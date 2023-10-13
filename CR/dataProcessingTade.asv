@@ -37,7 +37,7 @@ clear all
 
 %% Motion Planning:
     
-    % Latency
+    % Latency®
     % Time required to send one UAS state of varying size to ground station.
     n = 50;
     packet_size = (48:n*96)./1000; %kB
@@ -58,9 +58,21 @@ clear all
     figure()
     hold on
     for packet_size = [48 /1000, 96 / 1000, 2 * 98 /1000, 3 * 98 / 1000]
-       plot(frames, frames * packet_size * byte_per_pixel / 1000, "LineWidth", 2)
+       plot(frames, frames * packet_size, "LineWidth", 2)
     end
     xlabel('Updates Per Second')
     ylabel('KB/S')
-    title('Required Communication Throughput required for various image trasnfer rates')
-    legend('360p', '480p', '720p', '1080p', '1440')
+    title('Required Communication Throughput required for various state trasnfer rates')
+    legend('48 byte state', '96 byte state', '2 * 96 byte state', '3 * 96 byte state')
+
+%% CV uncertainty
+
+% Assumptions:
+V_rgv = 2; % 2 m/s
+
+on_ground_comp_time = 0;
+on_ground_fps = 0;
+
+on_board_comp_time = 0;
+on_board_fps = 0;
+

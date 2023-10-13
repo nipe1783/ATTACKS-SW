@@ -64,3 +64,15 @@ clear all
     ylabel('KB/S')
     title('Required Communication Throughput required for various state trasnfer rates')
     legend('48 byte state', '96 byte state', '2 * 96 byte state', '3 * 96 byte state')
+
+%% CV uncertainty
+
+% Assumptions:
+V_rgv = 2; % 2 m/s
+
+on_ground_comp_time = 0;
+on_ground_fps = 0;
+
+on_board_comp_time = 0;
+on_board_fps = 0;
+

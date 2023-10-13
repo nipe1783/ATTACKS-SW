@@ -11,9 +11,6 @@ c_1080 = (24 * 1080)/8000;
 
 % Component latencies [s]
 gs_computer_latency = 75E-3;
-flight_controller_latency = 0E-3;
-companion_computer_latency = 0E-3;
-
 % GS Computer Vision latency, this is 1 way, i.e does not
 % get sent back to the UAS [s]
 camera_latency_360p = 16.875E-3;
@@ -43,20 +40,20 @@ motion_planning_latency = packet_size./suggested_bandwidth; %s
 
 O_O_O_latency = linspace(0,0,4);
 
-O_O_G_latency = companion_computer_latency+flight_controller_latency+motion_planning_latency+xyz_latency;
+O_O_G_latency = motion_planning_latency+xyz_latency;
 
-O_G_O_latency_360p = camera_latency_360p + companion_computer_latency+xyz_latency;
-O_G_O_latency_480p = camera_latency_480p + companion_computer_latency+xyz_latency;
-O_G_O_latency_720p = camera_latency_720p + companion_computer_latency + xyz_latency;
-O_G_O_latency_1080p = camera_latency_1080p +companion_computer_latency + xyz_latency;
+O_G_O_latency_360p = camera_latency_360p + xyz_latency;
+O_G_O_latency_480p = camera_latency_480p + xyz_latency;
+O_G_O_latency_720p = camera_latency_720p +  xyz_latency;
+O_G_O_latency_1080p = camera_latency_1080p + xyz_latency;
 
 O_G_O_latency = [O_G_O_latency_360p;O_G_O_latency_480p;O_G_O_latency_720p;O_G_O_latency_1080p];
 
 
-O_G_G_latency_360p = camera_latency_360p+flight_controller_latency+motion_planning_latency;
-O_G_G_latency_480p = camera_latency_480p+flight_controller_latency+motion_planning_latency;
-O_G_G_latency_720p = camera_latency_720p+flight_controller_latency+motion_planning_latency;
-O_G_G_latency_1080p = camera_latency_1080p+flight_controller_latency+motion_planning_latency;
+O_G_G_latency_360p = camera_latency_360p+motion_planning_latency;
+O_G_G_latency_480p = camera_latency_480p+motion_planning_latency;
+O_G_G_latency_720p = camera_latency_720p+motion_planning_latency;
+O_G_G_latency_1080p = camera_latency_1080p+motion_planning_latency;
 
 O_G_G_latency = [O_G_G_latency_360p;O_G_G_latency_480p;O_G_G_latency_720p;O_G_G_latency_1080p];
 
@@ -160,5 +157,22 @@ labels = {"O-O-O","O-O-G","O-G-O 360p","O-G-O 480p",...
 % Create a table with cell data types
 T = table(labels, data, 'VariableNames', {'Data Processing Mode', 'Transmission Latency (worst case) [ms]'});
 
-% Display the table
+% Display the tab
+% le
 display(T)
+
+errors = [max(O_O_O_latency) * 2, max(O_O_G_latency) * 2, max(O_G_O_latency_720p)* 2, max(O_G_G_latency_720p)*2];
+figure()
+% Create a numeric array for x-axis
+processing_methods_strings = ["O-O","O-G","G-O 720p","G-G 720p"];
+x = 1:numel(processing_methods_strings);
+
+% Create the bar plot with custom tick labels
+bar(x, errors);
+set(gca, 'XTick', x);
+set(gca, 'XTickLabel', processing_methods_strings);
+xtickangle(45); % Optional: Rotate x-axis labels for better readability
+xlabel("Data Processing Method");
+ylabel("Error [m]")
+title("Object Localization Error due to Latency for Moving RGV");
+hold on;
