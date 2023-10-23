@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/Users/nicolasperrault/Desktop/ATTACKS-SW/build",
+  "command": "/usr/bin/clang++  -isystem /usr/local/Cellar/opencv/4.8.1_1/include/opencv4 -g -std=gnu++11 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -o CMakeFiles/OpenCVExample.dir/main.cpp.o -c /Users/nicolasperrault/Desktop/ATTACKS-SW/OpenCVDemo/main.cpp",
+  "file": "/Users/nicolasperrault/Desktop/ATTACKS-SW/OpenCVDemo/main.cpp",
+  "output": "CMakeFiles/OpenCVExample.dir/main.cpp.o"
+}
+]
