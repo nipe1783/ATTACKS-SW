@@ -7,11 +7,10 @@
 #include "videoDemo/VideoDemo.cpp"
 #include "imageDemo/ImageDemo.cpp"
 #include "webCamDemo/WebCamDemo.cpp"
-#include "yoloDemo/YoloDemo.cpp"
 
 using namespace cv;
 int main()
 {
-    detectImage("/Users/nicolasperrault/Desktop/ATTACKS-SW/OpenCVDemo/images/demo2.png");
+    showWebCam();
     return 0;
 }
