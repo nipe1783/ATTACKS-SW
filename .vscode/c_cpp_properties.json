@@ -5,7 +5,10 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "/usr/local/Cellar/opencv/4.8.1_1/include/opencv4",
-                "/usr/local/include/opencv4"
+                "/usr/local/include/opencv4",
+                "/home/nicolas/repos/libtorch",
+                "/home/nicolas/repos/libtorch/include/torch/csrc/api/include",
+                "/home/nicolas/repos/libtorch/include"
             ],
             "defines": [],
             "macFrameworkPath": [
