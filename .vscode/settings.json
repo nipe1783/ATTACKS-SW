@@ -63,5 +63,6 @@
         "utility": "cpp",
         "cinttypes": "cpp"
     },
-    "cmake.sourceDirectory": "/Users/nicolasperrault/Desktop/ATTACKS-SW/OpenCVDemo"
+    "cmake.sourceDirectory": "/home/nicolas/Desktop/ATTACKS-SW/OpenCVDemo",
+    "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/compile_commands.json"
 }

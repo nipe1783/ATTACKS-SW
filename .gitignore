@@ -1,3 +1,4 @@
 OpenCVDemo/images
-OpenCVDemo/build
+OpenCVDemo/build/*
 OpenCVDemo/videos
+.vscode
