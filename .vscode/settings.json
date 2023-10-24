@@ -61,8 +61,21 @@
         "iterator": "cpp",
         "memory_resource": "cpp",
         "utility": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "clocale": "cpp",
+        "cstdarg": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "numeric": "cpp",
+        "system_error": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "iostream": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp"
     },
-    "cmake.sourceDirectory": "/home/nicolas/Desktop/ATTACKS-SW/OpenCVDemo",
-    "sonarlint.pathToCompileCommands": "${workspaceFolder}/build/compile_commands.json"
+    "cmake.sourceDirectory": "/home/nicolas/Desktop/ATTACKS-SW/OpenCVDemo"
 }
