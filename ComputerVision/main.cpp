@@ -4,13 +4,13 @@
 #include <opencv2/opencv.hpp>
 
 // Blob Detection Imports
-#include "BlobDetection/BlobDetection.h"
+#include "blobDetection/BlobDetection.h"
 
 
 using namespace cv;
 int main()
 {
     BlobDetection blobDetector;
-    blobDetector.calibrate("test");
+    blobDetector.calibrate("../images/test.png");
     return 0;
 }
