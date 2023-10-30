@@ -1,4 +1,10 @@
 OpenCVDemo/images
+<<<<<<< HEAD
 OpenCVDemo/build/*
 OpenCVDemo/videos
 .vscode
+=======
+OpenCVDemo/build
+OpenCVDemo/videos
+ComputerVision/build
+>>>>>>> d3cdb77 (working on setup)
