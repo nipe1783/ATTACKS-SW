@@ -5,11 +5,9 @@
 
 using namespace cv;
 
-void BlobDetection::calibrate(std::string imagePath)
+void BlobDetection::calibrate(Mat frame)
 {
     std::cout << "Calibrating..." << std::endl;
-
-    Mat frame = imread(imagePath, IMREAD_COLOR);
     Mat frameHSV;
     Mat filteredFrame;
 
@@ -63,10 +61,8 @@ void BlobDetection::calibrate(std::string imagePath)
 }
 
 
-void BlobDetection::detect(std::string imagePath)
+Mat& BlobDetection::detect(Mat& frame)
 {
-    std::cout << "Detecting..." << std::endl;
-    Mat frame = imread(imagePath, IMREAD_COLOR);
     Mat frameHSV, filteredFrame, labels, stats, centroids;
 
     // Filtering image based on calibration values
@@ -84,7 +80,6 @@ void BlobDetection::detect(std::string imagePath)
             maxArea = area;
             largestBlobLabel = i;
         }
-        std::cout << "Blob " << i << " size: " << area << std::endl;
     }
 
     // bounding largest blob
@@ -96,9 +91,9 @@ void BlobDetection::detect(std::string imagePath)
         rectangle(frame, Point(x, y), Point(x + width, y + height), Scalar(0, 255, 0), 2);
     }
 
-    imshow("Original with Largest Blob Bounded", frame);
-    waitKey(0);
-    
+    // imshow("Original with Largest Blob Bounded", frame);
+    // waitKey(0);
+    return frame;
 }
 
 void BlobDetection::on_low_H_thresh_trackbar(int pos, void* userdata)

@@ -24,16 +24,16 @@ public:
     ~BlobDetection() = default;
 
     // Public methods:
-    void calibrate(std::string imagePath);
-    void detect(std::string imagePath);
+    void calibrate(Mat frame);
+    Mat& detect(Mat& frame);
     
     // Member variables:
-    int hLow = 100;
-    int hHigh = 118;
-    int sLow = 28;
-    int sHigh = 35;
-    int vLow = 44;
-    int vHigh = 90;
+    int hLow = 150;
+    int hHigh = 180;
+    int sLow = 69;
+    int sHigh = 143;
+    int vLow = 11;
+    int vHigh = 180;
     int blurSize = 91;
     
     static const int maxValueH = 360/2;
