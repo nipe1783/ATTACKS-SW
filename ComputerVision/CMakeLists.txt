@@ -14,6 +14,8 @@ add_executable(
     ${PROJECT_NAME} 
     main.cpp
     blobDetection/BlobDetection.cpp
+    visualizer/Visualizer.cpp
+    blob/Blob.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})

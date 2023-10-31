@@ -1,7 +1,9 @@
 #include "BlobDetection.h"
+#include "../blob/Blob.h"
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
+#include <memory>
 
 using namespace cv;
 
@@ -61,7 +63,7 @@ void BlobDetection::calibrate(Mat frame)
 }
 
 
-Mat& BlobDetection::detect(Mat& frame)
+std::unique_ptr<Blob> BlobDetection::detect(const Mat& frame)
 {
     Mat frameHSV, filteredFrame, labels, stats, centroids;
 
@@ -88,12 +90,11 @@ Mat& BlobDetection::detect(Mat& frame)
         int y = stats.at<int>(largestBlobLabel, cv::CC_STAT_TOP);
         int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
         int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
-        rectangle(frame, Point(x, y), Point(x + width, y + height), Scalar(0, 255, 0), 2);
+        int area = stats.at<int>(largestBlobLabel, cv::CC_STAT_AREA);
+        std::unique_ptr<Blob> blobPtr = std::make_unique<Blob>(x, y, width, height, area);
+        return blobPtr;
     }
-
-    // imshow("Original with Largest Blob Bounded", frame);
-    // waitKey(0);
-    return frame;
+    return nullptr;
 }
 
 void BlobDetection::on_low_H_thresh_trackbar(int pos, void* userdata)

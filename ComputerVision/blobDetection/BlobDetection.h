@@ -4,6 +4,8 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
+#include "../blob/Blob.h"
+#include <memory>
 
 using namespace cv;
 
@@ -25,7 +27,7 @@ public:
 
     // Public methods:
     void calibrate(Mat frame);
-    Mat& detect(Mat& frame);
+    std::unique_ptr<Blob> detect(const Mat& frame);
     
     // Member variables:
     int hLow = 150;
