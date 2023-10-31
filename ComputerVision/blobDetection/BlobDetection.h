@@ -26,7 +26,6 @@ public:
     // Public methods:
     void calibrate(std::string imagePath);
     void detect(std::string imagePath);
-    void updateFilteredImage(const Mat& src, Mat& dest);
     
     // Member variables:
     int hLow = 100;
@@ -35,7 +34,7 @@ public:
     int sHigh = 35;
     int vLow = 44;
     int vHigh = 90;
-    int blurSize = 90;
+    int blurSize = 91;
     
     static const int maxValueH = 360/2;
     static const int maxValue = 255;

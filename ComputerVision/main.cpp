@@ -11,6 +11,6 @@ using namespace cv;
 int main()
 {
     BlobDetection blobDetector;
-    blobDetector.calibrate("../images/test.png");
+    blobDetector.detect("../images/test.png");
     return 0;
 }

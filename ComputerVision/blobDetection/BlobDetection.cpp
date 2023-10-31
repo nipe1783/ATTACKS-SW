@@ -66,6 +66,39 @@ void BlobDetection::calibrate(std::string imagePath)
 void BlobDetection::detect(std::string imagePath)
 {
     std::cout << "Detecting..." << std::endl;
+    Mat frame = imread(imagePath, IMREAD_COLOR);
+    Mat frameHSV, filteredFrame, labels, stats, centroids;
+
+    // Filtering image based on calibration values
+    cvtColor(frame, frameHSV, COLOR_BGR2HSV);
+    GaussianBlur(frameHSV, frameHSV, Size(blurSize, blurSize), 0);
+    inRange(frameHSV, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), filteredFrame);
+
+    // Detecting blobs
+    int numberOfLabels = connectedComponentsWithStats(filteredFrame, labels, stats, centroids);
+    int largestBlobLabel = 0;
+    int maxArea = 0;
+    for (int i = 1; i < numberOfLabels; i++) { // Start from 1 to skip background
+        int area = stats.at<int>(i, cv::CC_STAT_AREA);
+        if(area > maxArea) {
+            maxArea = area;
+            largestBlobLabel = i;
+        }
+        std::cout << "Blob " << i << " size: " << area << std::endl;
+    }
+
+    // bounding largest blob
+    if (largestBlobLabel != 0) { 
+        int x = stats.at<int>(largestBlobLabel, cv::CC_STAT_LEFT);
+        int y = stats.at<int>(largestBlobLabel, cv::CC_STAT_TOP);
+        int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
+        int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
+        rectangle(frame, Point(x, y), Point(x + width, y + height), Scalar(0, 255, 0), 2);
+    }
+
+    imshow("Original with Largest Blob Bounded", frame);
+    waitKey(0);
+    
 }
 
 void BlobDetection::on_low_H_thresh_trackbar(int pos, void* userdata)
