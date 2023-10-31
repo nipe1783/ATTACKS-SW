@@ -29,12 +29,13 @@ public:
     void updateFilteredImage(const Mat& src, Mat& dest);
     
     // Member variables:
-    int hLow = 0;
-    int hHigh = 0;
-    int sLow = 0;
-    int sHigh = 0;
-    int vLow = 0;
-    int vHigh = 0;
+    int hLow = 100;
+    int hHigh = 118;
+    int sLow = 28;
+    int sHigh = 35;
+    int vLow = 44;
+    int vHigh = 90;
+    int blurSize = 90;
     
     static const int maxValueH = 360/2;
     static const int maxValue = 255;

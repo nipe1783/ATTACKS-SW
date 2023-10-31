@@ -25,10 +25,21 @@ void BlobDetection::calibrate(std::string imagePath)
     createTrackbar("High S", "Filtered Frame", &sHigh, maxValueH, on_high_S_thresh_trackbar, this);
     createTrackbar("Low V", "Filtered Frame", &vLow, maxValueH, on_low_V_thresh_trackbar, this);
     createTrackbar("High V", "Filtered Frame", &vHigh, maxValueH, on_high_V_thresh_trackbar, this);
-    
-    imshow("HSV Frame", frameHSV);
+    createTrackbar("Blur Size", "Filtered Frame", &blurSize, 100, NULL);
 
     while(true){
+
+        cvtColor(frame, frameHSV, COLOR_BGR2HSV);
+
+        // Blur the frame
+        if(blurSize > 0 && blurSize % 2 == 1) {
+            GaussianBlur(frameHSV, frameHSV, Size(blurSize, blurSize), 0);
+        }
+        else if(blurSize > 0){
+            blurSize++;
+            GaussianBlur(frameHSV, frameHSV, Size(blurSize, blurSize), 0);
+        }
+
         // Detect the object based on HSV Range Values
         inRange(frameHSV, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), filteredFrame);
         
@@ -47,6 +58,7 @@ void BlobDetection::calibrate(std::string imagePath)
     std::cout << "High S: " << sHigh << std::endl;
     std::cout << "Low V: " << vLow << std::endl;
     std::cout << "High V: " << vHigh << std::endl;
+    std::cout << "Blur Size: " << blurSize << std::endl;
     std::cout << "Finished Calibrating." << std::endl;
 }
 
