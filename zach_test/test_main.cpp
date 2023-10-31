@@ -133,8 +133,12 @@ void on_high_V_thresh_trackbar(int, void *) {
 
 int main(int argc, char *argv[])
 {
-    VideoCapture cap("/Users/zachchen/Desktop/ATTACKS-SW/zach_test/testvid.mp4"); //test video
-    //VideoCapture cap(0); webcam
+    //test video
+    VideoCapture cap("/Users/zachchen/Desktop/ATTACKS-SW/zach_test/testvid2.mp4"); 
+    
+    // //webcam
+    //VideoCapture cap(0);
+
     namedWindow(rgb_detection_name);
     namedWindow(window_detection_name);
 
@@ -164,16 +168,15 @@ int main(int argc, char *argv[])
     params.filterByColor = false;
     params.blobColor = 0;
 
-   params.minThreshold  = 125;
+    //Value threshholds for V (value)
+    params.minThreshold  = 125;
     params.maxThreshold  = 255;
     params.thresholdStep = 10;
-
-    // params.thresholdStep = 10;
     params.minRepeatability = 15;
 
     // Filter by Area.
     params.filterByArea = true;
-    params.minArea = 500;
+    params.minArea = 500; //pixels per area
 
     // Filter by Circularity
     params.filterByCircularity = false;
@@ -185,7 +188,7 @@ int main(int argc, char *argv[])
 
     // Filter by Inertia - how elongated a shape is. 1 for a circle
     params.filterByInertia = false;
-    // params.minInertiaRatio = 0.2;
+    params.minInertiaRatio = 0.2;
 
     // Storage for blobs
     std::vector<KeyPoint> keypoints;
@@ -203,7 +206,7 @@ int main(int argc, char *argv[])
 
         // filter based on HSV Range Values
         // inRange(frame_HSV, Scalar(low_H, low_S, low_V), Scalar(high_H, high_S, high_V), frame_threshold);
-        inRange(frame_HSV, Scalar(0, 0, 50), Scalar(179, 255, 255), frame_threshold);
+        inRange(frame_HSV, Scalar(0, 0, 65), Scalar(179, 255, 255), frame_threshold);
 
 
         // filter based on RGB Range Values
@@ -238,6 +241,8 @@ int main(int argc, char *argv[])
         imshow("keypoints on gray", im_with_keypoints);
 
         char key = (char)waitKey(1); //30 fps
+
+        //q or esc to quit
         if (key == 'q' || key == 27)
         {
             break;
