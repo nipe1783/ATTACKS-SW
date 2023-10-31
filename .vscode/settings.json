@@ -75,7 +75,13 @@
         "iostream": "cpp",
         "numbers": "cpp",
         "semaphore": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "forward_list": "cpp",
+        "unordered_set": "cpp",
+        "shared_mutex": "cpp",
+        "typeindex": "cpp",
+        "valarray": "cpp",
+        "variant": "cpp"
     },
     "cmake.sourceDirectory": "/home/nicolas/Desktop/ATTACKS-SW/OpenCVDemo"
 }
