@@ -4,6 +4,7 @@ OpenCVDemo/build/*
 OpenCVDemo/videos/*
 ComputerVision/build/*
 ComputerVision/videos/*
+.vscode/*
 
 # Specific files to keep.
 !ComputerVision/videos/test.txt
