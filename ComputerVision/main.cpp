@@ -18,7 +18,6 @@ int main()
     VideoCapture cap(videoPath);
     Mat frame;
     Mat filteredFrame;
-    Blob blob;
     int counter = 0;
     while(true){
         cap >> frame;
