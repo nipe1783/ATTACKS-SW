@@ -6,6 +6,7 @@ ComputerVision/build/*
 ComputerVision/videos/*
 .vscode/
 build/
+.DS_Store
 
 # Specific files to keep.
 !ComputerVision/videos/test.txt
