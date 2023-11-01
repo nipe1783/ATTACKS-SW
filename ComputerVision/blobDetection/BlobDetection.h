@@ -28,6 +28,14 @@ public:
     // Public methods:
     void calibrate(Mat frame);
     std::unique_ptr<Blob> detect(const Mat& frame);
+
+    /**
+     * @brief Performs gamma correction on the given frame. Source: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5411802
+     * 
+     * @param frame The frame to perform gamma correction on.
+     * @param gamma The gamma value to use. [0, 1]
+     **/
+    void gammaCorrection(Mat& frame, float gamma);
     
     // Member variables:
     int hLow = 150;
