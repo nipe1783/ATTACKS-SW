@@ -30,22 +30,31 @@ public:
     std::unique_ptr<Blob> detect(const Mat& frame);
 
     /**
-     * @brief Performs gamma correction on the given frame. Source: https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=5411802
+     * @brief Performs gamma correction on the given frame. Source:https://ieeexplore.ieee.org/document/5411802
      * 
      * @param frame The frame to perform gamma correction on.
      * @param gamma The gamma value to use. [0, 1]
      **/
-    void gammaCorrection(Mat& frame, float gamma);
+    void gammaCorrection(Mat& frame, Mat& dst, double gamma);
+
+    void DoGFilter(Mat& frame, Mat& dst, int sigma1, int sigma2);
+
+    void Mask(Mat& frame, Mat& dst, Scalar lowerBound, Scalar upperBound);
+
+    void contrastEqualization(Mat& frame, Mat& dst, double alpha, double tau);
+
+    void detect1(Mat& frame, Mat& dst, Scalar lowerBound, Scalar upperBound, float gamma, int sigma1, int sigma2, double alpha, double tau, double areaThreshold);
+    void simpleDetect(Mat& frame, Mat& dst);
     
     // Member variables:
-    int hLow = 150;
-    int hHigh = 180;
-    int sLow = 69;
-    int sHigh = 143;
-    int vLow = 11;
-    int vHigh = 180;
-    int blurSize = 91;
+    int hLow = 0;
+    int hHigh = 255;
+    int sLow = 0;
+    int sHigh = 255;
+    int vLow = 190;
+    int vHigh = 255;
+    int blurSize = 15;
     
-    static const int maxValueH = 360/2;
+    static const int maxValueH = 255;
     static const int maxValue = 255;
 };

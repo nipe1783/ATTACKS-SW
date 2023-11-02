@@ -5,6 +5,7 @@ OpenCVDemo/videos/*
 ComputerVision/build/*
 ComputerVision/videos/*
 ComputerVision/images/*
+ComputerVision/output/*
 .vscode/
 build/
 

@@ -4,8 +4,85 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <memory>
+#include <cmath>
+#include "../visualizer/Visualizer.h"
 
 using namespace cv;
+
+void BlobDetection::gammaCorrection(Mat& frame, Mat& dst, double gamma)
+{
+    CV_Assert(gamma >= 0);
+    Mat lookupTable(1, 256, CV_8U);
+    uchar* p = lookupTable.ptr();
+
+    if(gamma > 0){
+        for(int i = 0; i < 256; ++i){
+            p[i] = saturate_cast<uchar>(pow(i / 255.0, gamma) * 255.0);
+        }
+    }
+    else{
+        for(int i = 0; i < 256; ++i){
+            p[i] = saturate_cast<uchar>(log(i + 1) / log(256) * 255.0);
+        }
+    }
+
+    LUT(frame, lookupTable, dst);
+}
+
+void BlobDetection::DoGFilter(Mat& frame, Mat& dst, int sigma1, int sigma2){
+    Mat gaussian1, gaussian2;
+    GaussianBlur(frame, gaussian1, Size(), sigma1, sigma1); // possibly change K size in the future for better performance
+    GaussianBlur(frame, gaussian2, Size(), sigma2, sigma2);
+    subtract(gaussian1, gaussian2, dst);
+}
+
+void BlobDetection::Mask(Mat& frame, Mat& dst, Scalar lowerBound, Scalar upperBound) {
+    // Create the mask for the pixels within the given bounds
+    Mat mask;
+    inRange(frame, lowerBound, upperBound, mask);
+
+    // Calculate the average color of the frame
+    Scalar avgColor = mean(frame);
+
+    // Initialize dst with the original frame
+    frame.copyTo(dst);
+
+    // Create a matrix with the average color
+    Mat avgColorMat(frame.size(), frame.type(), avgColor);
+
+    // Set pixels where the mask is not white (outside the range) to the average color in dst
+    avgColorMat.copyTo(dst, ~mask);
+}
+
+void BlobDetection::contrastEqualization(Mat& frame, Mat& dst, double alpha, double tau) {
+
+    // Convert image to float type for processing
+    int originalType = frame.type();
+    frame.convertTo(frame, CV_32FC1);
+
+    // Stage 1
+    Mat imgRaisedToAlpha;
+    pow(frame, alpha, imgRaisedToAlpha);
+    double mean1 = mean(abs(imgRaisedToAlpha))[0];
+    frame = frame / std::pow(mean1, 1.0 / alpha);
+
+    // Stage 2
+    Mat imgAbs = abs(frame);
+    Mat minImg = min(imgAbs, tau * Mat::ones(frame.size(), frame.type()));
+    pow(minImg, alpha, minImg);
+    double mean2 = mean(minImg)[0];
+    frame = frame / std::pow(mean2, 1.0 / alpha);
+
+    // Convert the image back to its original type
+    if (originalType == CV_8U) {
+        double minVal, maxVal;
+        minMaxLoc(frame, &minVal, &maxVal);
+        frame.convertTo(dst, originalType, 255.0 / (maxVal - minVal), -minVal * 255.0 / (maxVal - minVal));
+    } else {
+        frame.convertTo(dst, originalType);
+    }
+
+}
 
 void BlobDetection::calibrate(Mat frame)
 {
@@ -19,6 +96,7 @@ void BlobDetection::calibrate(Mat frame)
     imshow("Original Frame", frame);
     
     cvtColor(frame, frameHSV, COLOR_BGR2HSV);
+    imshow("Filtered Frame", frameHSV);
     createTrackbar("Low H", "Filtered Frame", &hLow, maxValueH, on_low_H_thresh_trackbar, this);
     createTrackbar("High H", "Filtered Frame", &hHigh, maxValueH, on_high_H_thresh_trackbar, this);
     createTrackbar("Low S", "Filtered Frame", &sLow, maxValueH, on_low_S_thresh_trackbar, this);
@@ -95,6 +173,65 @@ std::unique_ptr<Blob> BlobDetection::detect(const Mat& frame)
         return blobPtr;
     }
     return nullptr;
+}
+
+void BlobDetection::simpleDetect(Mat& frame, Mat& dst){
+    Mat frameHSV, labels, stats, centroids;
+
+    // Filtering image based on calibration values
+    cvtColor(frame, dst, COLOR_BGR2HSV);
+    GaussianBlur(dst, dst, Size(blurSize, blurSize), 0);
+    inRange(dst, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), dst);
+
+    // Detecting blobs
+    int numberOfLabels = connectedComponentsWithStats(dst, labels, stats, centroids);
+    int areaThreshold = 150;
+
+    for (int i = 1; i < numberOfLabels; i++) { // Start from 1 to skip background
+        int area = stats.at<int>(i, cv::CC_STAT_AREA);
+        std::cout << "area: " << area << std::endl;
+
+        if(area > areaThreshold) {
+            int x = stats.at<int>(i, cv::CC_STAT_LEFT);
+            int y = stats.at<int>(i, cv::CC_STAT_TOP);
+            int width = stats.at<int>(i, cv::CC_STAT_WIDTH);
+            int height = stats.at<int>(i, cv::CC_STAT_HEIGHT);
+            cv::Rect bounding_box = cv::Rect(x, y, width, height);
+            cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+        }
+    }
+
+    Visualizer::twoFrame(frame, dst);
+    waitKey(0);
+}
+
+void BlobDetection::detect1(Mat& frame, Mat& dst, cv::Scalar lowerBound, cv::Scalar upperBound, float gamma, int sigma1, int sigma2, double alpha, double tau, double areaThreshold){
+    cv::Mat frameHSV;
+    cvtColor(frame, dst, COLOR_BGR2HSV);
+    Mask(dst, dst, lowerBound, upperBound);
+    cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
+    cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+    gammaCorrection(dst, dst, gamma);
+    DoGFilter(dst, dst, sigma1, sigma2);
+    contrastEqualization(dst, dst, alpha, tau);
+    cv::threshold(dst, dst, 100, 255, cv::THRESH_BINARY);
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::findContours(dst, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    
+    double aspectRatioThreshold = 20.0;
+    for (size_t i = 0; i < contours.size(); i++) {
+        // Approximate contour with a polygon
+        if(cv::contourArea(contours[i]) > areaThreshold){
+            cv::Rect bounding_box = cv::boundingRect(contours[i]);
+            double aspectRatio = static_cast<double>(bounding_box.width) / bounding_box.height;
+
+            // Check if the blob is not too thin and long
+            if (aspectRatio < aspectRatioThreshold && aspectRatio > 1.0/aspectRatioThreshold) {
+                cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+            }
+        }
+    }
 }
 
 void BlobDetection::on_low_H_thresh_trackbar(int pos, void* userdata)
