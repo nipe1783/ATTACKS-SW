@@ -45,6 +45,7 @@ int main()
     //         }
     //     }
     // }
+    
     int sigma1 = 1;
     int sigma2 = 2;
     double alpha = 0.5;
@@ -55,31 +56,31 @@ int main()
     cv::Mat frame;
     cv::Mat dst;
 
-    for(double gamma = 0; gamma < 1; gamma += 0.1){
-        for(int sigma2 = 1; sigma2 < 10; sigma2++) {
-            for(int sigma1 = 1; sigma1 < sigma2; sigma1++) {
-                // for(int areaThreshold = 100; areaThreshold < 1000; areaThreshold += 5){
-                    for(int lbChannel = 0; lbChannel <= 150; lbChannel += 5) {    // varying third channel of lowerBound
-                        for(int ubChannel = 150; ubChannel <= 255; ubChannel += 5) {  // varying second channel of upperBound
-                            cv::Scalar lowerBound = cv::Scalar(0, 0, lbChannel);
-                            cv::Scalar upperBound = cv::Scalar(255, ubChannel, 255);
+    // for(double gamma = 0; gamma < 1; gamma += 0.1){
+    //     for(int sigma2 = 1; sigma2 < 10; sigma2++) {
+    //         for(int sigma1 = 1; sigma1 < sigma2; sigma1++) {
+    //             // for(int areaThreshold = 100; areaThreshold < 1000; areaThreshold += 5){
+    //                 for(int lbChannel = 0; lbChannel <= 150; lbChannel += 5) {    // varying third channel of lowerBound
+    //                     for(int ubChannel = 150; ubChannel <= 255; ubChannel += 5) {  // varying second channel of upperBound
+    //                         cv::Scalar lowerBound = cv::Scalar(0, 0, lbChannel);
+    //                         cv::Scalar upperBound = cv::Scalar(255, ubChannel, 255);
 
-                            currError = Benchmarking::run1("../images/train1", "../images/label1", blobDetector, gamma, sigma1, sigma2, alpha, tau, areaThreshold, lowerBound, upperBound);
+    //                         currError = Benchmarking::run1("../images/train1", "../images/label1", blobDetector, gamma, sigma1, sigma2, alpha, tau, areaThreshold, lowerBound, upperBound);
 
-                            if(currError < minError){
-                                minError = currError;
-                                std::cout << "gamma: " << gamma << " sigma1: " << sigma1 << " sigma2: " << sigma2 << " lowerBound: " << lowerBound << " upperBound: " << upperBound << " minError: " << minError << std::endl;
-                                cv::Mat frame = cv::imread("../images/train1/0004.jpg");
-                                blobDetector.detect1(frame, dst, lowerBound, upperBound, gamma, sigma1, sigma2, alpha, tau, areaThreshold);
-                                Visualizer::saveFrame(dst, "../output/total/min.jpg");
-                            }
-                            std::cout << "min error: " << minError << " curr error: " << currError << std::endl;
-                        }
-                    }
-                // }
-            }
-        }
-    }
+    //                         if(currError < minError){
+    //                             minError = currError;
+    //                             std::cout << "gamma: " << gamma << " sigma1: " << sigma1 << " sigma2: " << sigma2 << " lowerBound: " << lowerBound << " upperBound: " << upperBound << " minError: " << minError << std::endl;
+    //                             cv::Mat frame = cv::imread("../images/train1/0004.jpg");
+    //                             blobDetector.detect1(frame, dst, lowerBound, upperBound, gamma, sigma1, sigma2, alpha, tau, areaThreshold);
+    //                             Visualizer::saveFrame(dst, "../output/total/min.jpg");
+    //                         }
+    //                         std::cout << "min error: " << minError << " curr error: " << currError << std::endl;
+    //                     }
+    //                 }
+    //             // }
+    //         }
+    //     }
+    // }
 
     return 0;
 }
