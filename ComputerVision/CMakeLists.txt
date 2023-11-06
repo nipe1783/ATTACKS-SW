@@ -17,6 +17,7 @@ add_executable(
     visualizer/Visualizer.cpp
     blob/Blob.cpp
     benchmarking/Benchmarking.cpp
+    scripts/Scripts.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})

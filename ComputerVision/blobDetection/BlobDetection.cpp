@@ -104,6 +104,8 @@ void BlobDetection::calibrate(Mat frame)
     createTrackbar("Low V", "Filtered Frame", &vLow, maxValueH, on_low_V_thresh_trackbar, this);
     createTrackbar("High V", "Filtered Frame", &vHigh, maxValueH, on_high_V_thresh_trackbar, this);
     createTrackbar("Blur Size", "Filtered Frame", &blurSize, 100, NULL);
+    createTrackbar("Min Area", "Filtered Frame", &areaThreshold, 1000, NULL);
+
 
     while(true){
 
@@ -137,6 +139,8 @@ void BlobDetection::calibrate(Mat frame)
     std::cout << "Low V: " << vLow << std::endl;
     std::cout << "High V: " << vHigh << std::endl;
     std::cout << "Blur Size: " << blurSize << std::endl;
+    std::cout << "Min Area: " << areaThreshold << std::endl;
+
     std::cout << "Finished Calibrating." << std::endl;
 }
 
@@ -185,24 +189,49 @@ void BlobDetection::simpleDetect(Mat& frame, Mat& dst){
 
     // Detecting blobs
     int numberOfLabels = connectedComponentsWithStats(dst, labels, stats, centroids);
-    int areaThreshold = 150;
-
+    int maxArea = 0;
+    int secondMaxArea = 0;
+    int largestBlobLabel = 0;
+    int secondLargestBlobLabel = 0;
     for (int i = 1; i < numberOfLabels; i++) { // Start from 1 to skip background
         int area = stats.at<int>(i, cv::CC_STAT_AREA);
-        std::cout << "area: " << area << std::endl;
-
-        if(area > areaThreshold) {
-            int x = stats.at<int>(i, cv::CC_STAT_LEFT);
-            int y = stats.at<int>(i, cv::CC_STAT_TOP);
-            int width = stats.at<int>(i, cv::CC_STAT_WIDTH);
-            int height = stats.at<int>(i, cv::CC_STAT_HEIGHT);
+        // std::cout << "area: " << area << std::endl;
+        if(area > maxArea) {
+            secondMaxArea = maxArea;
+            maxArea = area;
+            secondLargestBlobLabel = largestBlobLabel;
+            largestBlobLabel = i;
+        }
+    }
+        if (largestBlobLabel != 0&& maxArea > areaThreshold) { 
+            int x = stats.at<int>(largestBlobLabel, cv::CC_STAT_LEFT);
+            int y = stats.at<int>(largestBlobLabel, cv::CC_STAT_TOP);
+            int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
+            int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
             cv::Rect bounding_box = cv::Rect(x, y, width, height);
             cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
         }
-    }
+        if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
+            int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
+            int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
+            int width = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_WIDTH);
+            int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
+            cv::Rect bounding_box = cv::Rect(x, y, width, height);
+            cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
+        }
 
-    Visualizer::twoFrame(frame, dst);
-    waitKey(0);
+        // if(area > areaThreshold) {
+        //     int x = stats.at<int>(i, cv::CC_STAT_LEFT);
+        //     int y = stats.at<int>(i, cv::CC_STAT_TOP);
+        //     int width = stats.at<int>(i, cv::CC_STAT_WIDTH);
+        //     int height = stats.at<int>(i, cv::CC_STAT_HEIGHT);
+        //     cv::Rect bounding_box = cv::Rect(x, y, width, height);
+        //     cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+        // }
+    // }
+
+    // Visualizer::twoFrame(frame, dst);
+    // waitKey(0);
 }
 
 void BlobDetection::detect1(Mat& frame, Mat& dst, cv::Scalar lowerBound, cv::Scalar upperBound, float gamma, int sigma1, int sigma2, double alpha, double tau, double areaThreshold){

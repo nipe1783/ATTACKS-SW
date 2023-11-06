@@ -5,9 +5,32 @@
 #include <memory>
 #include <cmath>
 #include "../visualizer/Visualizer.h"
+#include "../blobDetection/BlobDetection.h"
 
 using namespace cv;
 
-void Scripts::VideoRunner(std::string fileName) {
-    
+void Scripts::VideoRunner(const std::string&fileName, BlobDetection& blobDetector){
+
+    std::string videoPath = "../videos/" + fileName;
+    VideoCapture cap(videoPath);
+    Mat frame, dst;
+    int counter = 0;
+    while(true){
+        cap >> frame;
+        if(frame.empty()){
+            std::cout << "End of video." << std::endl;
+            break;
+        }
+        if(counter == 0){
+            blobDetector.calibrate(frame);
+            counter++;
+        }
+        blobDetector.simpleDetect(frame,dst);
+        imshow("Frame", frame);
+        char key = (char) waitKey(30);
+        if (key == 'q' || key == 27) // 'q' or 'ESC' key
+        {
+            break;
+        }
+    }
 }

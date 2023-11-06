@@ -47,13 +47,15 @@ public:
     void simpleDetect(Mat& frame, Mat& dst);
     
     // Member variables:
-    int hLow = 0;
-    int hHigh = 255;
-    int sLow = 0;
-    int sHigh = 255;
-    int vLow = 190;
-    int vHigh = 255;
-    int blurSize = 15;
+    int hLow = 61;
+    int hHigh = 141;
+    int sLow = 29;
+    int sHigh = 131;
+    int vLow = 82;
+    int vHigh = 203;
+    int blurSize = 20;
+    int areaThreshold = 250;
+
     
     static const int maxValueH = 255;
     static const int maxValue = 255;

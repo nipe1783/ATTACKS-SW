@@ -8,11 +8,15 @@
 #include "blobDetection/BlobDetection.h"
 #include "visualizer/Visualizer.h"
 #include "benchmarking/Benchmarking.h"
+#include "scripts/Scripts.h"
+
 
 using namespace cv;
 int main()
 {
     BlobDetection blobDetector;
+    Scripts script;
+    Scripts::VideoRunner("DroneTestFootage.mp4",blobDetector);
     // std::string imagePath = "../images/EORSSD/test-images/0004.jpg"; 
     // std::string imagePath = "../images/cars/train/DJI_0005-0018_jpg.rf.039f98afd951948ab4ccea83cadafacc.jpg";
     // std::string imagePath = "../images/cars/train/DJI_0013-0036_jpg.rf.955b80bd98684ce60bb92b3267c3004e.jpg";
