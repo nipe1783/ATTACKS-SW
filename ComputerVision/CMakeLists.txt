@@ -13,7 +13,8 @@ find_package(OpenCV 4 REQUIRED)
 add_executable(
     ${PROJECT_NAME} 
     main.cpp
-    blobDetection/BlobDetection.cpp
+    blobDetector/BlobDetector.cpp
+    blobDetector/BasicBlobDetector.cpp
     visualizer/Visualizer.cpp
     blob/Blob.cpp
     benchmarking/Benchmarking.cpp
