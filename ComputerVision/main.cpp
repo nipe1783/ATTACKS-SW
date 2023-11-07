@@ -2,38 +2,29 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
+#include <memory>
 
 // Blob Detection Imports
-#include "blobDetection/BlobDetection.h"
-
+#include "blobDetector/BasicBlobDetector.h"
+#include "blobDetector/VaryingLightBlobDetector.h"
+#include "visualizer/Visualizer.h"
+#include "benchmarking/Benchmarking.h"
 
 using namespace cv;
 int main()
 {
-    BlobDetection blobDetector;
-    std::string videoPath = "../videos/test.mp4";
-    VideoCapture cap(videoPath);
-    Mat frame;
-    int counter = 0;
-    while(true){
-        cap >> frame;
-        if(frame.empty()){
-            std::cout << "End of video." << std::endl;
-            break;
-        }
-        if(counter == 0){
-            blobDetector.calibrate(frame);
-            counter++;
-        }
-        frame = blobDetector.detect(frame);
-        imshow("Frame", frame);
-        char key = (char) waitKey(30);
-        if (key == 'q' || key == 27) // 'q' or 'ESC' key
-        {
-            break;
-        }
+
+    Mat dst;
+    Mat frame = cv::imread("../images/DroneTestImages/frame_0.jpg");
+    VaryingLightBlobDetector blobDetector;
+    blobDetector.calibrate(frame);
+    // Benchmarking::run("../images/train1", "../images/label1", blobDetector);
+    for(int i = 0; i < 2000; i++){
+        std::string path = "../images/DroneTestImages/frame_" + std::to_string(i) + ".jpg";
+        frame = cv::imread(path);
+        blobDetector.detect(frame, dst);
+        Visualizer::twoFrame(frame, dst);
+        waitKey(10);
     }
-    
-    // blobDetector.detect(frame);
     return 0;
 }
