@@ -13,7 +13,12 @@ find_package(OpenCV 4 REQUIRED)
 add_executable(
     ${PROJECT_NAME} 
     main.cpp
-    blobDetection/BlobDetection.cpp
+    blobDetector/src/BlobDetector.cpp
+    blobDetector/src/BasicBlobDetector.cpp
+    blobDetector/src/VaryingLightBlobDetector.cpp
+    visualizer/Visualizer.cpp
+    blob/Blob.cpp
+    benchmarking/Benchmarking.cpp
 )
 
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
