@@ -19,6 +19,8 @@ class VaryingLightBlobDetector : public BlobDetector
         static void on_sigma_1_thresh_trackbar(int, void*);
         static void on_sigma_2_thresh_trackbar(int, void*);
         static void on_alpha_trackbar(int, void*);
+        static void on_intensity_thresh_trackbar(int, void*);
+        std::vector<Rect> mergeNearbyContours(const std::vector<cv::Rect>& boundingBoxes, float mergeThreshold);
 
 
 
@@ -26,8 +28,10 @@ class VaryingLightBlobDetector : public BlobDetector
         float gamma = 0.7;
         int sigma1 = 2;
         int sigma2 = 5;
+        int intensityThreshold = 0;
         double alpha = 0;
         double tau = 10;
         static const int maxValueAlphaSlider = 100;
         int alphaSlider = 0;
+        int dilationSize = 0;
 };

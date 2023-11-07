@@ -18,15 +18,16 @@ class BlobDetector
         static void on_high_S_thresh_trackbar(int, void*);
         static void on_low_V_thresh_trackbar(int, void*);
         static void on_high_V_thresh_trackbar(int, void*);
+        static void on_area_threshold_trackbar(int, void*);
         
         // Member variables:
-        int hLow = 0;
-        int hHigh = 255;
-        int sLow = 0;
-        int sHigh = 255;
-        int vLow = 0;
-        int vHigh = 255;
-        int blurSize = 1;
-        double areaThreshold = 0.0;
+        int hLow = 92;
+        int hHigh = 125;
+        int sLow = 27;
+        int sHigh = 117;
+        int vLow = 28;
+        int vHigh = 227;
+        int blurSize = 19;
+        int areaThreshold = 0;
         static const int maxValueH = 255;
 };

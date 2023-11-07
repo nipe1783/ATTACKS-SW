@@ -41,3 +41,9 @@ void BlobDetector::on_high_V_thresh_trackbar(int pos, void* userdata)
     instance->vHigh = max(instance->vHigh, instance->vLow+1);
     setTrackbarPos("High V", "Filtered Frame", instance->vHigh);
 }
+
+void BlobDetector::on_area_threshold_trackbar(int pos, void* userdata)
+{
+    BlobDetector* instance = (BlobDetector*)userdata;
+    setTrackbarPos("Area Threshold", "Filtered Frame", instance->areaThreshold);
+}

@@ -4,7 +4,6 @@
 using namespace cv;
 
 void VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
-    cv::Mat frameHSV;
     cvtColor(frame, dst, COLOR_BGR2HSV);
     Mask(dst, dst);
     cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
@@ -12,17 +11,30 @@ void VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
     gammaCorrection(dst, dst);
     DoGFilter(dst, dst);
     contrastEqualization(dst, dst);
-    cv::threshold(dst, dst, 100, 255, cv::THRESH_BINARY);
+    cv::GaussianBlur(dst, dst, cv::Size(blurSize, blurSize), 0, 0);
+    cv::threshold(dst, dst, intensityThreshold, 255, cv::THRESH_BINARY);
+    Mat element = getStructuringElement(cv::MORPH_RECT,
+        cv::Size(2 * dilationSize + 1, 2 * dilationSize + 1),
+        cv::Point(dilationSize, dilationSize));
+    cv::dilate(dst, dst, element);
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
-    cv::findContours(dst, contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
-    double aspectRatioThreshold = 20.0;
+    cv::findContours(dst.clone(), contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    double maxArea = 0;
+    int maxAreaContourIndex = -1;
     for (size_t i = 0; i < contours.size(); i++) {
-        // Approximate contour with a polygon
-        if(cv::contourArea(contours[i]) > areaThreshold){
-            cv::Rect bounding_box = cv::boundingRect(contours[i]);
-            cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+        double area = cv::contourArea(contours[i]);
+        if(area > maxArea){
+            maxArea = area;
+            maxAreaContourIndex = i;
         }
+    }
+    if(maxAreaContourIndex != -1) {
+        Mat mask = Mat::zeros(dst.size(), dst.type());
+        cv::drawContours(mask, contours, maxAreaContourIndex, Scalar(255), cv::FILLED);
+        cv::Rect boundingBox = cv::boundingRect(contours[maxAreaContourIndex]);
+        cv::rectangle(frame, boundingBox, cv::Scalar(255, 0, 0), 2);
+        dst = dst & mask;
     }
 }
 
@@ -46,27 +58,20 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
     createTrackbar("High V", "Filtered Frame", &vHigh, maxValueH, on_high_V_thresh_trackbar, this);
     createTrackbar("Sigma 1", "Filtered Frame", &sigma1, maxValueH, on_sigma_1_thresh_trackbar, this);
     createTrackbar("Sigma 2", "Filtered Frame", &sigma2, maxValueH, on_sigma_2_thresh_trackbar, this);
+    createTrackbar("Intensity Threshold", "Filtered Frame", &intensityThreshold, maxValueH, on_intensity_thresh_trackbar, this);
     createTrackbar("Alpha", "Filtered Frame", &alphaSlider, maxValueAlphaSlider, on_alpha_trackbar, this);
     createTrackbar("Blur Size", "Filtered Frame", &blurSize, 100, NULL);
+    createTrackbar("Dilation Size", "Filtered Frame", &dilationSize, 100, NULL);
+    createTrackbar("Area Threshold", "Filtered Frame", &areaThreshold, 1000, NULL);
 
     while(true){
 
-        cvtColor(frame, frameHSV, COLOR_BGR2HSV);
-
-        // Blur the frame
-        if(blurSize > 0 && blurSize % 2 == 1) {
-            GaussianBlur(frameHSV, frameHSV, Size(blurSize, blurSize), 0);
-        }
-        else if(blurSize > 0){
-            blurSize++;
-            GaussianBlur(frameHSV, frameHSV, Size(blurSize, blurSize), 0);
-        }
-
-        // Detect the object based on HSV Range Values
-        inRange(frameHSV, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), filteredFrame);
+        Mat dst;
+        cvtColor(frame, dst, COLOR_BGR2HSV);
+        Mask(dst, dst);
         
         // Show the filtered frame
-        imshow("Filtered Frame", filteredFrame);
+        imshow("Filtered Frame", dst);
 
         char key = (char) waitKey(30);
         if (key == 'q' || key == 27) // 'q' or 'ESC' key
@@ -74,6 +79,66 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
             break;
         }
     }
+
+    while(true){
+
+        Mat dst;
+        cvtColor(frame, dst, COLOR_BGR2HSV);
+        Mask(dst, dst);
+        cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+        gammaCorrection(dst, dst);
+        DoGFilter(dst, dst);
+        contrastEqualization(dst, dst);
+        
+        // Show the filtered frame
+        imshow("Filtered Frame", dst);
+
+        char key = (char) waitKey(30);
+        if (key == 'q' || key == 27) // 'q' or 'ESC' key
+        {
+            break;
+        }
+    }
+
+    while(true) {
+        if(blurSize % 2 == 0) {
+            blurSize++;
+        }
+        Mat dst;
+        cvtColor(frame, dst, COLOR_BGR2HSV);
+        Mask(dst, dst);
+        cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+        gammaCorrection(dst, dst);
+        DoGFilter(dst, dst);
+        contrastEqualization(dst, dst);
+        cv::GaussianBlur(dst, dst, cv::Size(blurSize, blurSize), 0, 0);
+        cv::threshold(dst, dst, intensityThreshold, 255, cv::THRESH_BINARY);
+        Mat element = getStructuringElement(cv::MORPH_RECT,
+            cv::Size(2 * dilationSize + 1, 2 * dilationSize + 1),
+            cv::Point(dilationSize, dilationSize));
+        cv::dilate(dst, dst, element);
+        std::vector<std::vector<cv::Point>> contours;
+        std::vector<cv::Vec4i> hierarchy;
+        cv::findContours(dst.clone(), contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+        Mat mask = Mat::zeros(dst.size(), dst.type());
+        for(size_t i = 0; i < contours.size(); i++) {
+            if(cv::contourArea(contours[i]) > areaThreshold) {
+                drawContours(mask, contours, static_cast<int>(i), Scalar(255), cv::FILLED);
+            }
+        }
+        dst = dst & mask;
+        imshow("Filtered Frame", dst);
+        char key = (char) waitKey(30);
+        if (key == 'q' || key == 27) // 'q' or 'ESC' key
+        {
+            break;
+        }
+    }
+
+
+
     std::cout << "Low H: " << hLow << std::endl;
     std::cout << "High H: " << hHigh << std::endl;
     std::cout << "Low S: " << sLow << std::endl;
@@ -100,7 +165,6 @@ void VaryingLightBlobDetector::gammaCorrection(Mat& frame, Mat& dst)
             p[i] = saturate_cast<uchar>(log(i + 1) / log(256) * 255.0);
         }
     }
-
     LUT(frame, lookupTable, dst);
 }
 
@@ -159,9 +223,32 @@ void VaryingLightBlobDetector::contrastEqualization(Mat& frame, Mat& dst) {
 
 }
 
+std::vector<Rect> VaryingLightBlobDetector::mergeNearbyContours(const std::vector<Rect>& boundingBoxes, float mergeThreshold) {
+    std::vector<cv::Rect> mergedBoxes;
+    for (const auto& box : boundingBoxes) {
+        bool merged = false;
+        for (auto& mergedBox : mergedBoxes) {
+            if ((abs(mergedBox.x - box.x) < mergeThreshold && abs(mergedBox.y - box.y) < mergeThreshold) ||
+                (mergedBox & box).area() > 0) {
+                mergedBox |= box;
+                merged = true;
+                break;
+            }
+        }
+        if (!merged) {
+            mergedBoxes.push_back(box);
+        }
+    }
+    return mergedBoxes;
+}
+
+
 void VaryingLightBlobDetector::on_sigma_1_thresh_trackbar(int pos, void* userdata)
-{
+{   
     VaryingLightBlobDetector* instance = (VaryingLightBlobDetector*)userdata;
+    if (pos <= 0) {
+        pos = 1;
+    }
     instance->sigma1 = min(instance->sigma2-1, instance->sigma1);
     setTrackbarPos("Sigma 1", "Filtered Frame", instance->sigma1);
 }
@@ -179,3 +266,8 @@ void VaryingLightBlobDetector::on_alpha_trackbar(int pos, void* userdata)
     instance->alpha = (double)pos / maxValueAlphaSlider;
 }
 
+void VaryingLightBlobDetector::on_intensity_thresh_trackbar(int pos, void* userdata)
+{
+    VaryingLightBlobDetector* instance = (VaryingLightBlobDetector*)userdata;
+    instance->intensityThreshold = pos;
+}
