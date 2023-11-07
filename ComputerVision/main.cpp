@@ -20,6 +20,8 @@ int main()
     BasicBlobDetector basicBlobDetector;
 
     
-    Scripts::videoRunner("DroneTestFootage.mp4", VLBlobDetector);
+    Scripts::videoRunner("DroneTestFootage.mp4", basicBlobDetector);
+    // Scripts::cameraRunner(0, basicBlobDetector);
+
     return 0;
 }
