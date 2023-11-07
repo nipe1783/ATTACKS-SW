@@ -54,7 +54,7 @@ public:
     int vLow = 82;
     int vHigh = 203;
     int blurSize = 20;
-    int areaThreshold = 250;
+    int areaThreshold = 300;
 
     
     static const int maxValueH = 255;

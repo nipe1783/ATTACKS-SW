@@ -211,6 +211,7 @@ void BlobDetection::simpleDetect(Mat& frame, Mat& dst){
             cv::Rect bounding_box = cv::Rect(x, y, width, height);
             cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
         }
+        
         if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
             int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
             int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);

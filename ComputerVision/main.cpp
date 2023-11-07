@@ -17,6 +17,7 @@ int main()
     BlobDetection blobDetector;
     Scripts script;
     Scripts::VideoRunner("DroneTestFootage.mp4",blobDetector);
+
     // std::string imagePath = "../images/EORSSD/test-images/0004.jpg"; 
     // std::string imagePath = "../images/cars/train/DJI_0005-0018_jpg.rf.039f98afd951948ab4ccea83cadafacc.jpg";
     // std::string imagePath = "../images/cars/train/DJI_0013-0036_jpg.rf.955b80bd98684ce60bb92b3267c3004e.jpg";
@@ -50,15 +51,15 @@ int main()
     //     }
     // }
     
-    int sigma1 = 1;
-    int sigma2 = 2;
-    double alpha = 0.5;
-    double tau = 10;
-    double areaThreshold = 150;
-    double minError = MAXFLOAT;
-    double currError = MAXFLOAT;
-    cv::Mat frame;
-    cv::Mat dst;
+    // int sigma1 = 1;
+    // int sigma2 = 2;
+    // double alpha = 0.5;
+    // double tau = 10;
+    // double areaThreshold = 150;
+    // double minError = MAXFLOAT;
+    // double currError = MAXFLOAT;
+    // cv::Mat frame;
+    // cv::Mat dst;
 
     // for(double gamma = 0; gamma < 1; gamma += 0.1){
     //     for(int sigma2 = 1; sigma2 < 10; sigma2++) {

@@ -16,5 +16,7 @@ public:
     Scripts() = default;
     ~Scripts() = default;
 
-    static void VideoRunner(const std::string&fileName, BlobDetection& BlobDetector);
+    static void cameraRunner(int cameraNumber = 0, BlobDetection& blobDetector);
+    static void videoRunner(const std::string&fileName, BlobDetection& blobDetector);
+    static void imageRunner(const std::string&fileName, BlobDetection& blobDetector);
 };
