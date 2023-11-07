@@ -26,7 +26,7 @@
 //         }
 //     }
 
-//     LUT(frame, lookupTable, dst);
+//     LUT(frame, lookupTable, dst);blob detection paper
 // }
 
 // void BlobDetection::DoGFilter(Mat& frame, Mat& dst, int sigma1, int sigma2){
