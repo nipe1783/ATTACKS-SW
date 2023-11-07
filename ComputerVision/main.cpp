@@ -5,14 +5,15 @@
 #include <memory>
 
 // Blob Detection Imports
-#include "blobDetection/BlobDetection.h"
+#include "blobDetector/BasicBlobDetector.h"
+#include "blobDetector/VaryingLightBlobDetector.h"
 #include "visualizer/Visualizer.h"
 #include "benchmarking/Benchmarking.h"
 
 using namespace cv;
 int main()
 {
-    BlobDetection blobDetector;
+    // BlobDetection blobDetector;
     // std::string imagePath = "../images/EORSSD/test-images/0004.jpg"; 
     // std::string imagePath = "../images/cars/train/DJI_0005-0018_jpg.rf.039f98afd951948ab4ccea83cadafacc.jpg";
     // std::string imagePath = "../images/cars/train/DJI_0013-0036_jpg.rf.955b80bd98684ce60bb92b3267c3004e.jpg";
@@ -84,6 +85,15 @@ int main()
     // cv::Mat dst;
     // frame = cv::imread("../images/DroneTestImages/frame_0.jpg");
     // blobDetector.detect1(frame);
+
+    Mat dst;
+    Mat frame = cv::imread("../images/airportDataset/test/0004.jpg");
+    VaryingLightBlobDetector blobDetector;
+    blobDetector.calibrate(frame);
+    Benchmarking::run("../images/airportDataset/test", "../images/airportDataset/labels", blobDetector);
+
+    
+
 
     return 0;
 }

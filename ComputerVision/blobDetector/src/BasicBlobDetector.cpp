@@ -1,7 +1,28 @@
-#include "BasicBlobDetector.h"
+#include "../BasicBlobDetector.h"
 
 void BasicBlobDetector::detect(Mat& frame, Mat& dst){
-    
+    Mat labels, stats, centroids;
+
+    // Filtering image based on calibration values
+    cvtColor(frame, dst, COLOR_BGR2HSV);
+    GaussianBlur(dst, dst, Size(blurSize, blurSize), 0);
+    inRange(dst, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), dst);
+
+    // Detecting blobs
+    int numberOfLabels = connectedComponentsWithStats(dst, labels, stats, centroids);
+    int areaThreshold = 150;
+
+    for (int i = 1; i < numberOfLabels; i++) { // Start from 1 to skip background
+        int area = stats.at<int>(i, cv::CC_STAT_AREA);
+        if(area > areaThreshold) {
+            int x = stats.at<int>(i, cv::CC_STAT_LEFT);
+            int y = stats.at<int>(i, cv::CC_STAT_TOP);
+            int width = stats.at<int>(i, cv::CC_STAT_WIDTH);
+            int height = stats.at<int>(i, cv::CC_STAT_HEIGHT);
+            cv::Rect bounding_box = cv::Rect(x, y, width, height);
+            cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+        }
+    }
 }
 
 void BasicBlobDetector::calibrate(Mat& frame){
@@ -57,46 +78,4 @@ void BasicBlobDetector::calibrate(Mat& frame){
     std::cout << "High V: " << vHigh << std::endl;
     std::cout << "Blur Size: " << blurSize << std::endl;
     std::cout << "Finished Calibrating." << std::endl;
-}
-
-void BasicBlobDetector::on_low_H_thresh_trackbar(int pos, void* userdata)
-{
-    BasicBlobDetector* instance = (BasicBlobDetector*)userdata;
-    instance->hLow = min(instance->hHigh-1, instance->hLow);
-    setTrackbarPos("Low H", "Filtered Frame", instance->hLow);
-}
-
-void BasicBlobDetector::on_high_H_thresh_trackbar(int pos, void* userdata)
-{
-    BasicBlobDetector* instance = (BasicBlobDetector*)userdata;
-    instance->hHigh = max(instance->hHigh, instance->hLow+1);
-    setTrackbarPos("High H", "Filtered Frame", instance->hHigh);
-}
-
-void BasicBlobDetector::on_low_S_thresh_trackbar(int pos, void* userdata)
-{
-    BasicBlobDetector* instance = (BasicBlobDetector*)userdata;
-    instance->sLow = min(instance->sHigh-1, instance->sLow);
-    setTrackbarPos("Low S", "Filtered Frame", instance->sLow);
-}
-
-void BasicBlobDetector::on_high_S_thresh_trackbar(int pos, void* userdata)
-{
-    BasicBlobDetector* instance = (BasicBlobDetector*)userdata;
-    instance->sHigh = max(instance->sHigh, instance->sLow+1);
-    setTrackbarPos("High S", "Filtered Frame", instance->sHigh);
-}
-
-void BasicBlobDetector::on_low_V_thresh_trackbar(int pos, void* userdata)
-{
-    BasicBlobDetector* instance = (BasicBlobDetector*)userdata;
-    instance->vLow = min(instance->vHigh-1, instance->vLow);
-    setTrackbarPos("Low V", "Filtered Frame", instance->vLow);
-}
-
-void BasicBlobDetector::on_high_V_thresh_trackbar(int pos, void* userdata)
-{
-    BasicBlobDetector* instance = (BasicBlobDetector*)userdata;
-    instance->vHigh = max(instance->vHigh, instance->vLow+1);
-    setTrackbarPos("High V", "Filtered Frame", instance->vHigh);
 }
