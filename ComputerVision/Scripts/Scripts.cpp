@@ -6,13 +6,13 @@
 
 //import classes
 #include "../visualizer/Visualizer.h"
-#include "../blobDetection/BlobDetection.h"
+#include "../blobDetector/BlobDetector.h"
 #include "Scripts.h"
 
 
 using namespace cv;
 
-static void Scripts::cameraRunner(int cameraNumber, BlobDetection& blobDetector){
+void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
     VideoCapture cap(cameraNumber);
 
     if (!cap.isOpened()) {
@@ -43,13 +43,13 @@ static void Scripts::cameraRunner(int cameraNumber, BlobDetection& blobDetector)
             break;
         }
         if(counter == 0){
-            // Need to adjust calibrate functions to match between child blobDetectors
+            // Calibrate
             blobDetector.calibrate(frame);
             counter++;
         }
 
-        // Need to adjust detect functions to match between child blobDetectors
-        blobDetector.simpleDetect(frame,dst);
+        // Detect
+        blobDetector.detect(frame,dst);
         imshow("Frame", frame);
 
         //Writing frames to a video, use visualizer class to save individual frames
@@ -67,7 +67,7 @@ static void Scripts::cameraRunner(int cameraNumber, BlobDetection& blobDetector)
 }
 
 
-void Scripts::videoRunner(const std::string&fileName, BlobDetection& blobDetector){
+void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector){
     //File name of file in videos folder
     //Child blob detector class/object for various blob detection types
 
@@ -102,13 +102,13 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetection& blobDetecto
             break;
         }
         if(counter == 0){
-            // Need to adjust calibrate functions to match between child blobDetectors
+            // Calibrate function
             blobDetector.calibrate(frame);
             counter++;
         }
 
-        // Need to adjust detect functions to match between child blobDetectors
-        blobDetector.simpleDetect(frame,dst);
+        // Detect function
+        blobDetector.detect(frame,dst);
         imshow("Frame", frame);
 
         //Writing frames to a video, use visualizer class to save individual frames
@@ -125,7 +125,7 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetection& blobDetecto
     cap.release();  // Release the VideoCapture
 }
 
-void Scripts::imageRunner(const std::string&fileName, BlobDetection& blobDetector){
+void Scripts::imageRunner(const std::string&fileName, BlobDetector& blobDetector){
     //File name of file in images folder
     //Child blob detector class/object for various blob detection types
 
@@ -133,14 +133,14 @@ void Scripts::imageRunner(const std::string&fileName, BlobDetection& blobDetecto
 
     cv::Mat frame = cv::imread(imagePath);
     cv::Mat dst;
-        
-    // Need to adjust calibrate functions to match between child blobDetectors
+
+    //Calibrate function    
     blobDetector.calibrate(frame);
 
-    // Need to adjust detect functions to match between child blobDetectors
-    blobDetector.simpleDetect(frame, dst);
-
-    imshow("Frame", frame);
+    // Detect function
+    blobDetector.detect(frame,dst);
+    
+    imshow("Detected Frame", frame);
 
     Visualizer::saveFrame(frame, "../images/output_image.jpeg");
 

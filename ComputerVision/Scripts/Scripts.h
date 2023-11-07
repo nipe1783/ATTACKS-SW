@@ -5,7 +5,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <memory>
-#include "../blobDetection/BlobDetection.h"
+#include "../blobDetector/BlobDetector.h"
 
 using namespace cv;
 
@@ -16,7 +16,7 @@ public:
     Scripts() = default;
     ~Scripts() = default;
 
-    static void cameraRunner(int cameraNumber = 0, BlobDetection& blobDetector);
-    static void videoRunner(const std::string&fileName, BlobDetection& blobDetector);
-    static void imageRunner(const std::string&fileName, BlobDetection& blobDetector);
+    static void cameraRunner(const int cameraNumber, BlobDetector& blobDetector);
+    static void videoRunner(const std::string&fileName, BlobDetector& blobDetector);
+    static void imageRunner(const std::string&fileName, BlobDetector& blobDetector);
 };
