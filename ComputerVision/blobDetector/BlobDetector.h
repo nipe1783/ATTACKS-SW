@@ -27,7 +27,7 @@ class BlobDetector
         int sHigh = 117;
         int vLow = 28;
         int vHigh = 227;
-        int blurSize = 19;
-        int areaThreshold = 0;
+        int blurSize = 13;
+        int areaThreshold = 700;
         static const int maxValueH = 255;
 };

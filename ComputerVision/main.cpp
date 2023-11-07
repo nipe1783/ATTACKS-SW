@@ -9,22 +9,19 @@
 #include "blobDetector/VaryingLightBlobDetector.h"
 #include "visualizer/Visualizer.h"
 #include "benchmarking/Benchmarking.h"
+#include "scripts/Scripts.h"
+
 
 using namespace cv;
 int main()
 {
+    Scripts script;
+    VaryingLightBlobDetector VLBlobDetector;
+    BasicBlobDetector basicBlobDetector;
 
-    Mat dst;
-    Mat frame = cv::imread("../images/DroneTestImages/frame_0.jpg");
-    VaryingLightBlobDetector blobDetector;
-    blobDetector.calibrate(frame);
-    // Benchmarking::run("../images/train1", "../images/label1", blobDetector);
-    for(int i = 0; i < 2000; i++){
-        std::string path = "../images/DroneTestImages/frame_" + std::to_string(i) + ".jpg";
-        frame = cv::imread(path);
-        blobDetector.detect(frame, dst);
-        Visualizer::twoFrame(frame, dst);
-        waitKey(10);
-    }
+    
+    Scripts::videoRunner("DroneTestFootage.mp4", basicBlobDetector);
+    // Scripts::cameraRunner(0, basicBlobDetector);
+
     return 0;
 }

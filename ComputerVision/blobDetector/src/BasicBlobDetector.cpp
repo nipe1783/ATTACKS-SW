@@ -10,19 +10,36 @@ void BasicBlobDetector::detect(Mat& frame, Mat& dst){
 
     // Detecting blobs
     int numberOfLabels = connectedComponentsWithStats(dst, labels, stats, centroids);
-    int areaThreshold = 150;
-
+    int maxArea = 0;
+    int secondMaxArea = 0;
+    int largestBlobLabel = 0;
+    int secondLargestBlobLabel = 0;
     for (int i = 1; i < numberOfLabels; i++) { // Start from 1 to skip background
         int area = stats.at<int>(i, cv::CC_STAT_AREA);
-        if(area > areaThreshold) {
-            int x = stats.at<int>(i, cv::CC_STAT_LEFT);
-            int y = stats.at<int>(i, cv::CC_STAT_TOP);
-            int width = stats.at<int>(i, cv::CC_STAT_WIDTH);
-            int height = stats.at<int>(i, cv::CC_STAT_HEIGHT);
+        if(area > maxArea) {
+            secondMaxArea = maxArea;
+            maxArea = area;
+            secondLargestBlobLabel = largestBlobLabel;
+            largestBlobLabel = i;
+        }
+    }
+        if (largestBlobLabel != 0&& maxArea > areaThreshold) { 
+            int x = stats.at<int>(largestBlobLabel, cv::CC_STAT_LEFT);
+            int y = stats.at<int>(largestBlobLabel, cv::CC_STAT_TOP);
+            int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
+            int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
             cv::Rect bounding_box = cv::Rect(x, y, width, height);
             cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
         }
-    }
+        
+        if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
+            int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
+            int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
+            int width = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_WIDTH);
+            int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
+            cv::Rect bounding_box = cv::Rect(x, y, width, height);
+            cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
+        }
 }
 
 void BasicBlobDetector::calibrate(Mat& frame){
@@ -37,6 +54,7 @@ void BasicBlobDetector::calibrate(Mat& frame){
     
     cvtColor(frame, frameHSV, COLOR_BGR2HSV);
     imshow("Filtered Frame", frameHSV);
+
     createTrackbar("Low H", "Filtered Frame", &hLow, maxValueH, on_low_H_thresh_trackbar, this);
     createTrackbar("High H", "Filtered Frame", &hHigh, maxValueH, on_high_H_thresh_trackbar, this);
     createTrackbar("Low S", "Filtered Frame", &sLow, maxValueH, on_low_S_thresh_trackbar, this);

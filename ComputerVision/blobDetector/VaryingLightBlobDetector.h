@@ -28,10 +28,10 @@ class VaryingLightBlobDetector : public BlobDetector
         float gamma = 0.7;
         int sigma1 = 2;
         int sigma2 = 5;
-        int intensityThreshold = 0;
+        int intensityThreshold = 47;
         double alpha = 0;
         double tau = 10;
         static const int maxValueAlphaSlider = 100;
         int alphaSlider = 0;
-        int dilationSize = 0;
+        int dilationSize = 9;
 };
