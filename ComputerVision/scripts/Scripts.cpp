@@ -3,16 +3,18 @@
 #include <opencv2/opencv.hpp>
 #include <memory>
 #include <cmath>
+#include <vector>
 
 //import classes
 #include "../visualizer/Visualizer.h"
 #include "../blobDetector/BlobDetector.h"
 #include "Scripts.h"
 
-
 using namespace cv;
 
 void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
+
+    std::vector<Blob> blobVector;
     VideoCapture cap(cameraNumber);
 
     if (!cap.isOpened()) {
@@ -24,7 +26,6 @@ void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
     int frameHeight = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
     int fps = 30;  // Frames per second
     std::string outputFilename = "../videos/output_video.mp4";
-
 
     // Define the codec and create a VideoWriter object
     cv::VideoWriter videoWriter(outputFilename, cv::VideoWriter::fourcc('H', '2', '6', '4'), fps, cv::Size(frameWidth, frameHeight));
@@ -49,7 +50,7 @@ void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
         }
 
         // Detect
-        blobDetector.detect(frame,dst);
+        blobVector = blobDetector.detect(frame,dst);
         imshow("Frame", frame);
 
         //Writing frames to a video, use visualizer class to save individual frames
@@ -146,4 +147,3 @@ void Scripts::imageRunner(const std::string&fileName, BlobDetector& blobDetector
 
     char key = (char) waitKey(30);
 }
-
