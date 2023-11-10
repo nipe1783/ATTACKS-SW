@@ -71,7 +71,7 @@ void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
 void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector){
     //File name of file in videos folder
     //Child blob detector class/object for various blob detection types
-
+    std::vector<Blob> blobVector;
     std::string videoPath = "../videos/" + fileName;
     VideoCapture cap(videoPath);
 
@@ -109,7 +109,7 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector
         }
 
         // Detect function
-        blobDetector.detect(frame,dst);
+        blobVector = blobDetector.detect(frame,dst);
         imshow("Frame", frame);
 
         //Writing frames to a video, use visualizer class to save individual frames
@@ -130,6 +130,7 @@ void Scripts::imageRunner(const std::string&fileName, BlobDetector& blobDetector
     //File name of file in images folder
     //Child blob detector class/object for various blob detection types
 
+    std::vector<Blob> blobVector;
     std::string imagePath = "../images/" + fileName;
 
     cv::Mat frame = cv::imread(imagePath);
@@ -139,7 +140,7 @@ void Scripts::imageRunner(const std::string&fileName, BlobDetector& blobDetector
     blobDetector.calibrate(frame);
 
     // Detect function
-    blobDetector.detect(frame,dst);
+    blobVector = blobDetector.detect(frame,dst);
     
     imshow("Detected Frame", frame);
 
