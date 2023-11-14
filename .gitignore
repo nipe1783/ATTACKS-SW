@@ -6,6 +6,7 @@ ComputerVision/build/*
 ComputerVision/videos/*
 ComputerVision/images/*
 ComputerVision/output/*
+ComputerVision/binaryImages
 .vscode/
 build/
 .DS_Store

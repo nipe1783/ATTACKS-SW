@@ -14,18 +14,16 @@
 
 using namespace cv;
 
-struct data {
-    float x1,y1,x2,y2,x3,y3,x4,y4;
-};
-
 int main()
 {
     Scripts script;
     VaryingLightBlobDetector VLBlobDetector;
     BasicBlobDetector basicBlobDetector;
+    Benchmarking simpleBenchmark;
 
+    simpleBenchmark.runBasic("../images", "../binaryImages/", basicBlobDetector);
     
-    Scripts::videoRunner("DroneTestFootage.mp4", basicBlobDetector);
+    // Scripts::videoRunner("DroneTestFootage.mp4", basicBlobDetector);
     // Scripts::cameraRunner(0, basicBlobDetector);
 
     // Saving every 50 frames as an image
