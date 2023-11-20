@@ -19,11 +19,12 @@ int main()
     Scripts script;
     VaryingLightBlobDetector VLBlobDetector;
     BasicBlobDetector basicBlobDetector;
-    Benchmarking simpleBenchmark;
+    Benchmarking benchmark;
 
-    simpleBenchmark.runBasic("../images", "../binaryImages/", basicBlobDetector);
-    
-    // Scripts::videoRunner("DroneTestFootage.mp4", basicBlobDetector);
+    benchmark.runBasic("../images", "../binaryImages/", basicBlobDetector);
+    // benchmark.runVarying("../images", "../binaryImages/", VLBlobDetector);
+
+    // Scripts::videoRunner("DJI_20231117032318_0005_S.MP4", basicBlobDetector);
     // Scripts::cameraRunner(0, basicBlobDetector);
 
     // Saving every 50 frames as an image

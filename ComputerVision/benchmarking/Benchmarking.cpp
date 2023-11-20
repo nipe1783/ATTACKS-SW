@@ -5,16 +5,19 @@
 #include <memory>
 #include <cmath>
 #include <iostream>
+#include <fstream>
 #include "../blobDetector/BlobDetector.h"
 #include "../blobDetector/BasicBlobDetector.h"
 #include "../blobDetector/VaryingLightBlobDetector.h"
 #include "../visualizer/Visualizer.h"
 #include <filesystem>
+#include <chrono>
 
 void Benchmarking::runBasic(const std::string& datasetPath, const std::string& datasetLabelsPath, BasicBlobDetector& blobDetector){
     std::filesystem::path path(datasetPath);
     std::vector<std::string> imagePaths;
     double totalError = 0;
+    double totalTime = 0;
 
     // Gather all the PNG file paths
     for (const auto & entry : std::filesystem::directory_iterator(path)) {
@@ -29,12 +32,23 @@ void Benchmarking::runBasic(const std::string& datasetPath, const std::string& d
     cv::Mat frame = cv::imread(imagePaths[0]);
     blobDetector.calibrate(frame);
 
+    std::ofstream data;
+    data.open("../benchmarking/data/dataBasic.csv");
+    data << "Execution Time (ms),Pixel Error \n";
+
     // Process the images in alphabetical order
     for (const auto& imagePath : imagePaths) {
         cv::Mat frame = cv::imread(imagePath);
         cv::Mat dst;
+
+        auto start = std::chrono::high_resolution_clock::now();
         blobDetector.detect(frame, dst);
-        
+        auto stop = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> time = stop - start;
+
+        std::cout << "Execution time: " << time.count() << " ms" << std::endl;
+        totalTime += time.count();
+
         // Load corresponding label image
         std::filesystem::path labelPath = std::filesystem::path(datasetLabelsPath) / std::filesystem::path(imagePath).filename();
         labelPath.replace_extension(".png");
@@ -66,15 +80,21 @@ void Benchmarking::runBasic(const std::string& datasetPath, const std::string& d
         int differingPixels = cv::countNonZero(diffImage);
         std::cout<<"Image Error: "<<differingPixels<<std::endl;
         totalError += differingPixels;
+
+        data << time.count() << "," << differingPixels << "\n";
     }
 
+    data.close();
+
     std::cout << "Total error: " << totalError << std::endl;
+    std::cout << "Total execution time: " << totalTime << " ms" << std::endl;
 }
 
 void Benchmarking::runVarying(const std::string& datasetPath, const std::string& datasetLabelsPath, VaryingLightBlobDetector& blobDetector){
     std::filesystem::path path(datasetPath);
     std::vector<std::string> imagePaths;
     double totalError = 0;
+    double totalTime = 0;
 
     // Gather all the PNG file paths
     for (const auto & entry : std::filesystem::directory_iterator(path)) {
@@ -88,12 +108,23 @@ void Benchmarking::runVarying(const std::string& datasetPath, const std::string&
     // Calibrate
     cv::Mat frame = cv::imread(imagePaths[0]);
     blobDetector.calibrate(frame);
+
+    std::ofstream data;
+    data.open("../benchmarking/data/dataVarying.csv");
+    data << "Execution Time (ms),Pixel Error \n";
     
     // Process the images in alphabetical order
     for (const auto& imagePath : imagePaths) {
         cv::Mat frame = cv::imread(imagePath);
         cv::Mat dst;
+
+        auto start = std::chrono::high_resolution_clock::now();
         blobDetector.detect(frame, dst);
+        auto stop = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> time = stop - start;
+
+        std::cout << "Execution time: " << time.count() << " ms" << std::endl;
+        totalTime += time.count();
         
         // Load corresponding label image
         std::filesystem::path labelPath = std::filesystem::path(datasetLabelsPath) / std::filesystem::path(imagePath).filename();
@@ -126,9 +157,14 @@ void Benchmarking::runVarying(const std::string& datasetPath, const std::string&
         int differingPixels = cv::countNonZero(diffImage);
         std::cout<<"Image Error: "<<differingPixels<<std::endl;
         totalError += differingPixels;
+
+        data << time.count() << "," << differingPixels << "\n";
     }
 
+    data.close();
+
     std::cout << "Total error: " << totalError << std::endl;
+    std::cout << "Total execution time: " << totalTime << " ms" << std::endl;
 }
 
 Benchmarking::Benchmarking()

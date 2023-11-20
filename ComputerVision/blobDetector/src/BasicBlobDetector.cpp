@@ -23,23 +23,42 @@ void BasicBlobDetector::detect(Mat& frame, Mat& dst){
             largestBlobLabel = i;
         }
     }
-        if (largestBlobLabel != 0&& maxArea > areaThreshold) { 
-            int x = stats.at<int>(largestBlobLabel, cv::CC_STAT_LEFT);
-            int y = stats.at<int>(largestBlobLabel, cv::CC_STAT_TOP);
-            int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
-            int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
-            cv::Rect bounding_box = cv::Rect(x, y, width, height);
-            cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+    if (largestBlobLabel != 0&& maxArea > areaThreshold) { 
+        int x = stats.at<int>(largestBlobLabel, cv::CC_STAT_LEFT);
+        int y = stats.at<int>(largestBlobLabel, cv::CC_STAT_TOP);
+        int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
+        int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
+        cv::Rect bounding_box = cv::Rect(x, y, width, height);
+        cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+    }
+
+    if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
+        int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
+        int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
+        int width = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_WIDTH);
+        int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
+        cv::Rect bounding_box = cv::Rect(x, y, width, height);
+        cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
+    }
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::findContours(dst.clone(), contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    int maxAreaContourIndex = -1;
+    maxArea = 0;
+    for (size_t i = 0; i < contours.size(); i++) {
+        double area = cv::contourArea(contours[i]);
+        if(area > maxArea){
+            maxArea = area;
+            maxAreaContourIndex = i;
         }
-        
-        if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
-            int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
-            int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
-            int width = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_WIDTH);
-            int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
-            cv::Rect bounding_box = cv::Rect(x, y, width, height);
-            cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
-        }
+    }
+    if(maxAreaContourIndex != -1) {
+        Mat mask = Mat::zeros(dst.size(), dst.type());
+        cv::drawContours(mask, contours, maxAreaContourIndex, Scalar(255), cv::FILLED);
+        cv::Rect boundingBox = cv::boundingRect(contours[maxAreaContourIndex]);
+        cv::rectangle(frame, boundingBox, cv::Scalar(255, 0, 0), 2);
+        dst = dst & mask;
+    }
 }
 
 void BasicBlobDetector::calibrate(Mat& frame){
@@ -48,7 +67,8 @@ void BasicBlobDetector::calibrate(Mat& frame){
     Mat filteredFrame;
 
     namedWindow("Original Frame", WINDOW_AUTOSIZE);
-    namedWindow("Filtered Frame", WINDOW_AUTOSIZE);
+    namedWindow("Filtered Frame", WINDOW_NORMAL);
+    resizeWindow("Filtered Frame", 1280, 720);
     
     imshow("Original Frame", frame);
     

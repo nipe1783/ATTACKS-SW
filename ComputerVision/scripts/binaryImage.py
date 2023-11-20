@@ -32,4 +32,4 @@ for i in range(0,len(frames)):
     # Draw white polygon with specified coordinates
     filled = cv.fillPoly(filled, pts = [groupedPairs[i]], color = (255,255,255))
     # Save image
-    cv.imwrite("../images/binaryFrame_%s.png" % frames[i], filled)
+    cv.imwrite("../binaryImages/binaryFrame_%s.png" % frames[i], filled)
