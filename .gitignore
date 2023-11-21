@@ -16,4 +16,6 @@ build/
 !ComputerVision/videos/test.txt
 !ComputerVision/images/test.txt
 !ComputerVision/build/test.txt
+!ComputerVision/benchmarking/data/test.txt
+!ComputerVision/binaryImages/test.txt
 
