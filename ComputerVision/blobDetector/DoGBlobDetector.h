@@ -1,5 +1,7 @@
 # pragma once
 #include "BlobDetector.h"
+#include "../blob/Blob.h"
+#include <vector>
 
 using namespace cv;
 
@@ -9,6 +11,6 @@ class DoGBlobDetector : public BlobDetector
         // methods:
         DoGBlobDetector() = default;
         ~DoGBlobDetector() = default;
-        void detect(Mat& frame, Mat& dst) override;
+        std::vector<Blob> detect(Mat& frame, Mat& dst) override;
         void calibrate(Mat& frame) override;
 };

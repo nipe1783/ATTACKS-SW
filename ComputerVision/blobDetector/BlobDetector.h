@@ -2,6 +2,8 @@
 #include <opencv2/core.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
+#include <vector>
+#include "../blob/Blob.h"
 
 using namespace cv;
 
@@ -11,8 +13,8 @@ class BlobDetector
     public:
         // Public methods:
         virtual void calibrate(Mat& frame) = 0;
-        virtual void detect(Mat& frame, Mat& dst) = 0;
         void DoGFilter(Mat& frame, Mat& dst);
+        virtual std::vector<Blob> detect(Mat& frame, Mat& dst) = 0;
         static void on_low_H_thresh_trackbar(int, void*);
         static void on_high_H_thresh_trackbar(int, void*);
         static void on_low_S_thresh_trackbar(int, void*);

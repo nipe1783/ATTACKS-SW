@@ -1,6 +1,8 @@
 #include "../DoGBlobDetector.h"
+#include "../../blob/Blob.h"
+#include <vector>
 
-void DoGBlobDetector::detect(Mat& frame, Mat& dst){
+std::vector<Blob> DoGBlobDetector::detect(Mat& frame, Mat& dst){
     Mat labels, stats, centroids;
 
     // Filtering image based on calibration values
@@ -9,6 +11,7 @@ void DoGBlobDetector::detect(Mat& frame, Mat& dst){
     inRange(dst, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), dst);
 
     // Detecting blobs
+    std::vector<Blob> myblobVector; // Create an empty blob vector
     int numberOfLabels = connectedComponentsWithStats(dst, labels, stats, centroids);
     int maxArea = 0;
     int secondMaxArea = 0;
@@ -30,6 +33,7 @@ void DoGBlobDetector::detect(Mat& frame, Mat& dst){
         int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
         cv::Rect bounding_box = cv::Rect(x, y, width, height);
         cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+        myblobVector.push_back(Blob(x, y, width, height, maxArea));
     }
 
     if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
@@ -39,6 +43,7 @@ void DoGBlobDetector::detect(Mat& frame, Mat& dst){
         int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
         cv::Rect bounding_box = cv::Rect(x, y, width, height);
         cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
+        myblobVector.push_back(Blob(x, y, width, height, secondMaxArea));
     }
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
@@ -59,6 +64,7 @@ void DoGBlobDetector::detect(Mat& frame, Mat& dst){
         cv::rectangle(frame, boundingBox, cv::Scalar(255, 0, 0), 2);
         dst = dst & mask;
     }
+    return myblobVector;
 }
 
 void DoGBlobDetector::calibrate(Mat& frame){

@@ -1,9 +1,13 @@
 #include "../VaryingLightBlobDetector.h"
 #include "../../visualizer/Visualizer.h"
+#include "../../blob/Blob.h"
+#include <vector>
 
 using namespace cv;
 
-void VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
+std::vector<Blob> VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
+    std::vector<Blob> myblobVector; // Create an empty blob vector
+
     cvtColor(frame, dst, COLOR_BGR2HSV);
     Mask(dst, dst);
     cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
@@ -35,7 +39,9 @@ void VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
         cv::Rect boundingBox = cv::boundingRect(contours[maxAreaContourIndex]);
         cv::rectangle(frame, boundingBox, cv::Scalar(255, 0, 0), 2);
         dst = dst & mask;
+        myblobVector.push_back(Blob(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height, boundingBox.area()));
     }
+    return myblobVector;
 }
 
 void VaryingLightBlobDetector::calibrate(Mat& frame){
