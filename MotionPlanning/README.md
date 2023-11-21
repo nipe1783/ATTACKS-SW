@@ -27,10 +27,18 @@ source install/local_setup.bash
 ros2 launch px4_ros_com sensor_combined_listener.launch.py
 ```
 
-### Launching basic gazebo sim:
+### Launching basic gazebo sim w/ diff drive robot:
 ```
 cd ~/dev/ATTACKS-SW/MotionPlanning/dev_ws
 colcon build --symlink-install
 source install/setup.bash
 ros2 launch gz_pkg launch_sim.launch.py
+```
+
+### Launching basic gazebo sim w/ UAS:
+```
+cd ~/dev/ATTACKS-SW/MotionPlanning/dev_ws
+colcon build --symlink-install
+source install/setup.bash
+ros2 launch gz_pkg rsp_sdf.launch.py
 ```
