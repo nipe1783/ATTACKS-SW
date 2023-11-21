@@ -6,6 +6,7 @@
 
 // Blob Detection Imports
 #include "blobDetector/BasicBlobDetector.h"
+#include "blobDetector/DoGBlobDetector.h"
 #include "blobDetector/VaryingLightBlobDetector.h"
 #include "visualizer/Visualizer.h"
 #include "benchmarking/Benchmarking.h"
@@ -19,10 +20,12 @@ int main()
     Scripts script;
     VaryingLightBlobDetector VLBlobDetector;
     BasicBlobDetector basicBlobDetector;
+    DoGBlobDetector doGBlobDetector;
     Benchmarking benchmark;
 
-    benchmark.runBasic("../images", "../binaryImages/", basicBlobDetector);
-    // benchmark.runVarying("../images", "../binaryImages/", VLBlobDetector);
+    // benchmark.runBasic("../images", "../binaryImages/", basicBlobDetector);
+    // benchmark.runDoG("../images", "../binaryImages/", doGBlobDetector);
+    benchmark.runVarying("../images", "../binaryImages/", VLBlobDetector);
 
     // Scripts::videoRunner("DJI_20231117032318_0005_S.MP4", basicBlobDetector);
     // Scripts::cameraRunner(0, basicBlobDetector);

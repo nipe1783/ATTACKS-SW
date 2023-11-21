@@ -44,7 +44,9 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
     Mat filteredFrame;
 
     namedWindow("Original Frame", WINDOW_AUTOSIZE);
-    namedWindow("Filtered Frame", WINDOW_AUTOSIZE);
+    // namedWindow("Filtered Frame", WINDOW_AUTOSIZE);
+    namedWindow("Filtered Frame", WINDOW_NORMAL);
+    resizeWindow("Filtered Frame", 1280, 720);
     
     imshow("Original Frame", frame);
     
@@ -168,13 +170,6 @@ void VaryingLightBlobDetector::gammaCorrection(Mat& frame, Mat& dst)
     LUT(frame, lookupTable, dst);
 }
 
-void VaryingLightBlobDetector::DoGFilter(Mat& frame, Mat& dst){
-    Mat gaussian1, gaussian2;
-    GaussianBlur(frame, gaussian1, Size(), sigma1, sigma1); // possibly change K size in the future for better performance
-    GaussianBlur(frame, gaussian2, Size(), sigma2, sigma2);
-    subtract(gaussian1, gaussian2, dst);
-}
-
 void VaryingLightBlobDetector::Mask(Mat& frame, Mat& dst) {
     // Create the mask for the pixels within the given bounds
     Mat mask;
@@ -240,24 +235,6 @@ std::vector<Rect> VaryingLightBlobDetector::mergeNearbyContours(const std::vecto
         }
     }
     return mergedBoxes;
-}
-
-
-void VaryingLightBlobDetector::on_sigma_1_thresh_trackbar(int pos, void* userdata)
-{   
-    VaryingLightBlobDetector* instance = (VaryingLightBlobDetector*)userdata;
-    if (pos <= 0) {
-        pos = 1;
-    }
-    instance->sigma1 = min(instance->sigma2-1, instance->sigma1);
-    setTrackbarPos("Sigma 1", "Filtered Frame", instance->sigma1);
-}
-
-void VaryingLightBlobDetector::on_sigma_2_thresh_trackbar(int pos, void* userdata)
-{
-    VaryingLightBlobDetector* instance = (VaryingLightBlobDetector*)userdata;
-    instance->sigma2 = max(instance->sigma2, instance->sigma1+1);
-    setTrackbarPos("Sigma 2", "Filtered Frame", instance->sigma2);
 }
 
 void VaryingLightBlobDetector::on_alpha_trackbar(int pos, void* userdata)

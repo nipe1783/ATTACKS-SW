@@ -7,6 +7,7 @@ ComputerVision/videos/*
 ComputerVision/images/*
 ComputerVision/output/*
 ComputerVision/binaryImages/*
+ComputerVision/benchmarking/data/*
 .vscode/
 build/
 .DS_Store
