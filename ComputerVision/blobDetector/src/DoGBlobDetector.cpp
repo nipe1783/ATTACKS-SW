@@ -1,13 +1,13 @@
-#include "../BasicBlobDetector.h"
+#include "../DoGBlobDetector.h"
 #include "../../blob/Blob.h"
 #include <vector>
 
-std::vector<Blob> BasicBlobDetector::detect(Mat& frame, Mat& dst){
+std::vector<Blob> DoGBlobDetector::detect(Mat& frame, Mat& dst){
     Mat labels, stats, centroids;
 
     // Filtering image based on calibration values
     cvtColor(frame, dst, COLOR_BGR2HSV);
-    GaussianBlur(dst, dst, Size(blurSize, blurSize), 0);
+    DoGFilter(dst, dst);
     inRange(dst, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), dst);
 
     // Detecting blobs
@@ -35,7 +35,7 @@ std::vector<Blob> BasicBlobDetector::detect(Mat& frame, Mat& dst){
         cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
         myblobVector.push_back(Blob(x, y, width, height, maxArea));
     }
-    
+
     if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
         int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
         int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
@@ -64,16 +64,16 @@ std::vector<Blob> BasicBlobDetector::detect(Mat& frame, Mat& dst){
         cv::rectangle(frame, boundingBox, cv::Scalar(255, 0, 0), 2);
         dst = dst & mask;
     }
-
     return myblobVector;
 }
 
-void BasicBlobDetector::calibrate(Mat& frame){
+void DoGBlobDetector::calibrate(Mat& frame){
     std::cout << "Calibrating..." << std::endl;
     Mat frameHSV;
     Mat filteredFrame;
 
     namedWindow("Original Frame", WINDOW_AUTOSIZE);
+    // namedWindow("Filtered Frame", WINDOW_AUTOSIZE);
     namedWindow("Filtered Frame", WINDOW_NORMAL);
     resizeWindow("Filtered Frame", 1280, 720);
     
@@ -88,20 +88,14 @@ void BasicBlobDetector::calibrate(Mat& frame){
     createTrackbar("High S", "Filtered Frame", &sHigh, maxValueH, on_high_S_thresh_trackbar, this);
     createTrackbar("Low V", "Filtered Frame", &vLow, maxValueH, on_low_V_thresh_trackbar, this);
     createTrackbar("High V", "Filtered Frame", &vHigh, maxValueH, on_high_V_thresh_trackbar, this);
-    createTrackbar("Blur Size", "Filtered Frame", &blurSize, 100, NULL);
+    createTrackbar("Sigma 1", "Filtered Frame", &sigma1, maxValueH, on_sigma_1_thresh_trackbar, this);
+    createTrackbar("Sigma 2", "Filtered Frame", &sigma2, maxValueH, on_sigma_2_thresh_trackbar, this);
 
     while(true){
 
         cvtColor(frame, frameHSV, COLOR_BGR2HSV);
 
-        // Blur the frame
-        if(blurSize > 0 && blurSize % 2 == 1) {
-            GaussianBlur(frameHSV, frameHSV, Size(blurSize, blurSize), 0);
-        }
-        else if(blurSize > 0){
-            blurSize++;
-            GaussianBlur(frameHSV, frameHSV, Size(blurSize, blurSize), 0);
-        }
+        DoGFilter(frameHSV, frameHSV);
 
         // Detect the object based on HSV Range Values
         inRange(frameHSV, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), filteredFrame);
@@ -121,6 +115,7 @@ void BasicBlobDetector::calibrate(Mat& frame){
     std::cout << "High S: " << sHigh << std::endl;
     std::cout << "Low V: " << vLow << std::endl;
     std::cout << "High V: " << vHigh << std::endl;
-    std::cout << "Blur Size: " << blurSize << std::endl;
+    std::cout << "Sigma 1: " << sigma1 << std::endl;
+    std::cout << "Sigma 2: " << sigma2 << std::endl;
     std::cout << "Finished Calibrating." << std::endl;
 }

@@ -15,6 +15,7 @@ add_executable(
     main.cpp
     blobDetector/src/BlobDetector.cpp
     blobDetector/src/BasicBlobDetector.cpp
+    blobDetector/src/DoGBlobDetector.cpp
     blobDetector/src/VaryingLightBlobDetector.cpp
     visualizer/Visualizer.cpp
     blob/Blob.cpp

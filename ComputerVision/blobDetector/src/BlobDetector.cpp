@@ -47,3 +47,27 @@ void BlobDetector::on_area_threshold_trackbar(int pos, void* userdata)
     BlobDetector* instance = (BlobDetector*)userdata;
     setTrackbarPos("Area Threshold", "Filtered Frame", instance->areaThreshold);
 }
+
+void BlobDetector::on_sigma_1_thresh_trackbar(int pos, void* userdata)
+{   
+    BlobDetector* instance = (BlobDetector*)userdata;
+    if (pos <= 0) {
+        pos = 1;
+    }
+    instance->sigma1 = min(instance->sigma2-1, instance->sigma1);
+    setTrackbarPos("Sigma 1", "Filtered Frame", instance->sigma1);
+}
+
+void BlobDetector::on_sigma_2_thresh_trackbar(int pos, void* userdata)
+{
+    BlobDetector* instance = (BlobDetector*)userdata;
+    instance->sigma2 = max(instance->sigma2, instance->sigma1+1);
+    setTrackbarPos("Sigma 2", "Filtered Frame", instance->sigma2);
+}
+
+void BlobDetector::DoGFilter(Mat& frame, Mat& dst){
+    Mat gaussian1, gaussian2;
+    GaussianBlur(frame, gaussian1, Size(), sigma1, sigma1); // possibly change K size in the future for better performance
+    GaussianBlur(frame, gaussian2, Size(), sigma2, sigma2);
+    subtract(gaussian1, gaussian2, dst);
+}
