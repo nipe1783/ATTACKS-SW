@@ -9,8 +9,8 @@ Follow this tutorial: `http://docs.px4.io/main/en/ros/ros2_comm.html` to install
 
 1. Start the gazebo simulation.
 ```
-cd ~/PX4-Autopilot
-make px4_sitl gazebo_iris
+cd ~/dev/ATTACKS-SW/MotionPlanning/PX4-Autopilot
+make px4_sitl gazebo-classic_uas
 ```
 
 2. Create a uXRCE-DDS client. This creates the "tunnel" from PX4 autopilot to Ros. 
@@ -21,7 +21,8 @@ MicroXRCEAgent udp4 -p 8888
 
 3. Launch the ROS listener node. This prints the current state of the UAS. Confirming we are simulating data in gazebo, using the PX4 autopilot, moving the data from PX4 to ROS using the DDS to transfer data, and recieving the data in our ROS node.
 ```
-cd ~/ws_sensor_combined/
+cd ~/dev/ATTACKS-SW/MotionPlanning/dev_ws
+colcon build // run this if it is your first time building the ros2 code.
 source /opt/ros/humble/setup.bash
 source install/local_setup.bash
 ros2 launch px4_ros_com sensor_combined_listener.launch.py
