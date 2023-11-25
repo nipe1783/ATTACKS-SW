@@ -1,0 +1,1 @@
+/home/nic/dev/ATTACKS-SW/MotionPlanning/ros_ws/build/gz_pkg/ament_cmake_core/gz_pkgConfig-version.cmake
