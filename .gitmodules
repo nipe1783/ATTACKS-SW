@@ -1,8 +1,8 @@
-[submodule "MotionPlanning/dev_ws/src/px4_msgs"]
-	path = MotionPlanning/dev_ws/src/px4_msgs
+[submodule "MotionPlanning/ros_ws/src/px4_msgs"]
+	path = MotionPlanning/ros_ws/src/px4_msgs
 	url = https://github.com/PX4/px4_msgs.git
-[submodule "MotionPlanning/dev_ws/src/px4_ros_com"]
-	path = MotionPlanning/dev_ws/src/px4_ros_com
+[submodule "MotionPlanning/ros_ws/src/px4_ros_com"]
+	path = MotionPlanning/ros_ws/src/px4_ros_com
 	url = https://github.com/PX4/px4_ros_com.git
 [submodule "MotionPlanning/PX4-Autopilot"]
 	path = MotionPlanning/PX4-Autopilot

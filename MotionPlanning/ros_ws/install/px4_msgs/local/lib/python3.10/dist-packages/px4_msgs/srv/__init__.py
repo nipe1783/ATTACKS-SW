@@ -1,0 +1,1 @@
+/home/nic/dev/ATTACKS-SW/MotionPlanning/ros_ws/build/px4_msgs/rosidl_generator_py/px4_msgs/srv/__init__.py

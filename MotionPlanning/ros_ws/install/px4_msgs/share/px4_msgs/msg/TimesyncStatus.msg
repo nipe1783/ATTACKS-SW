@@ -1,0 +1,1 @@
+/home/nic/dev/ATTACKS-SW/MotionPlanning/ros_ws/src/px4_msgs/msg/TimesyncStatus.msg

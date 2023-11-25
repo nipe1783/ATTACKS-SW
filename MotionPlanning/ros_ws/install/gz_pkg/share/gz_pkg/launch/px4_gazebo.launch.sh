@@ -1,0 +1,1 @@
+/home/nic/dev/ATTACKS-SW/MotionPlanning/ros_ws/src/gz_pkg/launch/px4_gazebo.launch.sh
