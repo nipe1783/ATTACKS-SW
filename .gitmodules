@@ -4,6 +4,6 @@
 [submodule "MotionPlanning/dev_ws/src/px4_ros_com"]
 	path = MotionPlanning/dev_ws/src/px4_ros_com
 	url = https://github.com/PX4/px4_ros_com.git
-[submodule "MotionPlanning/PX4-Autopilot"]
-	path = MotionPlanning/PX4-Autopilot
-	url = https://github.com/PX4/PX4-Autopilot.git
+[submodule "MotionPlanning/"]
+	path = MotionPlanning/
+	url = https://github.com/nipe1783/PX4-Autopilot.git
