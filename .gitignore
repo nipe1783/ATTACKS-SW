@@ -1,16 +1,17 @@
-# Ignore all files in these directories
-OpenCVDemo/images/*
-OpenCVDemo/build/*
-OpenCVDemo/videos/*
+.vscode/
+build/
+.DS_Store
+
+# Computer Vision
 ComputerVision/build/*
 ComputerVision/videos/*
 ComputerVision/images/*
 ComputerVision/output/*
-MotionPlanning/dev_ws/log/*
-MotionPlanning/dev_ws/install/*
-.vscode/
-build/
-.DS_Store
+
+# Motion Planning
+MotionPlanning/ros_ws/log/*
+MotionPlanning/ros_ws/install/*
+MotionPlanning/ros_ws/build/*
 
 # Specific files to keep.
 !ComputerVision/videos/test.txt
