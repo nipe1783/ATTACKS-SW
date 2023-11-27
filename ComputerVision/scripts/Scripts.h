@@ -19,4 +19,5 @@ public:
     static void cameraRunner(const int cameraNumber, BlobDetector& blobDetector);
     static void videoRunner(const std::string&fileName, BlobDetector& blobDetector);
     static void imageRunner(const std::string&fileName, BlobDetector& blobDetector);
+    static void hardCalibrateImage(const std::string&fileName, BlobDetector& blobDetector);
 };

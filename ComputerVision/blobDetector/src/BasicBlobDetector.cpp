@@ -32,7 +32,7 @@ std::vector<Blob> BasicBlobDetector::detect(Mat& frame, Mat& dst){
             int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
             int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
             cv::Rect bounding_box = cv::Rect(x, y, width, height);
-            cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+            cv::rectangle(frame, bounding_box, cv::Scalar(0, 255, 0), 4);
             myblobVector.push_back(Blob(x, y, width, height, maxArea));
         }
         

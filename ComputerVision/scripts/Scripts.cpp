@@ -148,3 +148,32 @@ void Scripts::imageRunner(const std::string&fileName, BlobDetector& blobDetector
 
     char key = (char) waitKey(30);
 }
+
+void Scripts::hardCalibrateImage(const std::string&fileName, BlobDetector& blobDetector){
+    //File name of file in images folder
+    //Child blob detector class/object for various blob detection types
+
+    std::vector<Blob> blobVector;
+    std::string imagePath = "../images/" + fileName;
+
+    cv::Mat frame = cv::imread(imagePath);
+    cv::Mat dst;
+
+    while (true) {
+        // Get user input via console
+        std::cout << "Enter an hLow value: ";
+        std::cin >> blobDetector.hLow;
+
+            //Calibrate function    
+        blobDetector.calibrate(frame);
+
+        char key = cv::waitKey(1);
+        if (key == 'q' || key == 'Q') {
+            break;
+        }
+    }
+
+    cv::destroyAllWindows();
+
+    char key = (char) waitKey(30);
+}

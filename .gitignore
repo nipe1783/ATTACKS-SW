@@ -6,6 +6,8 @@ ComputerVision/build/*
 ComputerVision/videos/*
 ComputerVision/images/*
 ComputerVision/output/*
+MotionPlanning/dev_ws/log/*
+MotionPlanning/dev_ws/install/*
 .vscode/
 build/
 .DS_Store
