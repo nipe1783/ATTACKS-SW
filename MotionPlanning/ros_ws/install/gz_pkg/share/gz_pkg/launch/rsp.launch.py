@@ -1,1 +1,0 @@
-/home/nic/dev/ATTACKS-SW/MotionPlanning/ros_ws/src/gz_pkg/launch/rsp.launch.py
