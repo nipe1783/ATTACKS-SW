@@ -4,10 +4,13 @@
 #include <memory>
 #include <cmath>
 #include <vector>
+#include <fstream>
+#include <iostream>
 
 //import classes
 #include "../visualizer/Visualizer.h"
 #include "../blobDetector/BlobDetector.h"
+#include "../blob/Blob.h"
 #include "Scripts.h"
 
 using namespace cv;
@@ -87,7 +90,11 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector
 
 
     // Define the codec and create a VideoWriter object
-    cv::VideoWriter videoWriter(outputFilename, cv::VideoWriter::fourcc('H', '2', '6', '4'), fps, cv::Size(frameWidth, frameHeight));
+    cv::VideoWriter videoWriter(outputFilename, cv::VideoWriter::fourcc('a', 'v', 'c', '1'), fps, cv::Size(frameWidth, frameHeight));
+
+    // cv::VideoWriter videoWriter(outputFilename, cv::VideoWriter::fourcc('H', '2', '6', '4'), fps, cv::Size(frameWidth, frameHeight));
+
+    std:: ofstream blobData("../data/output_data.csv");         //Opening file to print info to
 
     if (!videoWriter.isOpened()) {
         std::cerr << "Error: Could not create the VideoWriter object." << std::endl;
@@ -96,6 +103,7 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector
 
     Mat frame, dst;
     int counter = 0;
+    int count = 0;
     while(true){
         cap >> frame;
         if(frame.empty()){
@@ -112,6 +120,8 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector
         blobVector = blobDetector.detect(frame,dst);
         imshow("Frame", frame);
 
+        Blob temp = blobVector.front();
+        blobData << count << "," <<temp.x << ","<< temp.y << ","<< temp.width << ","<< temp.height << "," << '\n';
         //Writing frames to a video, use visualizer class to save individual frames
         videoWriter.write(frame);
 
@@ -121,9 +131,11 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector
         {
             break;
         }
+        count ++;
     }
     videoWriter.release();  // Release the VideoWriter
     cap.release();  // Release the VideoCapture
+    blobData.close();
 }
 
 void Scripts::imageRunner(const std::string&fileName, BlobDetector& blobDetector){

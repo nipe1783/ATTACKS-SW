@@ -7,6 +7,7 @@ ComputerVision/build/*
 ComputerVision/videos/*
 ComputerVision/images/*
 ComputerVision/output/*
+ComputerVision/data/*
 
 # Motion Planning
 MotionPlanning/ros_ws/log/*
