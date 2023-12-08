@@ -94,7 +94,8 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector
 
     // cv::VideoWriter videoWriter(outputFilename, cv::VideoWriter::fourcc('H', '2', '6', '4'), fps, cv::Size(frameWidth, frameHeight));
 
-    std:: ofstream blobData("../data/output_data.csv");         //Opening file to print info to
+    std:: ofstream blobData;
+    blobData.open("../data/output_data.csv");         //Opening file to print info to
 
     if (!videoWriter.isOpened()) {
         std::cerr << "Error: Could not create the VideoWriter object." << std::endl;
@@ -120,8 +121,14 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector
         blobVector = blobDetector.detect(frame,dst);
         imshow("Frame", frame);
 
-        Blob temp = blobVector.front();
-        blobData << count << "," <<temp.x << ","<< temp.y << ","<< temp.width << ","<< temp.height << "," << '\n';
+        if(blobVector.empty()){
+            blobData << count << "," << -1 << ","<< -1 << ","<< -1 << ","<< -1 << "," << '\n';
+        }
+        else{
+            Blob temp = blobVector.front();
+            blobData << count << "," <<temp.x << ","<< temp.y << ","<< temp.width << ","<< temp.height << "," << '\n';
+        }
+        
         //Writing frames to a video, use visualizer class to save individual frames
         videoWriter.write(frame);
 
