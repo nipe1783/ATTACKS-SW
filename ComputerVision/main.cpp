@@ -21,8 +21,9 @@ int main()
 
     
     // Scripts::hardCalibrateImage("DJICalibrate15.jpg", basicBlobDetector);
-    Scripts::videoRunner("DJIVideos/DJI_20231117032318_0005_S.MP4", basicBlobDetector);
+    // Scripts::videoRunner("DJIVideos/DJI_20231117032318_0005_S.MP4", basicBlobDetector);
     // Scripts::videoRunner("DroneTestFootage.mp4", basicBlobDetector);
+    Scripts::imageRunner("Localization_05.png", VLBlobDetector);
 
     // Scripts::cameraRunner(0, basicBlobDetector);
     return 0;

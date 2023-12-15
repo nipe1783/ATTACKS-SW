@@ -9,14 +9,34 @@ std::vector<Blob> VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
     std::vector<Blob> myblobVector; // Create an empty blob vector
 
     cvtColor(frame, dst, COLOR_BGR2HSV);
-    Mask(dst, dst);
+
     cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
     cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
-    gammaCorrection(dst, dst);
+    imshow("gray frame", dst);
+    char key = (char) waitKey();
+
+    // gammaCorrection(dst, dst);
+    // imshow("gamma frame", dst);
+    // key = (char) waitKey();
+
+    cv::cvtColor(dst, dst, cv::COLOR_GRAY2BGR);
+    cv::cvtColor(dst, dst, cv::COLOR_BGR2HSV);
+    Mask(dst, dst);
+    imshow("mask frame", dst);
+    key = (char) waitKey();
+
+
     DoGFilter(dst, dst);
+    imshow("DoG frame", dst);
+    key = (char) waitKey();
+
     contrastEqualization(dst, dst);
+
     cv::GaussianBlur(dst, dst, cv::Size(blurSize, blurSize), 0, 0);
     cv::threshold(dst, dst, intensityThreshold, 255, cv::THRESH_BINARY);
+    imshow("final frame", dst);
+    key = (char) waitKey();
+
     Mat element = getStructuringElement(cv::MORPH_RECT,
         cv::Size(2 * dilationSize + 1, 2 * dilationSize + 1),
         cv::Point(dilationSize, dilationSize));
@@ -74,6 +94,28 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
 
         Mat dst;
         cvtColor(frame, dst, COLOR_BGR2HSV);
+        cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+        gammaCorrection(dst, dst);
+        
+        // Show the filtered frame
+        imshow("Filtered Frame", dst);
+
+        char key = (char) waitKey(30);
+        if (key == 'q' || key == 27) // 'q' or 'ESC' key
+        {
+            break;
+        }
+    }
+    while(true){
+
+        Mat dst;
+        cvtColor(frame, dst, COLOR_BGR2HSV);
+        cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+        gammaCorrection(dst, dst);
+        cv::cvtColor(dst, dst, cv::COLOR_GRAY2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2HSV);
         Mask(dst, dst);
         
         // Show the filtered frame
@@ -85,15 +127,18 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
             break;
         }
     }
-
-    while(true){
+     while(true){
 
         Mat dst;
         cvtColor(frame, dst, COLOR_BGR2HSV);
-        Mask(dst, dst);
         cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
         cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
         gammaCorrection(dst, dst);
+        cv::cvtColor(dst, dst, cv::COLOR_GRAY2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2HSV);
+        Mask(dst, dst);
+        cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
         DoGFilter(dst, dst);
         contrastEqualization(dst, dst);
         
@@ -107,16 +152,21 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
         }
     }
 
+
     while(true) {
         if(blurSize % 2 == 0) {
             blurSize++;
         }
-        Mat dst;
+         Mat dst;
         cvtColor(frame, dst, COLOR_BGR2HSV);
-        Mask(dst, dst);
         cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
         cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
         gammaCorrection(dst, dst);
+        cv::cvtColor(dst, dst, cv::COLOR_GRAY2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2HSV);
+        Mask(dst, dst);
+        cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
+        cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
         DoGFilter(dst, dst);
         contrastEqualization(dst, dst);
         cv::GaussianBlur(dst, dst, cv::Size(blurSize, blurSize), 0, 0);

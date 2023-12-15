@@ -25,11 +25,21 @@ class BlobDetector
         // Member variables:
         int hLow = 92;
         int hHigh = 125;
-        int sLow = 14;
-        int sHigh = 90;
-        int vLow = 53;
-        int vHigh = 222;
-        int blurSize = 13;
+        int sLow = 27;
+        int sHigh = 117;
+        int vLow = 28;
+        int vHigh = 227;
+        int blurSize = 2;
         int areaThreshold = 700;
         static const int maxValueH = 255;
+        // int hLow = 92;
+        // int hHigh = 125;
+        // int sLow = 14;
+        // int sHigh = 90;
+        // int vLow = 53;
+        // int vHigh = 222;
+        // int blurSize = 13;
+        // int areaThreshold = 700;
+        // static const int maxValueH = 255;
+
 };

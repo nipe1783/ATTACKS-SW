@@ -1,14 +1,30 @@
 #include "../BasicBlobDetector.h"
 #include "../../blob/Blob.h"
+#include "../../visualizer/Visualizer.h"
 #include <vector>
 
 std::vector<Blob> BasicBlobDetector::detect(Mat& frame, Mat& dst){
+    
+
     Mat labels, stats, centroids;
 
     // Filtering image based on calibration values
     cvtColor(frame, dst, COLOR_BGR2HSV);
+    imshow("next frame", dst);
+    char key = (char) waitKey();
+    
+
+
     GaussianBlur(dst, dst, Size(blurSize, blurSize), 0);
+    imshow("blur frame", dst);
+    key = (char) waitKey();
+
+
+   
     inRange(dst, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), dst);
+    imshow("hsv filter frame", dst);
+    key = (char) waitKey();
+
 
     // Detecting blobs
     std::vector<Blob> myblobVector; // Create an empty blob vector
