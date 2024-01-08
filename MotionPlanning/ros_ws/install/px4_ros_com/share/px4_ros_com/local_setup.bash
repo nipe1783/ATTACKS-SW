@@ -1,1 +1,0 @@
-/home/nic/dev/ATTACKS-SW/MotionPlanning/ros_ws/build/px4_ros_com/ament_cmake_environment_hooks/local_setup.bash
