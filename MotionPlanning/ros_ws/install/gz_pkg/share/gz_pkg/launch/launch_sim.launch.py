@@ -1,1 +1,0 @@
-/home/nic/dev/ATTACKS-SW/MotionPlanning/ros_ws/src/gz_pkg/launch/launch_sim.launch.py
