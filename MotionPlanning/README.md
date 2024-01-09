@@ -11,7 +11,8 @@ This directory contains all code, documentation, and resources relevant to the m
 - **Step 1:** Open a new Ubuntu terminal.
   ```bash
   cd ~/dev/ATTACKS-SW/MotionPlanning/PX4-Autopilot
-  make px4_sitl gazebo-classic_uas
+  make px4_sitl gazebo-classic_uas__field
+
   ```
   *Note: If you encounter CMake errors, navigate to the PX4-Autopilot directory and run the following commands:*
   ```bash
@@ -39,5 +40,17 @@ This directory contains all code, documentation, and resources relevant to the m
   ros2 launch px4_ros_com sensor_combined_listener.launch.py
   ```
 
+### 4. Launch the ROS Control Node
+
+- **Step 1:** Open a new Ubuntu terminal.
+  ```bash
+  cd ~/dev/ATTACKS-SW/MotionPlanning/ros_ws
+  colcon build
+  source /opt/ros/humble/setup.bash
+  source install/local_setup.bash
+  ros2 run px4_ros_com offboard_control
+  ```
+
 ## Sources
 - PX4 and ROS2 installation tutorial: [ROS2 Communication](http://docs.px4.io/main/en/ros/ros2_comm.html)
+- Code completion and debugging for ROS2 in vscode: [Code debugging](https://medium.com/@junbs95/code-completion-and-debugging-for-ros2-in-vscode-a4ede900d979)
