@@ -46,7 +46,13 @@ target_include_directories(frame_transforms PUBLIC
 
 # /uas_trailing
 add_executable(uas_trailing src/uas_trailing.cpp)
-ament_target_dependencies(uas_trailing rclcpp px4_msgs)
+ament_target_dependencies(
+	uas_trailing 
+	rclcpp 
+	px4_msgs 
+	sensor_msgs 
+	cv_bridge
+)
 install(TARGETS uas_trailing DESTINATION lib/${PROJECT_NAME})
 
 

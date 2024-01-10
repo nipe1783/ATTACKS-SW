@@ -3,6 +3,8 @@
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
 #include <sensor_msgs/msg/image.hpp>
+#include <opencv2/opencv.hpp>
+
 
 /**
  * @brief Listener class to get state variables of the UAS from PX4.
