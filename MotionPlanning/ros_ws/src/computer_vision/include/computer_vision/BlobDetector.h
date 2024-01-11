@@ -13,7 +13,7 @@ class BlobDetector
     public:
         // Public methods:
         virtual void calibrate(Mat& frame) = 0;
-        virtual std::vector<Blob> detect(Mat& frame, Mat& dst) = 0;
+        virtual std::vector<Blob> detect(Mat& frame) = 0;
         static void on_low_H_thresh_trackbar(int, void*);
         static void on_high_H_thresh_trackbar(int, void*);
         static void on_low_S_thresh_trackbar(int, void*);
@@ -23,13 +23,13 @@ class BlobDetector
         static void on_area_threshold_trackbar(int, void*);
         
         // Member variables:
-        int hLow = 92;
-        int hHigh = 125;
-        int sLow = 27;
-        int sHigh = 117;
-        int vLow = 28;
-        int vHigh = 227;
-        int blurSize = 13;
-        int areaThreshold = 700;
+        int hLow = 0;
+        int hHigh = 255;
+        int sLow = 0;
+        int sHigh = 255;
+        int vLow = 226;
+        int vHigh = 255;
+        int blurSize = 3;
+        int areaThreshold = 1;
         static const int maxValueH = 255;
 };

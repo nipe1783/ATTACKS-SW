@@ -2,8 +2,8 @@
 #include "computer_vision/Blob.h"
 #include <vector>
 
-std::vector<Blob> BasicBlobDetector::detect(Mat& frame, Mat& dst){
-    Mat labels, stats, centroids;
+std::vector<Blob> BasicBlobDetector::detect(Mat& frame){
+    Mat labels, stats, centroids, dst;
 
     // Filtering image based on calibration values
     cvtColor(frame, dst, COLOR_BGR2HSV);
@@ -26,26 +26,26 @@ std::vector<Blob> BasicBlobDetector::detect(Mat& frame, Mat& dst){
             largestBlobLabel = i;
         }
     }
-        if (largestBlobLabel != 0&& maxArea > areaThreshold) { 
-            int x = stats.at<int>(largestBlobLabel, cv::CC_STAT_LEFT);
-            int y = stats.at<int>(largestBlobLabel, cv::CC_STAT_TOP);
-            int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
-            int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
-            cv::Rect bounding_box = cv::Rect(x, y, width, height);
-            cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
-            myblobVector.push_back(Blob(x, y, width, height, maxArea));
-        }
-        
-        if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
-            int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
-            int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
-            int width = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_WIDTH);
-            int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
-            cv::Rect bounding_box = cv::Rect(x, y, width, height);
-            cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
-            myblobVector.push_back(Blob(x, y, width, height, secondMaxArea));
-        }
-        return myblobVector;
+    if (largestBlobLabel != 0&& maxArea > areaThreshold) { 
+        int x = stats.at<int>(largestBlobLabel, cv::CC_STAT_LEFT);
+        int y = stats.at<int>(largestBlobLabel, cv::CC_STAT_TOP);
+        int width = stats.at<int>(largestBlobLabel, cv::CC_STAT_WIDTH);
+        int height = stats.at<int>(largestBlobLabel, cv::CC_STAT_HEIGHT);
+        cv::Rect bounding_box = cv::Rect(x, y, width, height);
+        cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
+        myblobVector.push_back(Blob(x, y, width, height, maxArea));
+    }
+    
+    if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
+        int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
+        int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
+        int width = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_WIDTH);
+        int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
+        cv::Rect bounding_box = cv::Rect(x, y, width, height);
+        cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
+        myblobVector.push_back(Blob(x, y, width, height, secondMaxArea));
+    }
+    return myblobVector;
 }
 
 void BasicBlobDetector::calibrate(Mat& frame){

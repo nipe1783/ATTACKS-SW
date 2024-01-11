@@ -28,6 +28,7 @@ find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(uas_common REQUIRED)
+find_package(computer_vision REQUIRED)
 
 
 #################
@@ -51,6 +52,7 @@ ament_target_dependencies(
 	uas_exploration
 	cv_bridge
 	uas_common
+	computer_vision
 	rclcpp 
 	px4_msgs 
 	sensor_msgs

@@ -5,7 +5,8 @@
 
 using namespace cv;
 
-std::vector<Blob> VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
+std::vector<Blob> VaryingLightBlobDetector::detect(Mat& frame){
+    Mat dst;
     std::vector<Blob> myblobVector; // Create an empty blob vector
 
     cvtColor(frame, dst, COLOR_BGR2HSV);

@@ -29,26 +29,9 @@ This directory contains all code, documentation, and resources relevant to the m
   MicroXRCEAgent udp4 -p 8888
   ```
 
-### 3. Launch the ROS Listener Node
+### 3. Launch the ROS UAS Exploration Node
 
 - **Step 1:** Open a new Ubuntu terminal.
-  ```bash
-  cd ~/dev/ATTACKS-SW/MotionPlanning/ros_ws
-  colcon build
-  source /opt/ros/humble/setup.bash
-  source install/local_setup.bash
-  ros2 launch ctrl_pkg UAS_state_listener.launch.py
-  ```
-- **Step 2:** Open a new Ubuntu terminal.
-  ```bash
-  cd ~/dev/ATTACKS-SW/MotionPlanning/ros_ws
-  colcon build
-  source /opt/ros/humble/setup.bash
-  source install/local_setup.bash
-  ros2 launch ctrl_pkg UAS_sensor_listener.launch.py
-  ```
-
-  **Step 3:** Open a new Ubuntu terminal.
   ```bash
   cd ~/dev/ATTACKS-SW/MotionPlanning/ros_ws
   colcon build

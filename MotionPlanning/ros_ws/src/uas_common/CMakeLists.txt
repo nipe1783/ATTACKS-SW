@@ -26,6 +26,7 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
+find_package(computer_vision REQUIRED)
 
 
 # Include directories
@@ -43,7 +44,8 @@ ament_target_dependencies(uas_common_lib
   Eigen3 
   geometry_msgs 
   OpenCV 
-  image_transport 
+  image_transport
+  computer_vision
 )
 
 # Install header files and library

@@ -11,6 +11,6 @@ class BasicBlobDetector : public BlobDetector
         // methods:
         BasicBlobDetector() = default;
         ~BasicBlobDetector() = default;
-        std::vector<Blob> detect(Mat& frame, Mat& dst) override;
+        std::vector<Blob> detect(Mat& frame) override;
         void calibrate(Mat& frame) override;
 };
