@@ -53,7 +53,7 @@
 #include <geometry_msgs/msg/vector3.hpp>
 #include <sensor_msgs/msg/imu.hpp>
 
-namespace uas_trailing
+namespace uas_lib
 {
 namespace frame_transforms
 {

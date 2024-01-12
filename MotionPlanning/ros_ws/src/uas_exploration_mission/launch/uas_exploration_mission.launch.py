@@ -11,14 +11,14 @@ def generate_launch_description():
         shell=True
     )
 
-    uas_trailing_node = Node(
-        package='uas_trailing',
-        executable='uas_trailing',
+    uas_exploration_mission = Node(
+        package='uas_exploration_mission',
+        executable='uas_exploration_mission',
         output='screen',
         shell=True,
     )
 
     return LaunchDescription([
         #micro_ros_agent,
-        uas_trailing_node
+        uas_exploration_mission
     ])

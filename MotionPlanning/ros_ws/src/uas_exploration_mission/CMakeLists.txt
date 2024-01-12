@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(uas_trailing)
+project(uas_exploration_mission)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -27,6 +27,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
+find_package(uas_lib REQUIRED)
+find_package(computer_vision REQUIRED)
 
 
 #################
@@ -44,16 +46,22 @@ target_include_directories(frame_transforms PUBLIC
 )
 
 
-# /uas_trailing
-add_executable(uas_trailing src/uas_trailing.cpp)
+# /uas_exploration_mission
+add_executable(uas_exploration_mission src/uas_exploration_mission.cpp)
 ament_target_dependencies(
-	uas_trailing 
+	uas_exploration_mission
+	cv_bridge
+	uas_lib
+	computer_vision
 	rclcpp 
 	px4_msgs 
-	sensor_msgs 
-	cv_bridge
+	sensor_msgs
 )
-install(TARGETS uas_trailing DESTINATION lib/${PROJECT_NAME})
+target_link_libraries(uas_exploration_mission
+  ${cv_bridge_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+)
+install(TARGETS uas_exploration_mission DESTINATION lib/${PROJECT_NAME})
 
 
 

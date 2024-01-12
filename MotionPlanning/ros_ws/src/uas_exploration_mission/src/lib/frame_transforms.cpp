@@ -38,11 +38,11 @@
  * Adapted from MAVROS ftf_frame_conversions.cpp and ftf_quaternion_utils.cpp.
  */
 
-#include <uas_trailing/frame_transforms.h>
+#include <uas_exploration_mission/frame_transforms.h>
 
 #include <assert.h>
 
-namespace uas_trailing
+namespace uas_exploration_mission
 {
 namespace frame_transforms
 {
