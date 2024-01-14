@@ -4,6 +4,7 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include "computer_vision/Blob.h"
+#include "computer_vision/CVImg.h"
 
 using namespace cv;
 
@@ -13,7 +14,7 @@ class BlobDetector
     public:
         // Public methods:
         virtual void calibrate(Mat& frame) = 0;
-        virtual std::vector<Blob> detect(Mat& frame) = 0;
+        virtual CVImg detect(Mat& frame) = 0;
         static void on_low_H_thresh_trackbar(int, void*);
         static void on_high_H_thresh_trackbar(int, void*);
         static void on_low_S_thresh_trackbar(int, void*);

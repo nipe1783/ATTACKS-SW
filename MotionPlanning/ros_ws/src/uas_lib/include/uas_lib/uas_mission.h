@@ -26,7 +26,7 @@ class UASMission : public rclcpp::Node
         UASState uasState_;
         UASState goalState_;
         BasicBlobDetector blobDetector_;
-        std::vector<Blob> detectedBlobs_;
+        CVImg cvImg_;
         rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr stateSubscription_;
         rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr psSubscription_;
         rclcpp::Publisher<px4_msgs::msg::OffboardControlMode>::SharedPtr controlModePublisher_;

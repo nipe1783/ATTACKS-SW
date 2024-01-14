@@ -1,4 +1,4 @@
-#include "uas_exploration_mission.h"
+#include "uas_complete_mission.h"
 #include "computer_vision/BasicBlobDetector.h"
 #include "computer_vision/Blob.h"
 #include <rclcpp/rclcpp.hpp>
@@ -10,16 +10,16 @@
 #include <opencv2/opencv.hpp>
 #include <chrono>
 
-UASExplorationMission::UASExplorationMission() : UASMission("uas_complete_mission") {
+UASCompleteMission::UASCompleteMission() : UASMission("uas_complete_mission") {
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
 
     psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera/image_raw", qos, std::bind(&UASExplorationMission::callbackPS, this, std::placeholders::_1)
+        "/camera/image_raw", qos, std::bind(&UASCompleteMission::callbackPS, this, std::placeholders::_1)
     );
 
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
-        "/fmu/out/vehicle_local_position", qos, std::bind(&UASExplorationMission::callbackState, this, std::placeholders::_1)
+        "/fmu/out/vehicle_local_position", qos, std::bind(&UASCompleteMission::callbackState, this, std::placeholders::_1)
     );
 
     controlModePublisher_ = this->create_publisher<px4_msgs::msg::OffboardControlMode>(
@@ -36,14 +36,14 @@ UASExplorationMission::UASExplorationMission() : UASMission("uas_complete_missio
 
     currentPhase_ = "exploration";
     explorationPhase_ = std::make_unique<UASExplorationPhase>(waypoints_);
+    trailingPhase_ = std::make_unique<UASTrailingPhase>();
     waypointIndex_ = 0;
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
-    
-    timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&UASExplorationMission::timerCallback, this));
+    timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&UASCompleteMission::timerCallback, this));
 }
 
-void UASExplorationMission::timerCallback(){
+void UASCompleteMission::timerCallback(){
     if(!psMsgReceived_ || !stateMsgReceived_) {
         return;
     }
@@ -56,13 +56,21 @@ void UASExplorationMission::timerCallback(){
     cv::imshow("Primary Sensor", psFrame_);
     cv::waitKey(1);
     std::cout << "Current phase: " << currentPhase_ << ". ";
-    std::cout << "UAS state: " << uasState_.ix << ", " << uasState_.iy << ", " << uasState_.iz << ", " << uasState_.bxV << ", " << uasState_.byV << ", " << uasState_.bzV << ". ";
-    std::cout << "Number of blobs: " << cvImg_.blobs.size() << std::endl;
-    
+    std::cout<< "Number of blobs detected: " << cvImg_.blobs.size() << ". " << std::endl;
     if(currentPhase_ == "exploration"){
         goalState_ = explorationPhase_->generateDesiredState(cvImg_, uasState_);
     }
-    
+    if(currentPhase_ == "exploration" && cvImg_.blobs.size() > 0){
+        currentPhase_ = "trailing";
+        goalState_ = trailingPhase_->generateDesiredState(cvImg_, uasState_);
+    }
+    if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
+        goalState_ = trailingPhase_->generateDesiredState(cvImg_, uasState_);
+    }
+    if(currentPhase_ == "trailing" && cvImg_.blobs.size() == 0){
+        currentPhase_ = "exploration";
+        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uasState_);
+    }
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
     if (offboardSetpointCounter_ < 11) {
@@ -73,10 +81,10 @@ void UASExplorationMission::timerCallback(){
 
 int main(int argc, char *argv[])
 {
-	std::cout << "Starting UAS exploration mission node..." << std::endl;
+	std::cout << "Starting UAS complete mission node..." << std::endl;
 	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 	rclcpp::init(argc, argv);
-	rclcpp::spin(std::make_shared<UASExplorationMission>());
+	rclcpp::spin(std::make_shared<UASCompleteMission>());
 	rclcpp::shutdown();
 	return 0;
 }

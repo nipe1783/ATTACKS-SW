@@ -1,6 +1,7 @@
 #include "uas_lib/uas_mission.h"
 #include "uas_lib/UASState.h"
 #include <cv_bridge/cv_bridge.h>
+#include <limits>
 
 void UASMission::imageConvert(const sensor_msgs::msg::Image::SharedPtr sImg)
 {
@@ -22,26 +23,44 @@ void UASMission::savePSFrame()
 
 double UASMission::distance(UASState s1, UASState s2)
 {
-    return sqrt(pow(s1.x - s2.x, 2) + pow(s1.y - s2.y, 2) + pow(s1.z - s2.z, 2));
+    return sqrt(pow(s1.ix - s2.ix, 2) + pow(s1.iy - s2.iy, 2) + pow(s1.iz - s2.iz, 2));
 }
 
 void UASMission::publishControlMode()
 {   
     px4_msgs::msg::OffboardControlMode msg{};
-    msg.position = true;
-	msg.velocity = false;
-	msg.acceleration = false;
-	msg.attitude = false;
-	msg.body_rate = false;
-	msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+    if(currentPhase_ == "exploration"){
+        msg.position = true;
+        msg.velocity = false;
+        msg.acceleration = false;
+        msg.attitude = false;
+        msg.body_rate = false;
+    }
+    else if(currentPhase_ == "trailing"){
+        msg.position = false;
+        msg.velocity = true;
+        msg.acceleration = false;
+        msg.attitude = false;
+        msg.body_rate = false;
+    }
+    msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
 	controlModePublisher_->publish(msg);
 }
 
 void UASMission::publishTrajectorySetpoint(UASState s)
 {
     px4_msgs::msg::TrajectorySetpoint msg{};
-    msg.position = {s.x, s.y, s.z};
-    msg.yaw = -3.14;
+    if(currentPhase_ == "exploration"){
+        msg.position = {s.ix, s.iy, s.iz};
+        msg.yaw = -3.14;
+    }
+    else if(currentPhase_ == "trailing"){
+        msg.velocity = {s.bxV, s.byV, s.bzV};
+        msg.position[0] = std::numeric_limits<float>::quiet_NaN();
+        msg.position[1] = std::numeric_limits<float>::quiet_NaN();
+        msg.position[2] = std::numeric_limits<float>::quiet_NaN();
+        msg.yaw = std::numeric_limits<float>::quiet_NaN();
+    }
     msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
     trajectorySetpointPublisher_->publish(msg);
 }
@@ -80,5 +99,5 @@ void UASMission::callbackPS(const sensor_msgs::msg::Image::SharedPtr psMsg) {
 
 void UASMission::callbackState(const px4_msgs::msg::VehicleLocalPosition::UniquePtr stateMsg) {
     stateMsgReceived_ = true;
-    uasState_ = UASState(stateMsg->x, stateMsg->y, stateMsg->z);
+    uasState_ = UASState(stateMsg->x, stateMsg->y, stateMsg->z, stateMsg->heading, stateMsg->vx,  stateMsg->vy,  stateMsg->vz);
 }

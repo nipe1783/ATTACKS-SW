@@ -36,6 +36,7 @@ include_directories(include)
 add_library(uas_lib 
   src/UASPhase.cpp
   src/UASExplorationPhase.cpp
+  src/UASTrailingPhase.cpp
   src/uas_mission.cpp
 )
 

@@ -9,5 +9,5 @@ class UASExplorationPhase : public UASPhase
         unsigned int waypointIndex_;
 
         //methods:
-        UASState generateDesiredState(std::vector<Blob> blobs, UASState uasState) override;
+        UASState generateDesiredState(CVImg cvImg, UASState uasState) override;
 };

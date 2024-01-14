@@ -2,7 +2,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <opencv2/opencv.hpp>
 #include "uas_lib/UASState.h"
-#include "computer_vision/Blob.h"
+#include "computer_vision/CVImg.h"
 
 class UASPhase
 {   
@@ -19,7 +19,7 @@ class UASPhase
          * @brief Primary function of all UAS mission phases. Tells the UAS where to go.
          *
          */
-        virtual UASState generateDesiredState(std::vector<Blob> blobs, UASState uasState) = 0;
+        virtual UASState generateDesiredState(CVImg cvImg, UASState uasState) = 0;
         
         /**
          * @brief Determines distance between the UAS and a waypoint.

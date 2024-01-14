@@ -5,7 +5,7 @@
 
 using namespace cv;
 
-std::vector<Blob> VaryingLightBlobDetector::detect(Mat& frame){
+CVImg VaryingLightBlobDetector::detect(Mat& frame){
     Mat dst;
     std::vector<Blob> myblobVector; // Create an empty blob vector
 
@@ -42,7 +42,7 @@ std::vector<Blob> VaryingLightBlobDetector::detect(Mat& frame){
         dst = dst & mask;
         myblobVector.push_back(Blob(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height, boundingBox.area()));
     }
-    return myblobVector;
+    return CVImg(frame.cols, frame.rows, frame.cols / 2, frame.rows / 2, myblobVector);
 }
 
 void VaryingLightBlobDetector::calibrate(Mat& frame){

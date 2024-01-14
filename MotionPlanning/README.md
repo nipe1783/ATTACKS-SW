@@ -37,7 +37,7 @@ This directory contains all code, documentation, and resources relevant to the m
   colcon build
   source /opt/ros/humble/setup.bash
   source install/local_setup.bash
-  ros2 launch uas_exploration_mission uas_exploration_mission.launch.py
+  ros2 launch uas_complete_mission uas_complete_mission.launch.py
   ```
 
 ### 4. Launch the ROS Control Node
