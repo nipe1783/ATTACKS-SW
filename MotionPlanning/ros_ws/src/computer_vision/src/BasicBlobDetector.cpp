@@ -1,8 +1,9 @@
 #include "computer_vision/BasicBlobDetector.h"
 #include "computer_vision/Blob.h"
 #include <vector>
+#include "computer_vision/CVImg.h"
 
-std::vector<Blob> BasicBlobDetector::detect(Mat& frame){
+CVImg BasicBlobDetector::detect(Mat& frame){
     Mat labels, stats, centroids, dst;
 
     // Filtering image based on calibration values
@@ -45,7 +46,7 @@ std::vector<Blob> BasicBlobDetector::detect(Mat& frame){
         cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
         myblobVector.push_back(Blob(x, y, width, height, secondMaxArea));
     }
-    return myblobVector;
+    return CVImg(frame.cols, frame.rows, frame.cols / 2, frame.rows / 2, myblobVector);
 }
 
 void BasicBlobDetector::calibrate(Mat& frame){
