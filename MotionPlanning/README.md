@@ -8,7 +8,8 @@ This directory contains all code, documentation, and resources relevant to the m
 
 ### 1. Starting the Gazebo Simulation
 
-- **Step 1:** Open a new Ubuntu terminal.
+- **Step 1:** Op
+en a new Ubuntu terminal.
   ```bash
   cd ~/dev/ATTACKS-SW/MotionPlanning/PX4-Autopilot
   make px4_sitl gazebo-classic_uas__field
@@ -19,6 +20,20 @@ This directory contains all code, documentation, and resources relevant to the m
   git remote add upstream https://github.com/PX4/PX4-Autopilot.git
   git fetch upstream
   git fetch upstream --tags
+  ```
+
+- **Step 2:**
+  ```bash
+  gimbal test pitch -90
+  ```
+
+- **Step 3:**
+  ```bash
+  param set MPC_XY_VEL_MAX 3
+  param save
+  ```
+   ```
+  *Note: This only needs to be ran the first time you are running the sim. If you wish to change the maximum horizontal velocity of the UAS you can reset it.*
   ```
 
 ### 2. Creating a uXRCE-DDS Client
