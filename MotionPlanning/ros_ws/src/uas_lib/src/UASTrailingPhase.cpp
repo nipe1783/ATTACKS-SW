@@ -18,11 +18,11 @@ UASState UASTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
 
     Blob blob = cvImg.blobs[0];
     if (std::abs(blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) > tolerance_) {
-        bodyX = (blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) * 2;
+        bodyX = (blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) * 3;
     }
 
     if (std::abs(blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) > tolerance_) {
-        bodyY = (blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) * 2;
+        bodyY = (blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) * 3;
     }
 
     desiredUASState.bxV = bodyX * cos(uasState.ipsi  + M_PI_2) - bodyY * sin(uasState.ipsi + M_PI_2);
