@@ -1,0 +1,93 @@
+-- The C compiler identification is GNU 11.4.0
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Found ament_cmake: 1.3.6 (/opt/ros/humble/share/ament_cmake/cmake)
+-- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter 
+-- Found builtin_interfaces: 1.2.1 (/opt/ros/humble/share/builtin_interfaces/cmake)
+-- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+-- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+-- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found eigen3_cmake_module: 0.1.1 (/opt/ros/humble/share/eigen3_cmake_module/cmake)
+-- Found Eigen3: TRUE (found version "3.4.0") 
+-- Found geometry_msgs: 4.2.3 (/opt/ros/humble/share/geometry_msgs/cmake)
+-- Found px4_msgs: 2.0.1 (/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/cmake)
+-- Found rclcpp: 16.0.7 (/opt/ros/humble/share/rclcpp/cmake)
+-- Found rmw_implementation_cmake: 6.1.1 (/opt/ros/humble/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 6.2.5 (/opt/ros/humble/share/rmw_fastrtps_cpp/cmake)
+-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "3.0.2")  
+-- Found FastRTPS: /opt/ros/humble/include  
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Found sensor_msgs: 4.2.3 (/opt/ros/humble/share/sensor_msgs/cmake)
+-- Found cv_bridge: 3.2.1 (/opt/ros/humble/share/cv_bridge/cmake)
+-- Found OpenCV: /usr (found version "4.5.4") 
+-- Found image_transport: 3.1.7 (/opt/ros/humble/share/image_transport/cmake)
+-- Found computer_vision: 0.1.0 (/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/cmake)
+-- Found ament_lint_auto: 0.12.9 (/opt/ros/humble/share/ament_lint_auto/cmake)
+-- Added test 'copyright' to check source files copyright and LICENSE
+-- Added test 'cppcheck' to perform static code analysis on C / C++ code
+-- Configured cppcheck include dirs: /home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib/include
+-- Configured cppcheck exclude dirs and/or files: 
+-- Added test 'cpplint' to check C / C++ code against the Google style
+-- Configured cpplint exclude dirs and/or files: 
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'uncrustify' to check C / C++ code style
+-- Configured uncrustify additional arguments: 
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib
+[ 80%] [32mBuilding CXX object CMakeFiles/uas_lib.dir/src/uas_mission.cpp.o[0m
+[ 80%] [32mBuilding CXX object CMakeFiles/uas_lib.dir/src/UASExplorationPhase.cpp.o[0m
+[ 80%] [32mBuilding CXX object CMakeFiles/uas_lib.dir/src/UASTrailingPhase.cpp.o[0m
+[ 80%] [32mBuilding CXX object CMakeFiles/uas_lib.dir/src/UASPhase.cpp.o[0m
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib/src/UASExplorationPhase.cpp:[m[K In member function ‘[01m[Kvirtual UASState UASExplorationPhase::generateDesiredState(CVImg, UASState)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib/src/UASExplorationPhase.cpp:10:58:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[KcvImg[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   10 | UASState UASExplorationPhase::generateDesiredState([01;35m[KCVImg cvImg[m[K, UASState uasState)
+      |                                                    [01;35m[K~~~~~~^~~~~[m[K
+[100%] [32m[1mLinking CXX static library libuas_lib.a[0m
+[100%] Built target uas_lib
+-- Install configuration: ""
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/include/uas_lib
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/include/uas_lib/UASPhase.h
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/include/uas_lib/frame_transforms.h
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/include/uas_lib/UASState.h
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/include/uas_lib/UASTrailingPhase.h
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/include/uas_lib/UASExplorationPhase.h
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/include/uas_lib/uas_mission.h
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib/libuas_lib.a
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/environment/library_path.sh
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/environment/library_path.dsv
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/ament_index/resource_index/package_run_dependencies/uas_lib
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/ament_index/resource_index/parent_prefix_path/uas_lib
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/environment/ament_prefix_path.sh
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/environment/ament_prefix_path.dsv
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/environment/path.sh
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/environment/path.dsv
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/local_setup.bash
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/local_setup.sh
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/local_setup.zsh
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/local_setup.dsv
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.dsv
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/ament_index/resource_index/packages/uas_lib
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/cmake/ament_cmake_export_libraries-extras.cmake
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/cmake/uas_libConfig.cmake
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/cmake/uas_libConfig-version.cmake
+-- Installing: /home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.xml
