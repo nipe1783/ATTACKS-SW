@@ -12,3 +12,7 @@
 	path = MotionPlanning/PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic
 	url = https://github.com/nipe1783/sitl_gazebo-classic.git
 	branch = test
+[submodule "PX4-Autopilot"]
+	path = PX4-Autopilot
+	url = https://github.com/nipe1783/PX4-Autopilot.git
+	branch = test
