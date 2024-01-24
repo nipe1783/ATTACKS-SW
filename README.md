@@ -6,7 +6,7 @@
 - **2:** Run `git submodule update --init --recursive` in the ATTACKS-SW directory.
 - **3:** Run the following commands to update the PX4 autopilot:
 ```bash
-cd ~/dev/ATTACKS-SW/MotionPlanning/PX4-Autopilot
+cd ~/dev/ATTACKS-SW/PX4-Autopilot
 git remote add upstream https://github.com/PX4/PX4-Autopilot.git
 git fetch upstream
 git fetch upstream --tags
@@ -14,7 +14,7 @@ git fetch upstream --tags
 
 ## Dependencies:
 
-ROS2 Humble. To isntall, run the following commands:
+ROS2 Humble. To install, run the following commands:
 ```bash
 sudo apt update && sudo apt install locales
 sudo locale-gen en_US en_US.UTF-8
@@ -40,6 +40,10 @@ sudo aptitude install gazebo libgazebo11 libgazebo-dev
 ```
 ```bash
 pip install --user -U empy==3.3.4 pyros-genmsg setuptools
+```
+
+```bash
+sudo apt install ros-humble-gazebo-ros-pkgs
 ```
 
 ## Running the Simulation
