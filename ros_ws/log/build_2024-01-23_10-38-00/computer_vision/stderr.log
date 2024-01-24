@@ -1,0 +1,32 @@
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:[m[K In static member function ‘[01m[Kstatic void BlobDetector::on_low_H_thresh_trackbar(int, void*)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:3:49:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpos[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+    3 | void BlobDetector::on_low_H_thresh_trackbar([01;35m[Kint pos[m[K, void* userdata)
+      |                                             [01;35m[K~~~~^~~[m[K
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:[m[K In static member function ‘[01m[Kstatic void BlobDetector::on_high_H_thresh_trackbar(int, void*)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:10:50:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpos[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   10 | void BlobDetector::on_high_H_thresh_trackbar([01;35m[Kint pos[m[K, void* userdata)
+      |                                              [01;35m[K~~~~^~~[m[K
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:[m[K In static member function ‘[01m[Kstatic void BlobDetector::on_low_S_thresh_trackbar(int, void*)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:17:49:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpos[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   17 | void BlobDetector::on_low_S_thresh_trackbar([01;35m[Kint pos[m[K, void* userdata)
+      |                                             [01;35m[K~~~~^~~[m[K
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:[m[K In static member function ‘[01m[Kstatic void BlobDetector::on_high_S_thresh_trackbar(int, void*)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:24:50:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpos[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   24 | void BlobDetector::on_high_S_thresh_trackbar([01;35m[Kint pos[m[K, void* userdata)
+      |                                              [01;35m[K~~~~^~~[m[K
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:[m[K In static member function ‘[01m[Kstatic void BlobDetector::on_low_V_thresh_trackbar(int, void*)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:31:49:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpos[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   31 | void BlobDetector::on_low_V_thresh_trackbar([01;35m[Kint pos[m[K, void* userdata)
+      |                                             [01;35m[K~~~~^~~[m[K
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:[m[K In static member function ‘[01m[Kstatic void BlobDetector::on_high_V_thresh_trackbar(int, void*)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:38:50:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpos[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   38 | void BlobDetector::on_high_V_thresh_trackbar([01;35m[Kint pos[m[K, void* userdata)
+      |                                              [01;35m[K~~~~^~~[m[K
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:[m[K In static member function ‘[01m[Kstatic void BlobDetector::on_area_threshold_trackbar(int, void*)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/BlobDetector.cpp:45:51:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpos[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+   45 | void BlobDetector::on_area_threshold_trackbar([01;35m[Kint pos[m[K, void* userdata)
+      |                                               [01;35m[K~~~~^~~[m[K
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/VaryingLightBlobDetector.cpp:[m[K In static member function ‘[01m[Kstatic void VaryingLightBlobDetector::on_sigma_2_thresh_trackbar(int, void*)[m[K’:
+[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision/src/VaryingLightBlobDetector.cpp:263:63:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[Kpos[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
+  263 | void VaryingLightBlobDetector::on_sigma_2_thresh_trackbar([01;35m[Kint pos[m[K, void* userdata)
+      |                                                           [01;35m[K~~~~^~~[m[K

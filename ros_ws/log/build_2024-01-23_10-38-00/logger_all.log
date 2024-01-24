@@ -1,0 +1,644 @@
+[0.754s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build']
+[0.754s] DEBUG:colcon:Parsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=32, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7fa5c1ebf3d0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7fa5c1ebeec0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7fa5c1ebeec0>>)
+[0.825s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.825s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.825s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.825s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.825s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.825s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.825s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/home/nic/dev/ATTACKS-SW/ros_ws'
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.825s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.854s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ignore_ament_install'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_pkg']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_pkg'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['colcon_meta']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'colcon_meta'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['ros']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'ros'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['cmake', 'python']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'cmake'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extensions ['python_setup_py']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src) by extension 'python_setup_py'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extensions ['ignore', 'ignore_ament_install']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extension 'ignore'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extension 'ignore_ament_install'
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extensions ['colcon_pkg']
+[0.855s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extension 'colcon_pkg'
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extensions ['colcon_meta']
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extension 'colcon_meta'
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extensions ['ros']
+[0.856s] Level 1:colcon.colcon_core.package_identification:_identify(src/computer_vision) by extension 'ros'
+[0.860s] DEBUG:colcon.colcon_core.package_identification:Package 'src/computer_vision' with type 'ros.ament_cmake' and name 'computer_vision'
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extensions ['ignore', 'ignore_ament_install']
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extension 'ignore'
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extension 'ignore_ament_install'
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extensions ['colcon_pkg']
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extension 'colcon_pkg'
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extensions ['colcon_meta']
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extension 'colcon_meta'
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extensions ['ros']
+[0.860s] Level 1:colcon.colcon_core.package_identification:_identify(src/ctrl_pkg) by extension 'ros'
+[0.861s] DEBUG:colcon.colcon_core.package_identification:Package 'src/ctrl_pkg' with type 'ros.ament_cmake' and name 'ctrl_pkg'
+[0.861s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extensions ['ignore', 'ignore_ament_install']
+[0.861s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extension 'ignore'
+[0.861s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extension 'ignore_ament_install'
+[0.861s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extensions ['colcon_pkg']
+[0.861s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extension 'colcon_pkg'
+[0.861s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extensions ['colcon_meta']
+[0.861s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extension 'colcon_meta'
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extensions ['ros']
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/gz_pkg) by extension 'ros'
+[0.862s] DEBUG:colcon.colcon_core.package_identification:Package 'src/gz_pkg' with type 'ros.ament_cmake' and name 'gz_pkg'
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extensions ['ignore', 'ignore_ament_install']
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extension 'ignore'
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extension 'ignore_ament_install'
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extensions ['colcon_pkg']
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extension 'colcon_pkg'
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extensions ['colcon_meta']
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extension 'colcon_meta'
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extensions ['ros']
+[0.862s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_msgs) by extension 'ros'
+[0.863s] DEBUG:colcon.colcon_core.package_identification:Package 'src/px4_msgs' with type 'ros.ament_cmake' and name 'px4_msgs'
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extensions ['ignore', 'ignore_ament_install']
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extension 'ignore'
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extension 'ignore_ament_install'
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extensions ['colcon_pkg']
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extension 'colcon_pkg'
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extensions ['colcon_meta']
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extension 'colcon_meta'
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extensions ['ros']
+[0.863s] Level 1:colcon.colcon_core.package_identification:_identify(src/px4_ros_com) by extension 'ros'
+[0.864s] DEBUG:colcon.colcon_core.package_identification:Package 'src/px4_ros_com' with type 'ros.ament_cmake' and name 'px4_ros_com'
+[0.864s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extensions ['ignore', 'ignore_ament_install']
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extension 'ignore'
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extension 'ignore_ament_install'
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extensions ['colcon_pkg']
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extension 'colcon_pkg'
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extensions ['colcon_meta']
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extension 'colcon_meta'
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extensions ['ros']
+[0.865s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_complete_misison) by extension 'ros'
+[0.866s] DEBUG:colcon.colcon_core.package_identification:Package 'src/uas_complete_misison' with type 'ros.ament_cmake' and name 'uas_complete_mission'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extensions ['ignore', 'ignore_ament_install']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extension 'ignore'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extension 'ignore_ament_install'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extensions ['colcon_pkg']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extension 'colcon_pkg'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extensions ['colcon_meta']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extension 'colcon_meta'
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extensions ['ros']
+[0.866s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_exploration_mission) by extension 'ros'
+[0.867s] DEBUG:colcon.colcon_core.package_identification:Package 'src/uas_exploration_mission' with type 'ros.ament_cmake' and name 'uas_exploration_mission'
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extensions ['ignore', 'ignore_ament_install']
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extension 'ignore'
+[0.867s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extension 'ignore_ament_install'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extensions ['colcon_pkg']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extension 'colcon_pkg'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extensions ['colcon_meta']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extension 'colcon_meta'
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extensions ['ros']
+[0.868s] Level 1:colcon.colcon_core.package_identification:_identify(src/uas_lib) by extension 'ros'
+[0.869s] DEBUG:colcon.colcon_core.package_identification:Package 'src/uas_lib' with type 'ros.ament_cmake' and name 'uas_lib'
+[0.869s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.869s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.869s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.869s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.869s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.931s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) check parameters
+[0.931s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) discover
+[0.952s] DEBUG:colcon.colcon_installed_package_information.package_discovery:Found 317 installed packages in /opt/ros/humble
+[0.953s] Level 1:colcon.colcon_core.package_discovery:discover_packages(prefix_path) using defaults
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'cmake_args' from command line to 'None'
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'cmake_target' from command line to 'None'
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'cmake_clean_cache' from command line to 'False'
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'cmake_clean_first' from command line to 'False'
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'cmake_force_configure' from command line to 'False'
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'ament_cmake_args' from command line to 'None'
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'catkin_cmake_args' from command line to 'None'
+[1.012s] Level 5:colcon.colcon_core.verb:set package 'gz_pkg' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.012s] DEBUG:colcon.colcon_core.verb:Building package 'gz_pkg' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg', 'merge_install': False, 'path': '/home/nic/dev/ATTACKS-SW/ros_ws/src/gz_pkg', 'symlink_install': False, 'test_result_base': None}
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'cmake_args' from command line to 'None'
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'cmake_target' from command line to 'None'
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'cmake_clean_cache' from command line to 'False'
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'cmake_clean_first' from command line to 'False'
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'cmake_force_configure' from command line to 'False'
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'ament_cmake_args' from command line to 'None'
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'catkin_cmake_args' from command line to 'None'
+[1.022s] Level 5:colcon.colcon_core.verb:set package 'px4_msgs' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.022s] DEBUG:colcon.colcon_core.verb:Building package 'px4_msgs' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs', 'merge_install': False, 'path': '/home/nic/dev/ATTACKS-SW/ros_ws/src/px4_msgs', 'symlink_install': False, 'test_result_base': None}
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'cmake_args' from command line to 'None'
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'cmake_target' from command line to 'None'
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'cmake_clean_cache' from command line to 'False'
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'cmake_clean_first' from command line to 'False'
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'cmake_force_configure' from command line to 'False'
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'ament_cmake_args' from command line to 'None'
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'catkin_cmake_args' from command line to 'None'
+[1.030s] Level 5:colcon.colcon_core.verb:set package 'computer_vision' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.030s] DEBUG:colcon.colcon_core.verb:Building package 'computer_vision' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision', 'merge_install': False, 'path': '/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision', 'symlink_install': False, 'test_result_base': None}
+[1.039s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'cmake_args' from command line to 'None'
+[1.040s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'cmake_target' from command line to 'None'
+[1.040s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.040s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'cmake_clean_cache' from command line to 'False'
+[1.040s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'cmake_clean_first' from command line to 'False'
+[1.040s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'cmake_force_configure' from command line to 'False'
+[1.040s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'ament_cmake_args' from command line to 'None'
+[1.040s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'catkin_cmake_args' from command line to 'None'
+[1.040s] Level 5:colcon.colcon_core.verb:set package 'ctrl_pkg' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.040s] DEBUG:colcon.colcon_core.verb:Building package 'ctrl_pkg' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg', 'merge_install': False, 'path': '/home/nic/dev/ATTACKS-SW/ros_ws/src/ctrl_pkg', 'symlink_install': False, 'test_result_base': None}
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'cmake_args' from command line to 'None'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'cmake_target' from command line to 'None'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'cmake_clean_cache' from command line to 'False'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'cmake_clean_first' from command line to 'False'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'cmake_force_configure' from command line to 'False'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'ament_cmake_args' from command line to 'None'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'catkin_cmake_args' from command line to 'None'
+[1.048s] Level 5:colcon.colcon_core.verb:set package 'px4_ros_com' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.048s] DEBUG:colcon.colcon_core.verb:Building package 'px4_ros_com' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com', 'merge_install': False, 'path': '/home/nic/dev/ATTACKS-SW/ros_ws/src/px4_ros_com', 'symlink_install': False, 'test_result_base': None}
+[1.055s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'cmake_args' from command line to 'None'
+[1.056s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'cmake_target' from command line to 'None'
+[1.056s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.056s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'cmake_clean_cache' from command line to 'False'
+[1.056s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'cmake_clean_first' from command line to 'False'
+[1.056s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'cmake_force_configure' from command line to 'False'
+[1.056s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'ament_cmake_args' from command line to 'None'
+[1.056s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'catkin_cmake_args' from command line to 'None'
+[1.056s] Level 5:colcon.colcon_core.verb:set package 'uas_lib' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.056s] DEBUG:colcon.colcon_core.verb:Building package 'uas_lib' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib', 'merge_install': False, 'path': '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib', 'symlink_install': False, 'test_result_base': None}
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'cmake_args' from command line to 'None'
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'cmake_target' from command line to 'None'
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'cmake_clean_cache' from command line to 'False'
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'cmake_clean_first' from command line to 'False'
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'cmake_force_configure' from command line to 'False'
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'ament_cmake_args' from command line to 'None'
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'catkin_cmake_args' from command line to 'None'
+[1.065s] Level 5:colcon.colcon_core.verb:set package 'uas_complete_mission' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.065s] DEBUG:colcon.colcon_core.verb:Building package 'uas_complete_mission' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission', 'merge_install': False, 'path': '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_complete_misison', 'symlink_install': False, 'test_result_base': None}
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'cmake_args' from command line to 'None'
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'cmake_target' from command line to 'None'
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'cmake_clean_cache' from command line to 'False'
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'cmake_clean_first' from command line to 'False'
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'cmake_force_configure' from command line to 'False'
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'ament_cmake_args' from command line to 'None'
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'catkin_cmake_args' from command line to 'None'
+[1.074s] Level 5:colcon.colcon_core.verb:set package 'uas_exploration_mission' build argument 'catkin_skip_building_tests' from command line to 'False'
+[1.074s] DEBUG:colcon.colcon_core.verb:Building package 'uas_exploration_mission' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission', 'merge_install': False, 'path': '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_exploration_mission', 'symlink_install': False, 'test_result_base': None}
+[1.082s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[1.092s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[1.093s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/px4_msgs' with build type 'ament_cmake'
+[1.093s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/px4_msgs'
+[1.107s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[1.107s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.107s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.125s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/gz_pkg' with build type 'ament_cmake'
+[1.125s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/gz_pkg'
+[1.134s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.134s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[1.156s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/px4_msgs -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs
+[1.162s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/gz_pkg -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg
+[2.121s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/gz_pkg -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg
+[2.123s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg -- -j32 -l32
+[2.145s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg -- -j32 -l32
+[2.161s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg
+[2.183s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(gz_pkg)
+[2.183s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/gz_pkg
+[2.197s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg' for CMake module files
+[2.197s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg' for CMake config files
+[2.197s] Level 1:colcon.colcon_core.shell:create_environment_hook('gz_pkg', 'cmake_prefix_path')
+[2.204s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/hook/cmake_prefix_path.ps1'
+[2.205s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/hook/cmake_prefix_path.dsv'
+[2.206s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/hook/cmake_prefix_path.sh'
+[2.206s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/bin'
+[2.206s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/lib/pkgconfig/gz_pkg.pc'
+[2.207s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/lib/python3.10/site-packages'
+[2.207s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/bin'
+[2.214s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.ps1'
+[2.215s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.dsv'
+[2.216s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.sh'
+[2.216s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.bash'
+[2.217s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.zsh'
+[2.218s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/colcon-core/packages/gz_pkg)
+[2.239s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(gz_pkg)
+[2.246s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg' for CMake module files
+[2.246s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg' for CMake config files
+[2.246s] Level 1:colcon.colcon_core.shell:create_environment_hook('gz_pkg', 'cmake_prefix_path')
+[2.254s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/hook/cmake_prefix_path.ps1'
+[2.254s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/hook/cmake_prefix_path.dsv'
+[2.255s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/hook/cmake_prefix_path.sh'
+[2.255s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/bin'
+[2.255s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/lib/pkgconfig/gz_pkg.pc'
+[2.255s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/lib/python3.10/site-packages'
+[2.256s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/bin'
+[2.263s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.ps1'
+[2.263s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.dsv'
+[2.263s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.sh'
+[2.263s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.bash'
+[2.264s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/gz_pkg/package.zsh'
+[2.264s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/gz_pkg/share/colcon-core/packages/gz_pkg)
+[4.522s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/px4_msgs -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs
+[4.523s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs -- -j32 -l32
+[104.950s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs -- -j32 -l32
+[106.905s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs
+[107.511s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(px4_msgs)
+[107.511s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/px4_msgs
+[107.518s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs' for CMake module files
+[107.519s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs' for CMake config files
+[107.521s] Level 1:colcon.colcon_core.shell:create_environment_hook('px4_msgs', 'cmake_prefix_path')
+[107.529s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/cmake_prefix_path.ps1'
+[107.529s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/cmake_prefix_path.dsv'
+[107.529s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/cmake_prefix_path.sh'
+[107.530s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib'
+[107.530s] Level 1:colcon.colcon_core.shell:create_environment_hook('px4_msgs', 'ld_library_path_lib')
+[107.536s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/ld_library_path_lib.ps1'
+[107.537s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/ld_library_path_lib.dsv'
+[107.537s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/ld_library_path_lib.sh'
+[107.537s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/bin'
+[107.537s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib/pkgconfig/px4_msgs.pc'
+[107.537s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib/python3.10/site-packages'
+[107.537s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/bin'
+[107.545s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.ps1'
+[107.545s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.dsv'
+[107.545s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.sh'
+[107.546s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.bash'
+[107.546s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.zsh'
+[107.546s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/colcon-core/packages/px4_msgs)
+[109.510s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(px4_msgs)
+[109.517s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs' for CMake module files
+[109.518s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs' for CMake config files
+[109.520s] Level 1:colcon.colcon_core.shell:create_environment_hook('px4_msgs', 'cmake_prefix_path')
+[109.526s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/cmake_prefix_path.ps1'
+[109.526s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/cmake_prefix_path.dsv'
+[109.526s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/cmake_prefix_path.sh'
+[109.526s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib'
+[109.526s] Level 1:colcon.colcon_core.shell:create_environment_hook('px4_msgs', 'ld_library_path_lib')
+[109.532s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/ld_library_path_lib.ps1'
+[109.533s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/ld_library_path_lib.dsv'
+[109.533s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/hook/ld_library_path_lib.sh'
+[109.533s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/bin'
+[109.533s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib/pkgconfig/px4_msgs.pc'
+[109.533s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib/python3.10/site-packages'
+[109.533s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/bin'
+[109.539s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.ps1'
+[109.540s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.dsv'
+[109.540s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.sh'
+[109.540s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.bash'
+[109.540s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/px4_msgs/package.zsh'
+[109.540s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/share/colcon-core/packages/px4_msgs)
+[109.541s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision' with build type 'ament_cmake'
+[109.541s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision'
+[109.549s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[109.549s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[109.563s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/ctrl_pkg' with build type 'ament_cmake'
+[109.564s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/ctrl_pkg'
+[109.572s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[109.573s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[109.590s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/px4_ros_com' with build type 'ament_cmake'
+[109.590s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/px4_ros_com'
+[109.599s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[109.599s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[109.617s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision
+[109.629s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/ctrl_pkg -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg
+[109.644s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/px4_ros_com -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com
+[112.962s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/px4_ros_com -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com
+[112.963s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com -- -j32 -l32
+[113.600s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/ctrl_pkg -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg
+[113.600s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg -- -j32 -l32
+[114.304s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/computer_vision -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision
+[114.305s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision -- -j32 -l32
+[116.375s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision -- -j32 -l32
+[116.402s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision
+[116.415s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(computer_vision)
+[116.415s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/computer_vision
+[116.434s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision' for CMake module files
+[116.434s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision' for CMake config files
+[116.434s] Level 1:colcon.colcon_core.shell:create_environment_hook('computer_vision', 'cmake_prefix_path')
+[116.444s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/hook/cmake_prefix_path.ps1'
+[116.445s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/hook/cmake_prefix_path.dsv'
+[116.445s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/hook/cmake_prefix_path.sh'
+[116.445s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib'
+[116.445s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/bin'
+[116.445s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib/pkgconfig/computer_vision.pc'
+[116.446s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib/python3.10/site-packages'
+[116.446s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/bin'
+[116.456s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.ps1'
+[116.456s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.dsv'
+[116.456s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.sh'
+[116.457s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.bash'
+[116.457s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.zsh'
+[116.457s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/colcon-core/packages/computer_vision)
+[116.492s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(computer_vision)
+[116.504s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision' for CMake module files
+[116.504s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision' for CMake config files
+[116.504s] Level 1:colcon.colcon_core.shell:create_environment_hook('computer_vision', 'cmake_prefix_path')
+[116.517s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/hook/cmake_prefix_path.ps1'
+[116.517s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/hook/cmake_prefix_path.dsv'
+[116.518s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/hook/cmake_prefix_path.sh'
+[116.518s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib'
+[116.518s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/bin'
+[116.518s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib/pkgconfig/computer_vision.pc'
+[116.519s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib/python3.10/site-packages'
+[116.519s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/bin'
+[116.528s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.ps1'
+[116.528s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.dsv'
+[116.528s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.sh'
+[116.529s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.bash'
+[116.529s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/computer_vision/package.zsh'
+[116.529s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/share/colcon-core/packages/computer_vision)
+[116.530s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib' with build type 'ament_cmake'
+[116.530s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib'
+[116.543s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[116.543s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[116.647s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib
+[120.983s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com -- -j32 -l32
+[121.006s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com
+[121.026s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(px4_ros_com)
+[121.027s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/px4_ros_com
+[121.035s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com' for CMake module files
+[121.036s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com' for CMake config files
+[121.036s] Level 1:colcon.colcon_core.shell:create_environment_hook('px4_ros_com', 'cmake_prefix_path')
+[121.045s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/cmake_prefix_path.ps1'
+[121.045s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/cmake_prefix_path.dsv'
+[121.046s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/cmake_prefix_path.sh'
+[121.046s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/lib'
+[121.046s] Level 1:colcon.colcon_core.shell:create_environment_hook('px4_ros_com', 'ld_library_path_lib')
+[121.053s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/ld_library_path_lib.ps1'
+[121.053s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/ld_library_path_lib.dsv'
+[121.054s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/ld_library_path_lib.sh'
+[121.054s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/bin'
+[121.054s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/lib/pkgconfig/px4_ros_com.pc'
+[121.054s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/lib/python3.10/site-packages'
+[121.054s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/bin'
+[121.063s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.ps1'
+[121.063s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.dsv'
+[121.063s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.sh'
+[121.064s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.bash'
+[121.064s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.zsh'
+[121.064s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/colcon-core/packages/px4_ros_com)
+[121.093s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(px4_ros_com)
+[121.102s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com' for CMake module files
+[121.102s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com' for CMake config files
+[121.102s] Level 1:colcon.colcon_core.shell:create_environment_hook('px4_ros_com', 'cmake_prefix_path')
+[121.110s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/cmake_prefix_path.ps1'
+[121.111s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/cmake_prefix_path.dsv'
+[121.111s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/cmake_prefix_path.sh'
+[121.111s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/lib'
+[121.111s] Level 1:colcon.colcon_core.shell:create_environment_hook('px4_ros_com', 'ld_library_path_lib')
+[121.120s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/ld_library_path_lib.ps1'
+[121.120s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/ld_library_path_lib.dsv'
+[121.120s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/hook/ld_library_path_lib.sh'
+[121.121s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/bin'
+[121.121s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/lib/pkgconfig/px4_ros_com.pc'
+[121.121s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/lib/python3.10/site-packages'
+[121.121s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/bin'
+[121.131s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.ps1'
+[121.131s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.dsv'
+[121.131s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.sh'
+[121.132s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.bash'
+[121.132s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/px4_ros_com/package.zsh'
+[121.132s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_ros_com/share/colcon-core/packages/px4_ros_com)
+[122.484s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib
+[122.485s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib -- -j32 -l32
+[123.133s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg -- -j32 -l32
+[123.156s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg
+[123.178s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(ctrl_pkg)
+[123.179s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/ctrl_pkg
+[123.188s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg' for CMake module files
+[123.188s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg' for CMake config files
+[123.188s] Level 1:colcon.colcon_core.shell:create_environment_hook('ctrl_pkg', 'cmake_prefix_path')
+[123.198s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/cmake_prefix_path.ps1'
+[123.198s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/cmake_prefix_path.dsv'
+[123.199s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/cmake_prefix_path.sh'
+[123.199s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/lib'
+[123.199s] Level 1:colcon.colcon_core.shell:create_environment_hook('ctrl_pkg', 'ld_library_path_lib')
+[123.209s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/ld_library_path_lib.ps1'
+[123.209s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/ld_library_path_lib.dsv'
+[123.209s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/ld_library_path_lib.sh'
+[123.210s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/bin'
+[123.210s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/lib/pkgconfig/ctrl_pkg.pc'
+[123.210s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/lib/python3.10/site-packages'
+[123.210s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/bin'
+[123.236s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.ps1'
+[123.236s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.dsv'
+[123.236s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.sh'
+[123.237s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.bash'
+[123.237s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.zsh'
+[123.237s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/colcon-core/packages/ctrl_pkg)
+[123.266s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(ctrl_pkg)
+[123.274s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg' for CMake module files
+[123.274s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg' for CMake config files
+[123.275s] Level 1:colcon.colcon_core.shell:create_environment_hook('ctrl_pkg', 'cmake_prefix_path')
+[123.284s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/cmake_prefix_path.ps1'
+[123.285s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/cmake_prefix_path.dsv'
+[123.285s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/cmake_prefix_path.sh'
+[123.285s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/lib'
+[123.285s] Level 1:colcon.colcon_core.shell:create_environment_hook('ctrl_pkg', 'ld_library_path_lib')
+[123.294s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/ld_library_path_lib.ps1'
+[123.294s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/ld_library_path_lib.dsv'
+[123.294s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/hook/ld_library_path_lib.sh'
+[123.295s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/bin'
+[123.295s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/lib/pkgconfig/ctrl_pkg.pc'
+[123.295s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/lib/python3.10/site-packages'
+[123.295s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/bin'
+[123.303s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.ps1'
+[123.304s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.dsv'
+[123.304s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.sh'
+[123.304s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.bash'
+[123.305s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/ctrl_pkg/package.zsh'
+[123.305s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/ctrl_pkg/share/colcon-core/packages/ctrl_pkg)
+[126.717s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib -- -j32 -l32
+[126.738s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib
+[126.747s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uas_lib)
+[126.748s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_lib
+[126.757s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib' for CMake module files
+[126.758s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib' for CMake config files
+[126.758s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_lib', 'cmake_prefix_path')
+[126.767s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/hook/cmake_prefix_path.ps1'
+[126.767s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/hook/cmake_prefix_path.dsv'
+[126.767s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/hook/cmake_prefix_path.sh'
+[126.768s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib'
+[126.768s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/bin'
+[126.768s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib/pkgconfig/uas_lib.pc'
+[126.768s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib/python3.10/site-packages'
+[126.768s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/bin'
+[126.777s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.ps1'
+[126.778s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.dsv'
+[126.778s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.sh'
+[126.778s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.bash'
+[126.779s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.zsh'
+[126.779s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/colcon-core/packages/uas_lib)
+[126.804s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uas_lib)
+[126.813s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib' for CMake module files
+[126.814s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib' for CMake config files
+[126.814s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_lib', 'cmake_prefix_path')
+[126.822s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/hook/cmake_prefix_path.ps1'
+[126.822s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/hook/cmake_prefix_path.dsv'
+[126.822s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/hook/cmake_prefix_path.sh'
+[126.822s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib'
+[126.823s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/bin'
+[126.823s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib/pkgconfig/uas_lib.pc'
+[126.823s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib/python3.10/site-packages'
+[126.823s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/bin'
+[126.831s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.ps1'
+[126.831s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.dsv'
+[126.832s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.sh'
+[126.832s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.bash'
+[126.832s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/uas_lib/package.zsh'
+[126.832s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/share/colcon-core/packages/uas_lib)
+[126.832s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_complete_misison' with build type 'ament_cmake'
+[126.833s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_complete_misison'
+[126.843s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[126.843s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[126.860s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_exploration_mission' with build type 'ament_cmake'
+[126.860s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_exploration_mission'
+[126.870s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[126.870s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[126.935s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/uas_complete_misison -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission
+[126.970s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/uas_exploration_mission -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission
+[131.298s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/uas_exploration_mission -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission
+[131.298s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission -- -j32 -l32
+[131.313s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake /home/nic/dev/ATTACKS-SW/ros_ws/src/uas_complete_misison -DCMAKE_INSTALL_PREFIX=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission
+[131.314s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission -- -j32 -l32
+[141.432s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission -- -j32 -l32
+[141.447s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission
+[141.454s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --build /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission -- -j32 -l32
+[141.462s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uas_exploration_mission)
+[141.462s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_exploration_mission
+[141.470s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission' for CMake module files
+[141.471s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission' for CMake config files
+[141.471s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_exploration_mission', 'cmake_prefix_path')
+[141.478s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/cmake_prefix_path.ps1'
+[141.478s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/cmake_prefix_path.dsv'
+[141.479s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/cmake_prefix_path.sh'
+[141.479s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/lib'
+[141.479s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_exploration_mission', 'ld_library_path_lib')
+[141.485s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/ld_library_path_lib.ps1'
+[141.486s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/ld_library_path_lib.dsv'
+[141.486s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/ld_library_path_lib.sh'
+[141.486s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/bin'
+[141.486s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/lib/pkgconfig/uas_exploration_mission.pc'
+[141.486s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/lib/python3.10/site-packages'
+[141.486s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/bin'
+[141.494s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.ps1'
+[141.495s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.dsv'
+[141.495s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.sh'
+[141.495s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.bash'
+[141.495s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.zsh'
+[141.495s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/colcon-core/packages/uas_exploration_mission)
+[141.497s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission
+[141.521s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uas_exploration_mission)
+[141.528s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission' for CMake module files
+[141.528s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission' for CMake config files
+[141.528s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_exploration_mission', 'cmake_prefix_path')
+[141.535s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/cmake_prefix_path.ps1'
+[141.535s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/cmake_prefix_path.dsv'
+[141.535s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/cmake_prefix_path.sh'
+[141.536s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/lib'
+[141.536s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_exploration_mission', 'ld_library_path_lib')
+[141.544s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/ld_library_path_lib.ps1'
+[141.544s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/ld_library_path_lib.dsv'
+[141.544s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/hook/ld_library_path_lib.sh'
+[141.544s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/bin'
+[141.544s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/lib/pkgconfig/uas_exploration_mission.pc'
+[141.545s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/lib/python3.10/site-packages'
+[141.545s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/bin'
+[141.551s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.ps1'
+[141.552s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.dsv'
+[141.552s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.sh'
+[141.552s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.bash'
+[141.552s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/uas_exploration_mission/package.zsh'
+[141.552s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_exploration_mission/share/colcon-core/packages/uas_exploration_mission)
+[141.553s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uas_complete_mission)
+[141.555s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission' returned '0': AMENT_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:${AMENT_PREFIX_PATH} CMAKE_PREFIX_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs:/opt/ros/humble LD_LIBRARY_PATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_lib/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/computer_vision/lib:/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/lib:/home/nic/.linuxbrew/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib:/usr/lib/x86_64-linux-gnu/gazebo-11/plugins PYTHONPATH=/home/nic/dev/ATTACKS-SW/ros_ws/install/px4_msgs/local/lib/python3.10/dist-packages:${PYTHONPATH} /usr/bin/cmake --install /home/nic/dev/ATTACKS-SW/ros_ws/build/uas_complete_mission
+[141.562s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission' for CMake module files
+[141.562s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission' for CMake config files
+[141.563s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_complete_mission', 'cmake_prefix_path')
+[141.569s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/cmake_prefix_path.ps1'
+[141.570s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/cmake_prefix_path.dsv'
+[141.570s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/cmake_prefix_path.sh'
+[141.570s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/lib'
+[141.570s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_complete_mission', 'ld_library_path_lib')
+[141.578s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/ld_library_path_lib.ps1'
+[141.578s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/ld_library_path_lib.dsv'
+[141.578s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/ld_library_path_lib.sh'
+[141.578s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/bin'
+[141.578s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/lib/pkgconfig/uas_complete_mission.pc'
+[141.578s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/lib/python3.10/site-packages'
+[141.579s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/bin'
+[141.585s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.ps1'
+[141.586s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.dsv'
+[141.586s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.sh'
+[141.586s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.bash'
+[141.586s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.zsh'
+[141.586s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/colcon-core/packages/uas_complete_mission)
+[141.608s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(uas_complete_mission)
+[141.615s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission' for CMake module files
+[141.616s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission' for CMake config files
+[141.616s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_complete_mission', 'cmake_prefix_path')
+[141.623s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/cmake_prefix_path.ps1'
+[141.623s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/cmake_prefix_path.dsv'
+[141.623s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/cmake_prefix_path.sh'
+[141.623s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/lib'
+[141.623s] Level 1:colcon.colcon_core.shell:create_environment_hook('uas_complete_mission', 'ld_library_path_lib')
+[141.630s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/ld_library_path_lib.ps1'
+[141.630s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/ld_library_path_lib.dsv'
+[141.630s] INFO:colcon.colcon_core.shell:Creating environment hook '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/hook/ld_library_path_lib.sh'
+[141.631s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/bin'
+[141.631s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/lib/pkgconfig/uas_complete_mission.pc'
+[141.631s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/lib/python3.10/site-packages'
+[141.631s] Level 1:colcon.colcon_core.environment:checking '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/bin'
+[141.638s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.ps1'
+[141.638s] INFO:colcon.colcon_core.shell:Creating package descriptor '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.dsv'
+[141.638s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.sh'
+[141.639s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.bash'
+[141.639s] INFO:colcon.colcon_core.shell:Creating package script '/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/uas_complete_mission/package.zsh'
+[141.639s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/home/nic/dev/ATTACKS-SW/ros_ws/install/uas_complete_mission/share/colcon-core/packages/uas_complete_mission)
+[141.639s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[141.640s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[141.640s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[141.640s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[141.664s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[141.664s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[141.664s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[141.664s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[141.664s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.FileNotFound: Failed to connect to socket /run/user/1000/bus: No such file or directory
+[141.664s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[141.671s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/nic/dev/ATTACKS-SW/ros_ws/install/local_setup.ps1'
+[141.672s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/nic/dev/ATTACKS-SW/ros_ws/install/_local_setup_util_ps1.py'
+[141.673s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/nic/dev/ATTACKS-SW/ros_ws/install/setup.ps1'
+[141.682s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/nic/dev/ATTACKS-SW/ros_ws/install/local_setup.sh'
+[141.682s] INFO:colcon.colcon_core.shell:Creating prefix util module '/home/nic/dev/ATTACKS-SW/ros_ws/install/_local_setup_util_sh.py'
+[141.683s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/nic/dev/ATTACKS-SW/ros_ws/install/setup.sh'
+[141.692s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/nic/dev/ATTACKS-SW/ros_ws/install/local_setup.bash'
+[141.692s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/nic/dev/ATTACKS-SW/ros_ws/install/setup.bash'
+[141.700s] INFO:colcon.colcon_core.shell:Creating prefix script '/home/nic/dev/ATTACKS-SW/ros_ws/install/local_setup.zsh'
+[141.700s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/home/nic/dev/ATTACKS-SW/ros_ws/install/setup.zsh'
