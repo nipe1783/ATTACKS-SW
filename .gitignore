@@ -9,9 +9,9 @@ ComputerVision/images/*
 ComputerVision/output/*
 
 # Motion Planning
-MotionPlanning/ros_ws/log/*
-MotionPlanning/ros_ws/install/*
-MotionPlanning/ros_ws/build/*
+ros_ws/log/*
+ros_ws/install/*
+ros_ws/build/*
 
 # Specific files to keep.
 !ComputerVision/videos/test.txt
