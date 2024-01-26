@@ -1,16 +1,32 @@
 # ATTACKS
 
-## Getting setup:
+## Getting Setup:
 
 - **1:** Clone the repo in the `~/dev/` directory.
-- **2:** Run `git submodule update --init --recursive` in the ATTACKS-SW directory.
+- **2:** Run the following commands to update the submodules:
+  ```bash
+  cd ~/dev/ATTACKS-SW
+  git submodule update --init --recursive
+  ```
+
 - **3:** Run the following commands to update the PX4 autopilot:
-```bash
-cd ~/dev/ATTACKS-SW/PX4-Autopilot
-git remote add upstream https://github.com/PX4/PX4-Autopilot.git
-git fetch upstream
-git fetch upstream --tags
-```
+  ```bash
+  cd ~/dev/ATTACKS-SW/PX4-Autopilot
+  git remote add upstream https://github.com/PX4/PX4-Autopilot.git
+  git fetch upstream
+  git fetch upstream --tags
+  ```
+
+- **4:** Run the following commands to make the Micro-XRCE-DDS-Agent:
+  ```bash
+  cd ~/dev/ATTACKS-SW/Micro-XRCE-DDS-Agent
+  mkdir build
+  cd build
+  cmake ..
+  make
+  sudo make install
+  sudo ldconfig /usr/local/lib/
+  ```
 
 ## Dependencies:
 
@@ -28,22 +44,16 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-a
 sudo apt update && sudo apt upgrade -y
 sudo apt install ros-humble-desktop
 sudo apt install ros-dev-tools
-source /opt/ros/humble/setup.bash && echo "source /opt/ros/humble/setup.bash" >> .bashrc
-```
-
-```bash
 sudo apt-get install libprotobuf-dev libprotoc-dev protobuf-compiler libeigen3-dev libxml2-utils python-rospkg python-jinja2
 sudo apt-get install libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-bad gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly -y
 sudo apt remove gz-garden
 sudo apt install aptitude
 sudo aptitude install gazebo libgazebo11 libgazebo-dev
+sudo apt install ros-humble-gazebo-ros-pkgs
+source /opt/ros/humble/setup.bash && echo "source /opt/ros/humble/setup.bash" >> .bashrc
 ```
 ```bash
 pip install --user -U empy==3.3.4 pyros-genmsg setuptools
-```
-
-```bash
-sudo apt install ros-humble-gazebo-ros-pkgs
 ```
 
 ## Running the Simulation

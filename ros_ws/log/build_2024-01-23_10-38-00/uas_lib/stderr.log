@@ -1,4 +1,0 @@
-[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib/src/UASExplorationPhase.cpp:[m[K In member function ‘[01m[Kvirtual UASState UASExplorationPhase::generateDesiredState(CVImg, UASState)[m[K’:
-[01m[K/home/nic/dev/ATTACKS-SW/ros_ws/src/uas_lib/src/UASExplorationPhase.cpp:10:58:[m[K [01;35m[Kwarning: [m[Kunused parameter ‘[01m[KcvImg[m[K’ [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wunused-parameter-Wunused-parameter]8;;[m[K]
-   10 | UASState UASExplorationPhase::generateDesiredState([01;35m[KCVImg cvImg[m[K, UASState uasState)
-      |                                                    [01;35m[K~~~~~~^~~~~[m[K
