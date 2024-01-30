@@ -13,6 +13,9 @@ ros_ws/log/*
 ros_ws/install/*
 ros_ws/build/*
 
+# Datasets
+Datasets/*
+
 # Specific files to keep.
 !ComputerVision/videos/test.txt
 !ComputerVision/images/test.txt

@@ -97,7 +97,16 @@ en a new Ubuntu terminal.
   colcon build
   source /opt/ros/humble/setup.bash
   source install/local_setup.bash
-  ros2 launch uas_complete_mission uas_complete_mission.launch.py
+  ros2 launch uas_bringup uas_complete_mission.launch.py
+  ```
+
+- **Step 1:** Open a new Ubuntu terminal.
+  ```bash
+  cd ~/dev/ATTACKS-SW/ros_ws
+  colcon build
+  source /opt/ros/humble/setup.bash
+  source install/local_setup.bash
+  ros2 launch uas_bringup uas_computer_vision_benchmarking.launch.py
   ```
 
 ## Sources
