@@ -1,1 +1,0 @@
-Binary images created from manual bounding boxes should be in this directory.
