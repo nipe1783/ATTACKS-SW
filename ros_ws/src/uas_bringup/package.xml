@@ -25,10 +25,10 @@
   <depend>launch</depend>
   <depend>launch_testing</depend>
   <depend>launch_testing_ros</depend>
-  <depend>uas_lib</depend>
+  <depend>uas</depend>
   <depend>uas_phases</depend>
   <depend>uas_scheduler</depend>
-  <depend>computer_vision</depend>
+  <depend>uas_computer_vision</depend>
 
   <exec_depend>rosidl_default_runtime</exec_depend>
   <exec_depend>ros2launch</exec_depend>

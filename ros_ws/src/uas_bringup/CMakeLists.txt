@@ -27,15 +27,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV 4.5 REQUIRED)
 find_package(image_transport REQUIRED)
-find_package(uas_lib REQUIRED)
+find_package(uas REQUIRED)
 find_package(computer_vision REQUIRED)
-
-
-#################
-# Setup targets #
-#################
-
-include_directories(include)
 
 
 
@@ -45,12 +38,6 @@ include_directories(include)
 
 # Export information to downstream packages
 ament_export_dependencies(ament_cmake rclcpp rosidl_default_runtime eigen3_cmake_module Eigen3 px4_msgs geometry_msgs sensor_msgs)
-
-
-ament_export_include_directories(include)
-
-# Install header files
-install(DIRECTORY include/${PROJECT_NAME}/ DESTINATION include/${PROJECT_NAME})
 
 # Install launch files.
 install(DIRECTORY launch DESTINATION share/${PROJECT_NAME}/)

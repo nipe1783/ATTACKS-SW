@@ -27,8 +27,9 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
-find_package(uas_lib REQUIRED)
-find_package(computer_vision REQUIRED)
+find_package(uas REQUIRED)
+find_package(uas_phases REQUIRED)
+find_package(uas_computer_vision REQUIRED)
 
 #################
 # Setup targets #
@@ -41,8 +42,9 @@ add_executable(completeMissionScheduler src/CompleteMissionScheduler.cpp src/Sch
 ament_target_dependencies(
     completeMissionScheduler
     cv_bridge
-    uas_lib
-    computer_vision
+    uas
+    uas_phases
+    uas_computer_vision
     rclcpp 
     px4_msgs 
     sensor_msgs

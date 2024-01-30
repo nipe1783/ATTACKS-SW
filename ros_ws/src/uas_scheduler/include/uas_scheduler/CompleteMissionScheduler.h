@@ -1,8 +1,8 @@
 #pragma once
 #include "uas_scheduler/Scheduler.h"
-#include "uas_lib/UASState.h"
-#include "uas_lib/UASExplorationPhase.h"
-#include "uas_lib/UASTrailingPhase.h"
+#include "uas/UASState.h"
+#include "uas_phases/UASTrailingPhase.h"
+#include "uas_phases/UASExplorationPhase.h"
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>

@@ -1,8 +1,8 @@
 #pragma once
 #include <rclcpp/rclcpp.hpp>
 #include <opencv2/opencv.hpp>
-#include "uas_lib/UASState.h"
-#include "computer_vision/CVImg.h"
+#include "uas/UASState.h"
+#include "uas_computer_vision/CVImg.h"
 
 class UASPhase
 {   

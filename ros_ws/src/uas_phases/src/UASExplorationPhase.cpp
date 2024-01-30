@@ -1,5 +1,5 @@
 #include "uas_phases/UASExplorationPhase.h"
-#include "computer_vision/CVImg.h"
+#include "uas_computer_vision/CVImg.h"
 
 UASExplorationPhase::UASExplorationPhase(std::vector<UASState> waypoints) : waypoints_(waypoints)
 {

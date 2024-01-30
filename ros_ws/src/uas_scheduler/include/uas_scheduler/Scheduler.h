@@ -4,9 +4,9 @@
 #include <px4_msgs/msg/vehicle_local_position.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <opencv2/opencv.hpp>
-#include "computer_vision/BasicBlobDetector.h"
-#include "computer_vision/Blob.h"
-#include "uas_lib/UASState.h"
+#include "uas_computer_vision/BasicBlobDetector.h"
+#include "uas_computer_vision/Blob.h"
+#include "uas/UASState.h"
 #include <px4_msgs/msg/offboard_control_mode.hpp>
 #include <px4_msgs/msg/trajectory_setpoint.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>

@@ -26,8 +26,8 @@ find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
-find_package(computer_vision REQUIRED)
-find_package(uas_lib REQUIRED)
+find_package(uas_computer_vision REQUIRED)
+find_package(uas REQUIRED)
 
 
 # Include directories
@@ -42,7 +42,7 @@ add_library(uas_phases
 
 # Specify libraries to link a library or executable target against
 ament_target_dependencies(uas_phases
-  uas_lib
+  uas
   px4_msgs 
   sensor_msgs 
   cv_bridge 
@@ -50,7 +50,7 @@ ament_target_dependencies(uas_phases
   geometry_msgs 
   OpenCV 
   image_transport
-  computer_vision
+  uas_computer_vision
 )
 
 # Install header files and library

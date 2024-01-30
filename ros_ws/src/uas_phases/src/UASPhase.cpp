@@ -1,8 +1,8 @@
 #include "uas_phases/UASPhase.h"
 #include <rclcpp/rclcpp.hpp>
 #include <opencv2/opencv.hpp>
-#include "uas_lib/UASState.h"
-#include "computer_vision/Blob.h"
+#include "uas/UASState.h"
+#include "uas_computer_vision/Blob.h"
 
 double UASPhase::distance(UASState s1, UASState s2)
 {

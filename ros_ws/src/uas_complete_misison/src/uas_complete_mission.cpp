@@ -1,6 +1,6 @@
 #include "uas_complete_mission.h"
-#include "computer_vision/BasicBlobDetector.h"
-#include "computer_vision/Blob.h"
+#include "uas_computer_vision/BasicBlobDetector.h"
+#include "uas_computer_vision/Blob.h"
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
