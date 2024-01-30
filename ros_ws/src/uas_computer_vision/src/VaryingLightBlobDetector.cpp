@@ -45,6 +45,45 @@ CVImg VaryingLightBlobDetector::detect(Mat& frame){
     return CVImg(frame.cols, frame.rows, frame.cols / 2, frame.rows / 2, myblobVector);
 }
 
+std::vector<Blob> VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
+    std::vector<Blob> myblobVector; // Create an empty blob vector
+
+    cvtColor(frame, dst, COLOR_BGR2HSV);
+    Mask(dst, dst);
+    cv::cvtColor(dst, dst, cv::COLOR_HSV2BGR);
+    cv::cvtColor(dst, dst, cv::COLOR_BGR2GRAY);
+    gammaCorrection(dst, dst);
+    DoGFilter(dst, dst);
+    contrastEqualization(dst, dst);
+    cv::GaussianBlur(dst, dst, cv::Size(blurSize, blurSize), 0, 0);
+    cv::threshold(dst, dst, intensityThreshold, 255, cv::THRESH_BINARY);
+    Mat element = getStructuringElement(cv::MORPH_RECT,
+        cv::Size(2 * dilationSize + 1, 2 * dilationSize + 1),
+        cv::Point(dilationSize, dilationSize));
+    cv::dilate(dst, dst, element);
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    cv::findContours(dst.clone(), contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+    double maxArea = 0;
+    int maxAreaContourIndex = -1;
+    for (size_t i = 0; i < contours.size(); i++) {
+        double area = cv::contourArea(contours[i]);
+        if(area > maxArea){
+            maxArea = area;
+            maxAreaContourIndex = i;
+        }
+    }
+    if(maxAreaContourIndex != -1) {
+        Mat mask = Mat::zeros(dst.size(), dst.type());
+        cv::drawContours(mask, contours, maxAreaContourIndex, Scalar(255), cv::FILLED);
+        cv::Rect boundingBox = cv::boundingRect(contours[maxAreaContourIndex]);
+        cv::rectangle(frame, boundingBox, cv::Scalar(255, 0, 0), 2);
+        dst = dst & mask;
+        myblobVector.push_back(Blob(boundingBox.x, boundingBox.y, boundingBox.width, boundingBox.height, boundingBox.area()));
+    }
+    return myblobVector;
+}
+
 void VaryingLightBlobDetector::calibrate(Mat& frame){
     std::cout << "Calibrating..." << std::endl;
     Mat frameHSV;

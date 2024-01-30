@@ -15,6 +15,7 @@ class BlobDetector
         // Public methods:
         virtual void calibrate(Mat& frame) = 0;
         virtual CVImg detect(Mat& frame) = 0;
+        virtual std::vector<Blob> detect(Mat& frame, Mat& dst) = 0; 
         static void on_low_H_thresh_trackbar(int, void*);
         static void on_high_H_thresh_trackbar(int, void*);
         static void on_low_S_thresh_trackbar(int, void*);

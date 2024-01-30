@@ -11,5 +11,6 @@ class BasicBlobDetector : public BlobDetector
         BasicBlobDetector() = default;
         ~BasicBlobDetector() = default;
         CVImg detect(Mat& frame) override;
+        std::vector<Blob> detect(Mat& frame, Mat& dst) override;
         void calibrate(Mat& frame) override;
 };

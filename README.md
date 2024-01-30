@@ -100,6 +100,15 @@ en a new Ubuntu terminal.
   ros2 launch uas_bringup uas_complete_mission.launch.py
   ```
 
+- **Step 1:** Open a new Ubuntu terminal.
+  ```bash
+  cd ~/dev/ATTACKS-SW/ros_ws
+  colcon build
+  source /opt/ros/humble/setup.bash
+  source install/local_setup.bash
+  ros2 launch uas_bringup uas_computer_vision_benchmarking.launch.py
+  ```
+
 ## Sources
 - PX4 and ROS2 installation tutorial: [ROS2 Communication](http://docs.px4.io/main/en/ros/ros2_comm.html)
 - Code completion and debugging for ROS2 in vscode: [Code debugging](https://medium.com/@junbs95/code-completion-and-debugging-for-ros2-in-vscode-a4ede900d979)
