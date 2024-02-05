@@ -50,13 +50,22 @@
       libgstreamer-plugins-base1.0-dev gstreamer1.0-plugins-bad gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly -y \
   ```
 
-- **2:** Open your bashrc file and add this line to the bottom.
   ```bash
   nano ~/.bashrc
   ```
-
+  - Add this line to the bottom of your bashrc
   ```bash
   source /opt/ros/foxy/setup.bash
+  ```
+
+  ```bash
+  sudo apt remove cmake
+  wget https://github.com/Kitware/CMake/releases/download/v3.28.1/cmake-3.28.1.tar.gz
+  tar -zxvf cmake-3.28.1.tar.gz
+  cd cmake-3.28.1/
+  ./bootstrap
+  make
+  sudo make install
   ```
 
 - **3:** Clone the repo in the `~/dev/` directory.
