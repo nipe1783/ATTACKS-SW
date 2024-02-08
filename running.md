@@ -15,7 +15,7 @@
 
 - **Step 3:**
   ```bash
-  param set MPC_XY_VEL_MAX 3
+  param set MPC_XY_VEL_MAX 2
   param save
   ```
    ```
