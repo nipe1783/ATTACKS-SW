@@ -10,9 +10,9 @@ UASTrailingPhase::UASTrailingPhase()
 UASState UASTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
 {   
     UASState desiredUASState;
-    desiredUASState.bxV = 0.0f;
-    desiredUASState.byV = 0.0f;
-    desiredUASState.bzV = 0.0f;
+    desiredUASState.bxV_ = 0.0f;
+    desiredUASState.byV_ = 0.0f;
+    desiredUASState.bzV_ = 0.0f;
     float bodyX = 0.0f;
     float bodyY = 0.0f;
 
@@ -25,7 +25,7 @@ UASState UASTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
         bodyY = (blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) * 3;
     }
 
-    desiredUASState.bxV = bodyX * cos(uasState.ipsi  + M_PI_2) - bodyY * sin(uasState.ipsi + M_PI_2);
-    desiredUASState.byV = bodyX * sin(uasState.ipsi  + M_PI_2) + bodyY * cos(uasState.ipsi + M_PI_2);
+    desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
+    desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
     return desiredUASState;
 }

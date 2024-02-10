@@ -1,5 +1,7 @@
 #include "uas_scheduler/Scheduler.h"
 #include "uas/UASState.h"
+#include "uas/UAS.h"
+#include "uas_helpers/Camera.h"
 #include <cv_bridge/cv_bridge.h>
 #include <limits>
 
@@ -23,7 +25,7 @@ void Scheduler::savePSFrame()
 
 double Scheduler::distance(UASState s1, UASState s2)
 {
-    return sqrt(pow(s1.ix - s2.ix, 2) + pow(s1.iy - s2.iy, 2) + pow(s1.iz - s2.iz, 2));
+    return sqrt(pow(s1.ix_ - s2.ix_, 2) + pow(s1.iy_ - s2.iy_, 2) + pow(s1.iz_ - s2.iz_, 2));
 }
 
 void Scheduler::publishControlMode()
@@ -51,11 +53,11 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
 {
     px4_msgs::msg::TrajectorySetpoint msg{};
     if(currentPhase_ == "exploration"){
-        msg.position = {s.ix, s.iy, s.iz};
+        msg.position = {s.ix_, s.iy_, s.iz_};
         msg.yaw = -3.14;
     }
     else if(currentPhase_ == "trailing"){
-        msg.velocity = {s.bxV, s.byV, s.bzV};
+        msg.velocity = {s.bxV_, s.byV_, s.bzV_};
         msg.position[0] = std::numeric_limits<float>::quiet_NaN();
         msg.position[1] = std::numeric_limits<float>::quiet_NaN();
         msg.position[2] = std::numeric_limits<float>::quiet_NaN();
@@ -99,5 +101,5 @@ void Scheduler::callbackPS(const sensor_msgs::msg::Image::SharedPtr psMsg) {
 
 void Scheduler::callbackState(const px4_msgs::msg::VehicleLocalPosition::UniquePtr stateMsg) {
     stateMsgReceived_ = true;
-    uasState_ = UASState(stateMsg->x, stateMsg->y, stateMsg->z, stateMsg->heading, stateMsg->vx,  stateMsg->vy,  stateMsg->vz);
+    uas_.state_ = UASState(stateMsg->x, stateMsg->y, stateMsg->z, stateMsg->heading, stateMsg->vx,  stateMsg->vy,  stateMsg->vz);
 }

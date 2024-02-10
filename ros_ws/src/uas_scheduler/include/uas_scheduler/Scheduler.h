@@ -7,6 +7,8 @@
 #include "uas_computer_vision/BasicBlobDetector.h"
 #include "uas_computer_vision/Blob.h"
 #include "uas/UASState.h"
+#include "uas/UAS.h"
+#include "uas_helpers/Camera.h"
 #include <px4_msgs/msg/offboard_control_mode.hpp>
 #include <px4_msgs/msg/trajectory_setpoint.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
@@ -16,14 +18,14 @@ class Scheduler : public rclcpp::Node
     public:
 
         // constructors:
-        Scheduler(const std::string& node_name) : Node(node_name) { }
+        Scheduler(const std::string& node_name, UAS uas) : Node(node_name), uas_(uas) { }
 
         // fields:
+        UAS uas_;
         std::string currentPhase_;
         std::string nextPhase_;
         cv::Mat psFrame_;
         cv::Mat ssFrame_;
-        UASState uasState_;
         UASState goalState_;
         BasicBlobDetector blobDetector_;
         CVImg cvImg_;

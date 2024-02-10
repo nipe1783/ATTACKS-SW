@@ -38,6 +38,7 @@ add_library(uas_phases
   src/UASPhase.cpp
   src/UASExplorationPhase.cpp
   src/UASTrailingPhase.cpp
+  src/UASExplorationPhase.cpp
 )
 
 # Specify libraries to link a library or executable target against

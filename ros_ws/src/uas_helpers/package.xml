@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>uas_scheduler</name>
+  <name>uas_helpers</name>
   <version>0.1.0</version>
-  <description>Package for UAS to explore workspace and find RGV</description>
+  <description>Package for UAS. Provides abstract classes for other phase nodes to use.</description>
   <maintainer email="nipe1783@colorado.edu">Nicolas Perrault</maintainer>
   <author email="nipe1783@colorado.edu">Nicolas Perrault</author>
 
@@ -15,6 +15,8 @@
   <build_depend>eigen</build_depend>
   <build_depend>ros_environment</build_depend>
 
+  <depend>uas_computer_vision</depend>
+
   <depend>builtin_interfaces</depend>
   <depend>rclcpp</depend>
 
@@ -25,11 +27,6 @@
   <depend>launch</depend>
   <depend>launch_testing</depend>
   <depend>launch_testing_ros</depend>
-  <depend>uas</depend>
-  <depend>uas_phases</depend>
-  <depend>uas_computer_vision</depend>
-  <depend>uas_helpers</depend>
-
 
   <exec_depend>rosidl_default_runtime</exec_depend>
   <exec_depend>ros2launch</exec_depend>

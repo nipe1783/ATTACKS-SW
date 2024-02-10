@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(uas)
+project(uas_helpers)
 
 # Default to C99 and C++14
 if(NOT CMAKE_C_STANDARD)
@@ -27,20 +27,19 @@ find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(uas_computer_vision REQUIRED)
-find_package(uas_helpers REQUIRED)
 
 
 # Include directories
 include_directories(include)
 
 # Add a library
-add_library(uas
-  src/UASState.cpp
-  src/UAS.cpp
+add_library(uas_helpers
+  src/Camera.cpp
+  src/RGVState.cpp
 )
 
 # Specify libraries to link a library or executable target against
-ament_target_dependencies(uas
+ament_target_dependencies(uas_helpers
   rclcpp 
   px4_msgs 
   sensor_msgs 
@@ -50,12 +49,11 @@ ament_target_dependencies(uas
   OpenCV 
   image_transport
   uas_computer_vision
-  uas_helpers
 )
 
 # Install header files and library
 install(DIRECTORY include/${PROJECT_NAME}/ DESTINATION include/${PROJECT_NAME})
-install(TARGETS uas
+install(TARGETS uas_helpers
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
@@ -64,7 +62,7 @@ install(TARGETS uas
 # Export dependencies and library
 ament_export_dependencies(ament_cmake rclcpp eigen3_cmake_module Eigen3 px4_msgs geometry_msgs sensor_msgs cv_bridge OpenCV image_transport)
 ament_export_include_directories(include)
-ament_export_libraries(uas)
+ament_export_libraries(uas_helpers)
 
 # Testing
 if(BUILD_TESTING)

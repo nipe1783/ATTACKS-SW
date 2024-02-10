@@ -1,5 +1,6 @@
 #include "uas_scheduler/CompleteMissionScheduler.h"
 #include "uas_scheduler/Scheduler.h"
+#include "uas/UAS.h"
 #include "uas_computer_vision/BasicBlobDetector.h"
 #include "uas_computer_vision/Blob.h"
 #include <rclcpp/rclcpp.hpp>
@@ -11,7 +12,7 @@
 #include <opencv2/opencv.hpp>
 #include <chrono>
 
-CompleteMissionScheduler::CompleteMissionScheduler() : Scheduler("uas_complete_mission") {
+CompleteMissionScheduler::CompleteMissionScheduler(UAS uas) : Scheduler("uas_complete_mission", uas) {
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
 
@@ -58,18 +59,18 @@ void CompleteMissionScheduler::timerCallback(){
     std::cout << "Current phase: " << currentPhase_ << ". ";
     std::cout<< "Number of blobs detected: " << cvImg_.blobs.size() << ". " << std::endl;
     if(currentPhase_ == "exploration"){
-        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uasState_);
+        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
     }
     if(currentPhase_ == "exploration" && cvImg_.blobs.size() > 0){
         currentPhase_ = "trailing";
-        goalState_ = trailingPhase_->generateDesiredState(cvImg_, uasState_);
+        goalState_ = trailingPhase_->generateDesiredState(cvImg_, uas_.state_);
     }
     if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
-        goalState_ = trailingPhase_->generateDesiredState(cvImg_, uasState_);
+        goalState_ = trailingPhase_->generateDesiredState(cvImg_, uas_.state_);
     }
     if(currentPhase_ == "trailing" && cvImg_.blobs.size() == 0){
         currentPhase_ = "exploration";
-        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uasState_);
+        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
     }
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
@@ -84,7 +85,7 @@ int main(int argc, char *argv[])
 	std::cout << "Starting UAS complete mission node..." << std::endl;
 	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 	rclcpp::init(argc, argv);
-	rclcpp::spin(std::make_shared<CompleteMissionScheduler>());
+	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(UAS()));
 	rclcpp::shutdown();
 	return 0;
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "uas_scheduler/Scheduler.h"
 #include "uas/UASState.h"
+#include "uas/UAS.h"
 #include "uas_phases/UASTrailingPhase.h"
 #include "uas_phases/UASExplorationPhase.h"
 #include <rclcpp/rclcpp.hpp>
@@ -13,7 +14,7 @@
 class CompleteMissionScheduler : public Scheduler
 {
     public:
-        CompleteMissionScheduler();
+        CompleteMissionScheduler(UAS uas_);
 
         // fields:
         std::vector<UASState> waypoints_ = {
