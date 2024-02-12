@@ -8,17 +8,18 @@ class UASState {
 
         //fields
         // inertial x position
-        float ix;
+        float ix_;
         // inertial y position
-        float iy;
+        float iy_;
         // inertial z position
-        float iz;
+        float iz_;
         // inertial psi
-        float ipsi;
+        float ipsi_;
         // body x velocity
-        float bxV;
+        float bxV_;
         // body y velocity
-        float byV;
+        float byV_;
         // body z velocity
-        float bzV;
+        float bzV_;
+
 };

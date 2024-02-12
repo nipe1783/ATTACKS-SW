@@ -1,14 +1,13 @@
-# pragma once
+#pragma once
 
-class RGV
-{   
-    // constructors:
 
-    // fields:
-    int id;
-    // TODO:
-    // add color
-    // add last known position
-    // add phase
-    // methods:
+class RGV {
+    public:
+        // constructor
+        RGV(int id):id_(id){}
+
+        //fields
+        int id_;
+        RGVState state_;
+
 };

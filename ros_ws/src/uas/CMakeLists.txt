@@ -27,6 +27,7 @@ find_package(cv_bridge REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(uas_computer_vision REQUIRED)
+find_package(uas_helpers REQUIRED)
 
 
 # Include directories
@@ -35,6 +36,7 @@ include_directories(include)
 # Add a library
 add_library(uas
   src/UASState.cpp
+  src/UAS.cpp
 )
 
 # Specify libraries to link a library or executable target against
@@ -48,6 +50,7 @@ ament_target_dependencies(uas
   OpenCV 
   image_transport
   uas_computer_vision
+  uas_helpers
 )
 
 # Install header files and library

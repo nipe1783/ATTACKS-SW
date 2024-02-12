@@ -6,5 +6,5 @@
 
 double UASPhase::distance(UASState s1, UASState s2)
 {
-    return sqrt(pow(s1.ix - s2.ix, 2) + pow(s1.iy - s2.iy, 2) + pow(s1.iz - s2.iz, 2));
+    return sqrt(pow(s1.ix_ - s2.ix_, 2) + pow(s1.iy_ - s2.iy_, 2) + pow(s1.iz_ - s2.iz_, 2));
 }

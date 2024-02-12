@@ -35,6 +35,7 @@ include_directories(include)
 # Add a library
 add_library(uas_helpers
   src/Camera.cpp
+  src/RGVState.cpp
 )
 
 # Specify libraries to link a library or executable target against

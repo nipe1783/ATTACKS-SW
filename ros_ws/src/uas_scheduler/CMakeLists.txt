@@ -30,6 +30,7 @@ find_package(image_transport REQUIRED)
 find_package(uas REQUIRED)
 find_package(uas_phases REQUIRED)
 find_package(uas_computer_vision REQUIRED)
+find_package(uas_helpers REQUIRED)
 
 #################
 # Setup targets #
@@ -45,6 +46,7 @@ ament_target_dependencies(
     uas
     uas_phases
     uas_computer_vision
+    uas_helpers
     rclcpp 
     px4_msgs 
     sensor_msgs
