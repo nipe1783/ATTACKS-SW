@@ -1,10 +1,11 @@
 #pragma once
-
+#include "RGVState.h"
 
 class RGV {
     public:
         // constructor
-        RGV(int id):id_(id){}
+        RGV();
+        RGV(int id):id_(id){};
 
         //fields
         int id_;

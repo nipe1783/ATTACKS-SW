@@ -9,6 +9,8 @@
 #include "uas/UASState.h"
 #include "uas/UAS.h"
 #include "uas_helpers/Camera.h"
+#include "uas_helpers/RGV.h"
+#include "uas_helpers/RGVState.h"
 #include <px4_msgs/msg/offboard_control_mode.hpp>
 #include <px4_msgs/msg/trajectory_setpoint.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
@@ -22,11 +24,15 @@ class Scheduler : public rclcpp::Node
 
         // fields:
         UAS uas_;
+        RGV rgv_ = RGV();
         std::string currentPhase_;
         std::string nextPhase_;
         cv::Mat psFrame_;
         cv::Mat ssFrame_;
         UASState goalState_;
+
+        //temporary vairable for printing state
+        RGVState rgvState_;
         BasicBlobDetector blobDetector_;
         CVImg cvImg_;
         rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr stateSubscription_;

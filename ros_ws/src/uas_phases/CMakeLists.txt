@@ -28,7 +28,7 @@ find_package(OpenCV REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(uas_computer_vision REQUIRED)
 find_package(uas REQUIRED)
-
+find_package(uas_helpers REQUIRED)
 
 # Include directories
 include_directories(include)
@@ -38,7 +38,7 @@ add_library(uas_phases
   src/UASPhase.cpp
   src/UASExplorationPhase.cpp
   src/UASTrailingPhase.cpp
-  src/UASExplorationPhase.cpp
+  src/UASCoarseLocalizationPhase.cpp
 )
 
 # Specify libraries to link a library or executable target against
@@ -52,6 +52,7 @@ ament_target_dependencies(uas_phases
   OpenCV 
   image_transport
   uas_computer_vision
+  uas_helpers
 )
 
 # Install header files and library

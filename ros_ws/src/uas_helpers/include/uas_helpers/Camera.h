@@ -4,7 +4,7 @@
 class Camera {
     public:
         // constructor
-        Camera(int width, int height, double FOV);
+        Camera(int width, int height, double xFOV, double yFOV);
 
         //fields
         int id_;
@@ -13,6 +13,7 @@ class Camera {
         int width_;
         int height_;
 
-        // Camera FOV
-        double FOV_; 
+        // Camera FOV in degrees
+        double xFOV_; 
+        double yFOV_; 
 };

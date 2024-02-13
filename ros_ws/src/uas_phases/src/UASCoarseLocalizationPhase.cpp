@@ -1,14 +1,15 @@
 #include "uas_phases/UASCoarseLocalizationPhase.h"
 #include <cmath>
-#include "eigen-3.4.0/Eigen/Dense"
-using Eigen::MatrixXd;
+#include <Eigen/Dense>
+#include "uas_helpers/RGVState.h"
+#include "uas_helpers/RGV.h"
 
 UASCoarseLocalizationPhase::UASCoarseLocalizationPhase()
 {
-    phaseName_ = "Coarse Localization";
+    phaseName_ = "coarse";
 }
 
-UASState UASTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
+UASState UASCoarseLocalizationPhase::generateDesiredState(CVImg cvImg, UASState uasState)
 {   
     UASState desiredUASState;
     desiredUASState.bxV_ = 0.0f;
@@ -34,165 +35,125 @@ UASState UASTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
 RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
 {
     //Initialize values
+    Camera camera = Camera(640, 360, 114.592, 64.457752);;
+
     //Temporarily set to 0 -- Will need to change UASState to add pitch and roll
+
+    //For sim: 1.125 radians yFOV, 2 radians xFOV -> converted to degrees
     float iphi = 0;
     float itheta = 0;
 
     float alpha = 0;
+    if(uas.cameras_.size()>0){
+        camera = uas.cameras_[0];
+    }
+    else{
+        std::cout<< " Unable to access camera from index 0. Vector size = 0" << std::endl;
+    }
+    
+    //Start calculations
+    //DOUBLE CHECK WHETHER CVIMG WIDTH IS X PIXELS AND Y PIXELS
 
-    Camera camera = uas.cameras_[1];
-    //Startr calculations
+    float xcp = cvImg.width/2;
+    float ycp = cvImg.height/2;
 
     //Distance from camera to center CF image assume alpha = 0
-    float rcp = uas.iz_ * (1 / cos(alpha));
+    float rcp = uas.state_.iz_ * (1 / cos(alpha));
 
     //Distance from edge to center point
-    // MAKE SURE TO UPDATE CAMERA DO WE HAVE FOV X AND FOV Y 
-    float dx = rcp * tan(camera.FOV_/2);
-    float dy = rcp * tan(camera.FOV_/2);
+    float dx = rcp * tan(camera.xFOV_/2);
+    float dy = rcp * tan(camera.yFOV_/2);
 
-    
+    //Pixel to distance scaling factor
+    float sx = xcp/dx;
+    float sy = ycp/dy;
 
-    return null;
+    //Distance between center point and foot
+    float d = sqrt(pow((xcp-cvImg.centerX)/sx,2) + pow((ycp-cvImg.centerY)/sy,2));
+
+    //Angle between pinhole vector and foot position vector
+    float theta = atan(d/rcp);
+
+    //Distance from camera to foot position -- UPDATE UAS STATE TO INCLUDE THETA AND PHI
+    float r_ground = rcp * (1/cos(itheta));
+
+    //Normalized foot position -- DOUBLE CHECK WHETHER CVIMG WIDTH IS X PIXELS AND Y PIXELS
+    float xn = (cvImg.centerX-xcp)/cvImg.width;
+    float yn = (cvImg.centerY-ycp)/cvImg.height;
+
+    //RGV position in camera frame
+    float xc = xn * r_ground;
+    float yc = yn * r_ground;
+    float zc = 0;
+
+    Eigen::MatrixXd r_cameraRelRGV(3,1);
+    r_cameraRelRGV(0,0) = xc;
+    r_cameraRelRGV(1,0) = yc;
+    r_cameraRelRGV(2,0) = zc;
+    Eigen::MatrixXd r_bodyRelRGV = r_cameraRelRGV;
+    r_bodyRelRGV /= 3.281; //feet to meters  
+
+    //Rotation Matricies -- MAY NEED TO UPDATE PHI AND THETA FOR UAS - PHI = ROLL, THETA = PITCH
+    Eigen::MatrixXd R1(3,3);
+    R1(0,0) = 1;
+    R1(0,1) = 0;
+    R1(0,2) = 0;
+    R1(1,0) = 0;
+    R1(1,1) = cos(iphi);
+    R1(1,2) = sin(iphi);
+    R1(2,0) = 0;
+    R1(2,1) = -sin(iphi);
+    R1(2,2) = cos(iphi);
+    Eigen::MatrixXd R2(3,3);
+    R2(0,0) = cos(itheta);
+    R2(0,1) = 0;
+    R2(0,2) = -sin(itheta);
+    R2(1,0) = 0;
+    R2(1,1) = 1;
+    R2(1,2) = 0;
+    R2(2,0) = sin(itheta);
+    R2(2,1) = 0;
+    R2(2,2) = cos(itheta);
+    Eigen::MatrixXd R3(3,3);
+    R3(0,0) = cos(uas.state_.ipsi_);
+    R3(0,1) = sin(uas.state_.ipsi_);
+    R3(0,2) = 0;
+    R3(1,0) = -sin(uas.state_.ipsi_);
+    R3(1,1) = cos(uas.state_.ipsi_);
+    R3(1,2) = 0;
+    R3(2,0) = 0;
+    R3(2,1) = 0;
+    R3(2,2) = 1;
+
+    //Added * signs in between R1, 2, 3
+    Eigen::MatrixXd R_eb = R1*R2*R3;
+    Eigen::MatrixXd R_be = R_eb.transpose();
+    Eigen::MatrixXd r_droneESDRelRGV = R_be*r_bodyRelRGV;
+    Eigen::MatrixXd R4(3,3);
+    R4(0,0) = 1;
+    R4(0,1) = 0;
+    R4(0,2) = 0;
+    R4(1,0) = 0;
+    R4(1,1) = -1;
+    R4(1,2) = 0;
+    R4(2,0) = 0;
+    R4(2,1) = 0;
+    R4(2,2) = -1;
+
+    Eigen::MatrixXd r_droneENUrelRGV = R4*r_droneESDRelRGV;
+    // Assuming drone is in NED frame and not ESD frame -- transforming from NED to ENU
+    /*MatrixXd r_droneENUrelRGV(3,1);
+    r_droneENUrelRGV(0,0) = r_droneESDRelRGV(1,0);
+    r_droneENUrelRGV(1,0) = r_droneESDRelRGV(0,0);
+    r_droneENUrelRGV(2,0) = -r_droneESDRelRGV(2,0);
+    */
+    // Adding UAS position to get RGV position
+    r_droneENUrelRGV(0,0) += uas.state_.ix_;
+    r_droneENUrelRGV(1,0) += uas.state_.iy_;
+    r_droneENUrelRGV(2,0) += uas.state_.iz_;
+    //converting from matrix to RGV State
+
+    RGVState rgvState = RGVState(r_droneENUrelRGV(0,0), r_droneENUrelRGV(1,0), r_droneENUrelRGV(2,0));
+    rgv.state_ = rgvState;
+    return rgvState;
 }
-// #include
-// #include
-// #include
-// #include
-// #include
-// #include "eigen-3.4.0/Eigen/Dense"
-// using Eigen::MatrixXd;
-// /struct Vehicle {
-// float x;
-// float y;
-// float z;
-// float roll;
-// float pitch;
-// float yaw;
-// };/
-// MatrixXd Localization(float x_rgv, float y_rgv, float x,float y, float z, float roll, float pitch, float yaw){
-// // camera parameters
-// float FOVx = 13.0736;
-// float FOVy = 7.3539;
-// int x_pixels = 3840;
-// int y_pixlels = 2160;
-// float alpha = 0;
-// float x_uas = x;
-// float y_uas = y;
-// float z_uas = z;
-// float roll_uas = roll;
-// float pitch_uas = pitch;
-// float yaw_uas = yaw;
-// //Image center point
-// float xcp = x_pixels/2;
-// float ycp = y_pixlels/2;
-// //Distance from camera to center CF image assume alpha = 0
-// float rcp = z_uas * (1 / cos(alpha));
-// //Distance from edge to center point
-// float dx = rcp * tan(FOVx/2);
-// float dy = rcp * tan(FOVy/2);
-// //Pixel to distance scaling factor
-// float sx = xcp/dx;
-// float sy = ycp/dy;
-// //Distance between center point and foot
-// float d = sqrt(pow((xcp-x_rgv)/sx,2) + pow((ycp-y_rgv)/sy,2));
-// //Angle between pinhole vector and foot position vector
-// float theta = atan(d/rcp);
-// //Distance from camera to foot position
-// float r_ground = rcp * (1/cos(theta));
-// //Normalized foot position
-// float xn = (x_rgv-xcp)/x_pixels;
-// float yn = (y_rgv-ycp)/y_pixlels;
-// //RGV position in camera frame
-// float xc = xn * r_ground;
-// float yc = yn * r_ground;
-// float zc = 0;
-// MatrixXd r_cameraRelRGV(3,1);
-// r_cameraRelRGV(0,0) = xc;
-// r_cameraRelRGV(1,0) = yc;
-// r_cameraRelRGV(2,0) = zc;
-// MatrixXd r_bodyRelRGV = r_cameraRelRGV;
-// r_bodyRelRGV /= 3.281; //feet to meters
-// //Rotation Matricies
-// MatrixXd R1(3,3);
-// R1(0,0) = 1;
-// R1(0,1) = 0;
-// R1(0,2) = 0;
-// R1(1,0) = 0;
-// R1(1,1) = cos(roll_uas);
-// R1(1,2) = sin(roll_uas);
-// R1(2,0) = 0;
-// R1(2,1) = -sin(roll_uas);
-// R1(2,2) = cos(roll_uas);
-// MatrixXd R2(3,3);
-// R2(0,0) = cos(pitch_uas);
-// R2(0,1) = 0;
-// R2(0,2) = -sin(pitch_uas);
-// R2(1,0) = 0;
-// R2(1,1) = 1;
-// R2(1,2) = 0;
-// R2(2,0) = sin(pitch_uas);
-// R2(2,1) = 0;
-// R2(2,2) = cos(pitch_uas);
-// MatrixXd R3(3,3);
-// R3(0,0) = cos(yaw_uas);
-// R3(0,1) = sin(yaw_uas);
-// R3(0,2) = 0;
-// R3(1,0) = -sin(yaw_uas);
-// R3(1,1) = cos(yaw_uas);
-// R3(1,2) = 0;
-// R3(2,0) = 0;
-// R3(2,1) = 0;
-// R3(2,2) = 1;
-// MatrixXd R_eb = R1R2R3;
-// MatrixXd R_be = R_eb.transpose();
-// MatrixXd r_droneESDRelRGV = R_ber_bodyRelRGV;
-// MatrixXd R4(3,3);
-// R4(0,0) = 1;
-// R4(0,1) = 0;
-// R4(0,2) = 0;
-// R4(1,0) = 0;
-// R4(1,1) = -1;
-// R4(1,2) = 0;
-// R4(2,0) = 0;
-// R4(2,1) = 0;
-// R4(2,2) = -1;
-// MatrixXd r_droneENUrelRGV = R4r_droneESDRelRGV;
-// // Assuming drone is in NED frame and not ESD frame -- transforming from NED to ENU
-// /*MatrixXd r_droneENUrelRGV(3,1);
-// r_droneENUrelRGV(0,0) = r_droneESDRelRGV(1,0);
-// r_droneENUrelRGV(1,0) = r_droneESDRelRGV(0,0);
-// r_droneENUrelRGV(2,0) = -r_droneESDRelRGV(2,0);
-// */
-// // Adding UAS position to get RGV position
-// /r_droneENUrelRGV(0,0) += x_uas;
-// r_droneENUrelRGV(1,0) += y_uas;
-// r_droneENUrelRGV(2,0) += z_uas;/
-// return r_droneENUrelRGV;
-// }
-// /int main()
-// {
-// Vehicle UAS = {1,1,1,0,0,0};
-// MatrixXd solution = Localization(5, 10, UAS, 50, 50, 0, 1080, 2900);
-// std::cout << solution <<std::endl;
-// int rows = 6;
-// int cols = 10;
-// Eigen::MatrixXd matrix(rows, cols);
-// std::ifstream file("DroneStates.txt");
-// std::string line;
-// int row = 0;
-// int col = 0;
-// while (std::getline(file, line) && row < rows) {
-// std::stringstream lineStream(line);
-// std::string cell;
-// col = 0;
-// while (std::getline(lineStream, cell, ',') && col < cols) {
-// matrix(row, col) = std::stod(cell);
-// col++;
-// }
-// row++;
-// }
-// std::cout << " " << std::endl;
-// std::cout << matrix.row(0).col(0) << std::endl;
-// return 0;
-// }/
