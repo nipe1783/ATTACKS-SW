@@ -71,22 +71,22 @@ void CompleteMissionScheduler::timerCallback(){
         currentPhase_ = "exploration";
         goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
     }
-    if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
-        goalState_ = trailingPhase_->generateDesiredState(cvImg_, uas_.state_);
-    }
-    // if(currentPhase_ == "coarse" && cvImg_.blobs.size() == 0){
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
-    // }
     // if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
-    //     currentPhase_ = "coarse";
-    //     goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
+    //     goalState_ = trailingPhase_->generateDesiredState(cvImg_, uas_.state_);
     // }
-    // if(currentPhase_ == "coarse" && cvImg_.blobs.size() > 0){
-    //     goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
-    //     rgvState_ = coarsePhase_->localize(cvImg_, uas_, rgv_);
-    //     std::cout << "RGV x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
-    // }
+    if(currentPhase_ == "coarse" && cvImg_.blobs.size() == 0){
+        currentPhase_ = "exploration";
+        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
+    }
+    if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
+        currentPhase_ = "coarse";
+        goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
+    }
+    if(currentPhase_ == "coarse" && cvImg_.blobs.size() > 0){
+        goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
+        rgvState_ = coarsePhase_->localize(cvImg_, uas_, rgv_);
+        std::cout << "RGV x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
+    }
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
     if (offboardSetpointCounter_ < 11) {
