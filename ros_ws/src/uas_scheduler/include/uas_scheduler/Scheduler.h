@@ -25,10 +25,9 @@ class Scheduler : public rclcpp::Node
         std::string currentPhase_;
         std::string nextPhase_;
         cv::Mat psFrame_;
+        cv::Mat psDisplayFrame_;
         cv::Mat ssFrame_;
         UASState goalState_;
-        BasicBlobDetector blobDetector_;
-        CVImg cvImg_;
         rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr stateSubscription_;
         rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr psSubscription_;
         rclcpp::Publisher<px4_msgs::msg::OffboardControlMode>::SharedPtr controlModePublisher_;

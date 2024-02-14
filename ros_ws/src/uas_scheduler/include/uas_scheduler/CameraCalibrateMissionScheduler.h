@@ -12,19 +12,16 @@
 #include <opencv2/opencv.hpp>
 #include <optional>
 
-class CompleteMissionScheduler : public Scheduler
+class CameraCalibrateMissionScheduler : public Scheduler
 {
     public:
-        CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2);
+        CameraCalibrateMissionScheduler(UAS uas, RGV rgv1, RGV rgv2);
 
         // fields:
         std::vector<UASState> waypoints_ = {
-            UASState(-10, -10, -5, 0, 0, 0, 0), 
-            UASState(-10, 10, -5, 0, 0, 0, 0), 
-            UASState(10, 10, -5, 0, 0, 0, 0), 
-            UASState(10, -10, -5, 0, 0, 0, 0),
-            UASState(0, 0, -5, 0, 0, 0, 0)
+            UASState(0, 0, -5, 0, 0, 0, 0), 
         };
+        
         unsigned int waypointIndex_;
         std::unique_ptr<UASExplorationPhase> explorationPhase_;
         std::unique_ptr<UASTrailingPhase> trailingPhase_;

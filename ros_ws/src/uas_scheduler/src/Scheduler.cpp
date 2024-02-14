@@ -9,6 +9,7 @@ void Scheduler::imageConvert(const sensor_msgs::msg::Image::SharedPtr sImg)
 {
     try {
         psFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
+        psDisplayFrame_ = psFrame_.clone();
     } catch (cv_bridge::Exception& e) {
         RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
     }
