@@ -54,8 +54,8 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     //Start calculations
     //DOUBLE CHECK WHETHER CVIMG WIDTH IS X PIXELS AND Y PIXELS
 
-    float xcp = cvImg.width/2;
-    float ycp = cvImg.height/2;
+    float xcp = float(cvImg.width)/2;
+    float ycp = float(cvImg.height)/2;
 
     //Distance from camera to center CF image assume alpha = 0
     float rcp = uas.state_.iz_ * (1 / cos(alpha));
@@ -69,7 +69,7 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     float sy = ycp/dy;
 
     //Distance between center point and foot
-    float d = sqrt(pow((xcp-cvImg.centerX)/sx,2) + pow((ycp-cvImg.centerY)/sy,2));
+    float d = sqrt(pow((xcp-float(cvImg.centerX))/sx,2) + pow((ycp-float(cvImg.centerY))/sy,2));
 
     //Angle between pinhole vector and foot position vector
     float theta = atan(d/rcp);
@@ -78,8 +78,8 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     float r_ground = rcp * (1/cos(itheta));
 
     //Normalized foot position -- DOUBLE CHECK WHETHER CVIMG WIDTH IS X PIXELS AND Y PIXELS
-    float xn = (cvImg.centerX-xcp)/cvImg.width;
-    float yn = (cvImg.centerY-ycp)/cvImg.height;
+    float xn = (float(cvImg.centerX)-xcp)/float(cvImg.width);
+    float yn = (float(cvImg.centerY-ycp))/float(cvImg.height);
 
     //RGV position in camera frame
     float xc = xn * r_ground;
@@ -92,6 +92,8 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     r_cameraRelRGV(2,0) = zc;
     Eigen::MatrixXd r_bodyRelRGV = r_cameraRelRGV;
     r_bodyRelRGV /= 3.281; //feet to meters  
+
+    std::cout << "rbody x:" <<r_bodyRelRGV(0,0) << ", y:" << r_bodyRelRGV(1,0)  << ", z:" << r_bodyRelRGV(2,0) << "\n" << std::endl;
 
     //Rotation Matricies -- MAY NEED TO UPDATE PHI AND THETA FOR UAS - PHI = ROLL, THETA = PITCH
     Eigen::MatrixXd R1(3,3);
@@ -129,6 +131,9 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     Eigen::MatrixXd R_eb = R1*R2*R3;
     Eigen::MatrixXd R_be = R_eb.transpose();
     Eigen::MatrixXd r_droneESDRelRGV = R_be*r_bodyRelRGV;
+
+    std::cout << "rdrone x:" <<r_droneESDRelRGV(0,0) << ", y:" << r_droneESDRelRGV(1,0)  << ", z:" << r_droneESDRelRGV(2,0) << "\n" << std::endl;
+
     Eigen::MatrixXd R4(3,3);
     R4(0,0) = 1;
     R4(0,1) = 0;
@@ -141,6 +146,8 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     R4(2,2) = -1;
 
     Eigen::MatrixXd r_droneENUrelRGV = R4*r_droneESDRelRGV;
+    std::cout << "localize x:" <<r_droneENUrelRGV(0,0) << ", y:" << r_droneENUrelRGV(1,0)  << ", z:" << r_droneENUrelRGV(2,0) << "\n" << std::endl;
+
     // Assuming drone is in NED frame and not ESD frame -- transforming from NED to ENU
     /*MatrixXd r_droneENUrelRGV(3,1);
     r_droneENUrelRGV(0,0) = r_droneESDRelRGV(1,0);
@@ -152,6 +159,7 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     r_droneENUrelRGV(1,0) += uas.state_.iy_;
     r_droneENUrelRGV(2,0) += uas.state_.iz_;
     //converting from matrix to RGV State
+
 
     RGVState rgvState = RGVState(r_droneENUrelRGV(0,0), r_droneENUrelRGV(1,0), r_droneENUrelRGV(2,0));
     rgv.state_ = rgvState;

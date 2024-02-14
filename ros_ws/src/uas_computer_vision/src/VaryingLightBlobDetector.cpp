@@ -16,7 +16,7 @@ CVImg VaryingLightBlobDetector::detect(Mat& frame){
     gammaCorrection(dst, dst);
     DoGFilter(dst, dst);
     contrastEqualization(dst, dst);
-    cv::GaussianBlur(dst, dst, cv::Size(blurSize, blurSize), 0, 0);
+    cv::GaussianBlur(dst, dst, cv::Size(blurSize_, blurSize_), 0, 0);
     cv::threshold(dst, dst, intensityThreshold, 255, cv::THRESH_BINARY);
     Mat element = getStructuringElement(cv::MORPH_RECT,
         cv::Size(2 * dilationSize + 1, 2 * dilationSize + 1),
@@ -55,7 +55,7 @@ std::vector<Blob> VaryingLightBlobDetector::detect(Mat& frame, Mat& dst){
     gammaCorrection(dst, dst);
     DoGFilter(dst, dst);
     contrastEqualization(dst, dst);
-    cv::GaussianBlur(dst, dst, cv::Size(blurSize, blurSize), 0, 0);
+    cv::GaussianBlur(dst, dst, cv::Size(blurSize_, blurSize_), 0, 0);
     cv::threshold(dst, dst, intensityThreshold, 255, cv::THRESH_BINARY);
     Mat element = getStructuringElement(cv::MORPH_RECT,
         cv::Size(2 * dilationSize + 1, 2 * dilationSize + 1),
@@ -96,19 +96,19 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
     
     cvtColor(frame, frameHSV, COLOR_BGR2HSV);
     imshow("Filtered Frame", frameHSV);
-    createTrackbar("Low H", "Filtered Frame", &hLow, maxValueH, on_low_H_thresh_trackbar, this);
-    createTrackbar("High H", "Filtered Frame", &hHigh, maxValueH, on_high_H_thresh_trackbar, this);
-    createTrackbar("Low S", "Filtered Frame", &sLow, maxValueH, on_low_S_thresh_trackbar, this);
-    createTrackbar("High S", "Filtered Frame", &sHigh, maxValueH, on_high_S_thresh_trackbar, this);
-    createTrackbar("Low V", "Filtered Frame", &vLow, maxValueH, on_low_V_thresh_trackbar, this);
-    createTrackbar("High V", "Filtered Frame", &vHigh, maxValueH, on_high_V_thresh_trackbar, this);
-    createTrackbar("Sigma 1", "Filtered Frame", &sigma1, maxValueH, on_sigma_1_thresh_trackbar, this);
-    createTrackbar("Sigma 2", "Filtered Frame", &sigma2, maxValueH, on_sigma_2_thresh_trackbar, this);
-    createTrackbar("Intensity Threshold", "Filtered Frame", &intensityThreshold, maxValueH, on_intensity_thresh_trackbar, this);
+    createTrackbar("Low H", "Filtered Frame", &hLow_, maxValueH_, on_low_H_thresh_trackbar, this);
+    createTrackbar("High H", "Filtered Frame", &hHigh_, maxValueH_, on_high_H_thresh_trackbar, this);
+    createTrackbar("Low S", "Filtered Frame", &sLow_, maxValueH_, on_low_S_thresh_trackbar, this);
+    createTrackbar("High S", "Filtered Frame", &sHigh_, maxValueH_, on_high_S_thresh_trackbar, this);
+    createTrackbar("Low V", "Filtered Frame", &vLow_, maxValueH_, on_low_V_thresh_trackbar, this);
+    createTrackbar("High V", "Filtered Frame", &vHigh_, maxValueH_, on_high_V_thresh_trackbar, this);
+    createTrackbar("Sigma 1", "Filtered Frame", &sigma1, maxValueH_, on_sigma_1_thresh_trackbar, this);
+    createTrackbar("Sigma 2", "Filtered Frame", &sigma2, maxValueH_, on_sigma_2_thresh_trackbar, this);
+    createTrackbar("Intensity Threshold", "Filtered Frame", &intensityThreshold, maxValueH_, on_intensity_thresh_trackbar, this);
     createTrackbar("Alpha", "Filtered Frame", &alphaSlider, maxValueAlphaSlider, on_alpha_trackbar, this);
-    createTrackbar("Blur Size", "Filtered Frame", &blurSize, 100, NULL);
+    createTrackbar("Blur Size", "Filtered Frame", &blurSize_, 100, NULL);
     createTrackbar("Dilation Size", "Filtered Frame", &dilationSize, 100, NULL);
-    createTrackbar("Area Threshold", "Filtered Frame", &areaThreshold, 1000, NULL);
+    createTrackbar("Area Threshold", "Filtered Frame", &areaThreshold_, 1000, NULL);
 
     while(true){
 
@@ -148,8 +148,8 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
     }
 
     while(true) {
-        if(blurSize % 2 == 0) {
-            blurSize++;
+        if(blurSize_ % 2 == 0) {
+            blurSize_++;
         }
         Mat dst;
         cvtColor(frame, dst, COLOR_BGR2HSV);
@@ -159,7 +159,7 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
         gammaCorrection(dst, dst);
         DoGFilter(dst, dst);
         contrastEqualization(dst, dst);
-        cv::GaussianBlur(dst, dst, cv::Size(blurSize, blurSize), 0, 0);
+        cv::GaussianBlur(dst, dst, cv::Size(blurSize_, blurSize_), 0, 0);
         cv::threshold(dst, dst, intensityThreshold, 255, cv::THRESH_BINARY);
         Mat element = getStructuringElement(cv::MORPH_RECT,
             cv::Size(2 * dilationSize + 1, 2 * dilationSize + 1),
@@ -170,7 +170,7 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
         cv::findContours(dst.clone(), contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
         Mat mask = Mat::zeros(dst.size(), dst.type());
         for(size_t i = 0; i < contours.size(); i++) {
-            if(cv::contourArea(contours[i]) > areaThreshold) {
+            if(cv::contourArea(contours[i]) > areaThreshold_) {
                 drawContours(mask, contours, static_cast<int>(i), Scalar(255), cv::FILLED);
             }
         }
@@ -185,13 +185,13 @@ void VaryingLightBlobDetector::calibrate(Mat& frame){
 
 
 
-    std::cout << "Low H: " << hLow << std::endl;
-    std::cout << "High H: " << hHigh << std::endl;
-    std::cout << "Low S: " << sLow << std::endl;
-    std::cout << "High S: " << sHigh << std::endl;
-    std::cout << "Low V: " << vLow << std::endl;
-    std::cout << "High V: " << vHigh << std::endl;
-    std::cout << "Blur Size: " << blurSize << std::endl;
+    std::cout << "Low H: " << hLow_ << std::endl;
+    std::cout << "High H: " << hHigh_ << std::endl;
+    std::cout << "Low S: " << sLow_ << std::endl;
+    std::cout << "High S: " << sHigh_ << std::endl;
+    std::cout << "Low V: " << vLow_ << std::endl;
+    std::cout << "High V: " << vHigh_ << std::endl;
+    std::cout << "Blur Size: " << blurSize_ << std::endl;
     std::cout << "Finished Calibrating." << std::endl;
 }
 
@@ -224,7 +224,7 @@ void VaryingLightBlobDetector::DoGFilter(Mat& frame, Mat& dst){
 void VaryingLightBlobDetector::Mask(Mat& frame, Mat& dst) {
     // Create the mask for the pixels within the given bounds
     Mat mask;
-    inRange(frame, Scalar(hLow, sLow, vLow), Scalar(hHigh, sHigh, vHigh), mask);
+    inRange(frame, Scalar(hLow_, sLow_, vLow_), Scalar(hHigh_, sHigh_, vHigh_), mask);
 
     // Calculate the average color of the frame
     Scalar avgColor = mean(frame);

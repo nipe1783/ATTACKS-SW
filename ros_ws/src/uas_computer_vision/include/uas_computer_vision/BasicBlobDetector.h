@@ -1,4 +1,4 @@
-# pragma once
+#pragma once
 #include "uas_computer_vision/BlobDetector.h"
 #include <vector>
 
@@ -8,6 +8,7 @@ class BasicBlobDetector : public BlobDetector
 {       
     public:
         // methods:
+        BasicBlobDetector(int hLow, int hHigh, int sLow, int sHigh, int vLow, int vHigh);
         BasicBlobDetector() = default;
         ~BasicBlobDetector() = default;
         CVImg detect(Mat& frame) override;

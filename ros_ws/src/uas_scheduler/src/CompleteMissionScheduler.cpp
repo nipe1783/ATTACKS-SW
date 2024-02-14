@@ -2,6 +2,7 @@
 #include "uas_scheduler/Scheduler.h"
 #include "uas/UAS.h"
 #include "uas_helpers/Camera.h"
+#include "uas_helpers/RGV.h"
 #include "uas_computer_vision/BasicBlobDetector.h"
 #include "uas_computer_vision/Blob.h"
 #include <rclcpp/rclcpp.hpp>
@@ -13,7 +14,7 @@
 #include <opencv2/opencv.hpp>
 #include <chrono>
 
-CompleteMissionScheduler::CompleteMissionScheduler(UAS uas) : Scheduler("uas_complete_mission", uas) {
+CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) : Scheduler("uas_complete_mission", uas) {
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
 
@@ -37,6 +38,23 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas) : Scheduler("uas_com
         "/fmu/in/vehicle_command", qos
     );
 
+    rgv1_ = rgv1;
+    rgv2_ = rgv2;
+
+    // Setting blob detector parameters:
+    rgv1BlobDetector_.hLow_ = rgv1_.hLow_;
+    rgv1BlobDetector_.hHigh_ = rgv1_.hHigh_;
+    rgv1BlobDetector_.sLow_ = rgv1_.sLow_;
+    rgv1BlobDetector_.sHigh_ = rgv1_.sHigh_;
+    rgv1BlobDetector_.vLow_ = rgv1_.vLow_;
+    rgv1BlobDetector_.vHigh_ = rgv1_.vHigh_;
+    rgv2BlobDetector_.hLow_ = rgv2_.hLow_;
+    rgv2BlobDetector_.hHigh_ = rgv2_.hHigh_;
+    rgv2BlobDetector_.sLow_ = rgv2_.sLow_;
+    rgv2BlobDetector_.sHigh_ = rgv2_.sHigh_;
+    rgv2BlobDetector_.vLow_ = rgv2_.vLow_;
+    rgv2BlobDetector_.vHigh_ = rgv2_.vHigh_;
+
     currentPhase_ = "exploration";
     explorationPhase_ = std::make_unique<UASExplorationPhase>(waypoints_);
     trailingPhase_ = std::make_unique<UASTrailingPhase>();
@@ -55,38 +73,102 @@ void CompleteMissionScheduler::timerCallback(){
         publishVehicleCommand(px4_msgs::msg::VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
         arm();
     }
-    cvImg_ = blobDetector_.detect(psFrame_);
-    cv::imshow("Primary Sensor", psFrame_);
-    cv::waitKey(1);
-    std::cout << "Current phase: " << currentPhase_ << ". ";
-    std::cout<< "Number of blobs detected: " << cvImg_.blobs.size() << ". " << std::endl;
-    if(currentPhase_ == "exploration"){
-        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
+
+    rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
+    rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
+
+    std::cout << "Phase: " << currentPhase_ << ". ";
+
+    if(rgv1CVData_.blobs.size() > 0){
+        cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
+        cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
+        std::cout << "RGV1 detected. ";
     }
-    if(currentPhase_ == "exploration" && cvImg_.blobs.size() > 0){
-        currentPhase_ = "trailing";
-        goalState_ = trailingPhase_->generateDesiredState(cvImg_, uas_.state_);
+    if(rgv2CVData_.blobs.size() > 0){
+        cv::Rect bounding_box = cv::Rect(rgv2CVData_.blobs[0].x, rgv2CVData_.blobs[0].y, rgv2CVData_.blobs[0].width, rgv2CVData_.blobs[0].height);
+        cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(0, 255, 0), 2);
+        std::cout << "RGV2 detected. ";
     }
-    if(currentPhase_ == "trailing" && cvImg_.blobs.size() == 0){
+    std::cout << std::endl;
+
+    std::cout << "UAS x:" << uas_.state_.ix_ << ", y:" << uas_.state_.iy_ << ", z:" << uas_.state_.iz_ << "\n" << std::endl;
+
+    if(rgv2CVData_.blobs.size() > 0){
+        if(currentPhase_ == "exploration"){
+            currentPhase_ = "trailing";
+        goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "trailing"){
+            currentPhase_ = "coarse";
+            goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
+        goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        rgvState_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
+        std::cout << "RGV 2 x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
+        }
+    }
+    else if(rgv2CVData_.blobs.size() == 0){
+        if(currentPhase_ == "exploration"){
+            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "trailing"){
+            currentPhase_ = "exploration";
+            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "coarse"){
+            currentPhase_ = "exploration";
+            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+    }
+    else{
         currentPhase_ = "exploration";
-        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
+        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     }
+
+
+    // if(currentPhase_ == "exploration"){
+    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    // }
+    // if(currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
+    //     currentPhase_ = "trailing";
+    //     goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    // }
+    // if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() > 0){
+    //     currentPhase_ = "coarse";
+    //     goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    // }
+    // if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() == 0){
+    //     currentPhase_ = "exploration";
+    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    // }
+    // if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
+    //     goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    // }
+    // if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() == 0){
+    //     currentPhase_ = "exploration";
+    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    // }
     // if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
     //     goalState_ = trailingPhase_->generateDesiredState(cvImg_, uas_.state_);
     // }
-    if(currentPhase_ == "coarse" && cvImg_.blobs.size() == 0){
-        currentPhase_ = "exploration";
-        goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
-    }
-    if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
-        currentPhase_ = "coarse";
-        goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
-    }
-    if(currentPhase_ == "coarse" && cvImg_.blobs.size() > 0){
-        goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
-        rgvState_ = coarsePhase_->localize(cvImg_, uas_, rgv_);
-        std::cout << "RGV x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
-    }
+    // if(currentPhase_ == "coarse" && cvImg_.blobs.size() == 0){
+    //     currentPhase_ = "exploration";
+    //     goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
+    // }
+    // if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
+    //     currentPhase_ = "coarse";
+    //     goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
+    // }
+    // if(currentPhase_ == "coarse" && cvImg_.blobs.size() > 0){
+    //     rgvState_ = coarsePhase_->localize(cvImg_, uas_, rgv_);
+    //     std::cout << "RGV x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
+    //     goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
+    // }
+
+    cv::imshow("Primary Sensor", psDisplayFrame_);
+    cv::waitKey(1);
+
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
     if (offboardSetpointCounter_ < 11) {
@@ -98,12 +180,14 @@ void CompleteMissionScheduler::timerCallback(){
 int main(int argc, char *argv[])
 {
 	std::cout << "Starting UAS complete mission node..." << std::endl;
+    RGV rgv1 = RGV(1, 0, 30, 180, 255, 180, 255); // RED
+    RGV rgv2 = RGV(2, 0, 10, 0, 10, 180, 255); // WHITE
 	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 	rclcpp::init(argc, argv);
     UAS missionUAS = UAS();
     Camera camera1 = Camera(640, 360, 114.592, 64.457752);
     missionUAS.addCamera(camera1);
-	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(missionUAS));
+	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(missionUAS, rgv1, rgv2));
 	rclcpp::shutdown();
 	return 0;
 }

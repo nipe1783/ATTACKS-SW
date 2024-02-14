@@ -28,6 +28,7 @@ class Scheduler : public rclcpp::Node
         std::string currentPhase_;
         std::string nextPhase_;
         cv::Mat psFrame_;
+        cv::Mat psDisplayFrame_;
         cv::Mat ssFrame_;
         UASState goalState_;
 
