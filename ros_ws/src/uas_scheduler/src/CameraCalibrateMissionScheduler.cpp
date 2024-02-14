@@ -1,4 +1,4 @@
-#include "uas_scheduler/CompleteMissionScheduler.h"
+#include "uas_scheduler/CameraCalibrateMissionScheduler.h"
 #include "uas_scheduler/Scheduler.h"
 #include "uas/UAS.h"
 #include "uas_helpers/RGV.h"
@@ -13,16 +13,16 @@
 #include <opencv2/opencv.hpp>
 #include <chrono>
 
-CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) : Scheduler("uas_complete_mission", uas) {
+CameraCalibrateMissionScheduler::CameraCalibrateMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) : Scheduler("uas_camera_calibration_mission", uas) {
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
 
     psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera/image_raw", qos, std::bind(&CompleteMissionScheduler::callbackPS, this, std::placeholders::_1)
+        "/camera/image_raw", qos, std::bind(&CameraCalibrateMissionScheduler::callbackPS, this, std::placeholders::_1)
     );
 
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
-        "/fmu/out/vehicle_local_position", qos, std::bind(&CompleteMissionScheduler::callbackState, this, std::placeholders::_1)
+        "/fmu/out/vehicle_local_position", qos, std::bind(&CameraCalibrateMissionScheduler::callbackState, this, std::placeholders::_1)
     );
 
     controlModePublisher_ = this->create_publisher<px4_msgs::msg::OffboardControlMode>(
@@ -60,10 +60,10 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
     waypointIndex_ = 0;
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
-    timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&CompleteMissionScheduler::timerCallback, this));
+    timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&CameraCalibrateMissionScheduler::timerCallback, this));
 }
 
-void CompleteMissionScheduler::timerCallback(){
+void CameraCalibrateMissionScheduler::timerCallback(){
     if(!psMsgReceived_ || !stateMsgReceived_) {
         return;
     }
@@ -74,39 +74,17 @@ void CompleteMissionScheduler::timerCallback(){
 
     rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
-
-    std::cout << "Phase: " << currentPhase_ << ". ";
-    if(rgv1CVData_.blobs.size() > 0){
-        cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
-        cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
-        std::cout << "RGV1 detected. ";
+    int key = cv::waitKey(10);
+    if(key == 115) {
+        rgv1BlobDetector_.calibrate(psFrame_);
     }
-    if(rgv2CVData_.blobs.size() > 0){
-        cv::Rect bounding_box = cv::Rect(rgv2CVData_.blobs[0].x, rgv2CVData_.blobs[0].y, rgv2CVData_.blobs[0].width, rgv2CVData_.blobs[0].height);
-        cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(0, 255, 0), 2);
-        std::cout << "RGV2 detected. ";
-    }
-    std::cout << std::endl;
-
-
-    if(currentPhase_ == "exploration"){
-        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    }
-    if(currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
-        currentPhase_ = "trailing";
-        goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    }
-    if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() > 0){
-        goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    }
-    if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() == 0){
-        currentPhase_ = "exploration";
-        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    }
-
-    cv::imshow("Primary Sensor", psDisplayFrame_);
+    cv::imshow("Primary Sensor", psFrame_);
     cv::waitKey(1);
+    std::cout << "Phase: " << currentPhase_ << ". ";
+    std::cout<< "RGV 1 Detected: " << rgv1CVData_.blobs.size();
+    std::cout<< ". RGV 2 Detected: " << rgv2CVData_.blobs.size() << ". " << std::endl;
 
+    goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
     if (offboardSetpointCounter_ < 11) {
@@ -117,12 +95,12 @@ void CompleteMissionScheduler::timerCallback(){
 
 int main(int argc, char *argv[])
 {
-	std::cout << "Starting UAS complete mission node..." << std::endl;
-    RGV rgv1 = RGV(1, 0, 30, 180, 255, 180, 255); // RED
-    RGV rgv2 = RGV(2, 0, 10, 0, 10, 180, 255); // WHITE
+	std::cout << "Starting UAS Calibrate mission node..." << std::endl;
+    RGV rgv1 = RGV(1, 0, 30, 0, 95, 95, 255); // RED
+    RGV rgv2 = RGV(2, 95, 255, 95, 255, 95, 255); // WHITE
 	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 	rclcpp::init(argc, argv);
-	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(UAS(), rgv1, rgv2));
+	rclcpp::spin(std::make_shared<CameraCalibrateMissionScheduler>(UAS(), rgv1, rgv2));
 	rclcpp::shutdown();
 	return 0;
 }

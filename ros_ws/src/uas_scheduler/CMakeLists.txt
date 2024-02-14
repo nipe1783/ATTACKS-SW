@@ -57,6 +57,25 @@ target_link_libraries(completeMissionScheduler
 )
 install(TARGETS completeMissionScheduler DESTINATION lib/${PROJECT_NAME})
 
+# /cameraCalibrateMissionScheduler
+add_executable(cameraCalibrateMissionScheduler src/CameraCalibrateMissionScheduler.cpp src/Scheduler.cpp)
+ament_target_dependencies(
+    cameraCalibrateMissionScheduler
+    cv_bridge
+    uas
+    uas_phases
+    uas_computer_vision
+    uas_helpers
+    rclcpp 
+    px4_msgs 
+    sensor_msgs
+)
+target_link_libraries(cameraCalibrateMissionScheduler
+  ${cv_bridge_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+)
+install(TARGETS cameraCalibrateMissionScheduler DESTINATION lib/${PROJECT_NAME})
+
 ############
 # Install ##
 ############
