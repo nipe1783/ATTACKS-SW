@@ -2,6 +2,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
+#include <px4_msgs/msg/vehicle_attitude.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <opencv2/opencv.hpp>
 #include "uas_computer_vision/BasicBlobDetector.h"
@@ -36,6 +37,8 @@ class Scheduler : public rclcpp::Node
         RGVState rgvState_;
         BasicBlobDetector blobDetector_;
         CVImg cvImg_;
+
+        rclcpp::Subscription<px4_msgs::msg::VehicleAttitude>::SharedPtr attitudeSubscription_;
         rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr stateSubscription_;
         rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr psSubscription_;
         rclcpp::Publisher<px4_msgs::msg::OffboardControlMode>::SharedPtr controlModePublisher_;
@@ -104,5 +107,11 @@ class Scheduler : public rclcpp::Node
          * @brief Stores the current UAS state from the ROS topic in uasState_.
          */
         void callbackState(const px4_msgs::msg::VehicleLocalPosition::UniquePtr msg);
+
+        /**
+         * @brief Stores the current UAS attitude from the ROS topic in uas_.state_.
+         */
+        void callbackAttitude(const px4_msgs::msg::VehicleAttitude::UniquePtr msg);
+
         
 };

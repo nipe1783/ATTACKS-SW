@@ -43,9 +43,7 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     centerX_ = float(cvImg.centerX);
     centerY_ = float(cvImg.centerY);
 
-
-    float iphi = 0;
-    float itheta = 0;    
+ 
     if(uas.cameras_.size()>0){
         camera = uas.cameras_[0];
     }
@@ -82,12 +80,12 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     
     //Rotation Matricies -- MAY NEED TO UPDATE PHI AND THETA FOR UAS - PHI = ROLL, THETA = PITCH
     R1_ << 1, 0, 0,
-        0, cos(iphi), sin(iphi),
-        0, -sin(iphi), cos(iphi);
+        0, cos(uas.state_.iphi_), sin(uas.state_.iphi_),
+        0, -sin(uas.state_.iphi_), cos(uas.state_.iphi_);
    
-    R2_ << cos(itheta), 0, -sin(itheta),
+    R2_ << cos(uas.state_.itheta_), 0, -sin(uas.state_.itheta_),
         0, 1, 0,
-        sin(itheta), 0, cos(itheta);
+        sin(uas.state_.itheta_), 0, cos(uas.state_.itheta_);
     R3_ << cos(uas.state_.ipsi_), sin(uas.state_.ipsi_), 0,
         -sin(uas.state_.ipsi_), cos(uas.state_.ipsi_), 0,
         0, 0, 1;
@@ -107,7 +105,7 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     r_DroneENURelRGV_(1) += uas.state_.iy_;
     r_DroneENURelRGV_(2) += uas.state_.iz_;
 
-    //converting from matrix to RGV State    
+    //converting from matrix to RGV State  -- UPDATE FOR RGSTATE TO HAVE UPDATE FUNCTION  
     RGVState rgvState = RGVState(r_DroneENURelRGV_(0), r_DroneENURelRGV_(1), r_DroneENURelRGV_(2));
     rgv.state_ = rgvState;
     return rgvState;

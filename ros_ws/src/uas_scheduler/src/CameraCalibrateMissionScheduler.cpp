@@ -7,6 +7,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
+#include <px4_msgs/msg/vehicle_attitude.hpp>
 #include <iostream>
 #include <sensor_msgs/msg/image.hpp>
 #include <cv_bridge/cv_bridge.h>
@@ -23,6 +24,10 @@ CameraCalibrateMissionScheduler::CameraCalibrateMissionScheduler(UAS uas, RGV rg
 
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
         "/fmu/out/vehicle_local_position", qos, std::bind(&CameraCalibrateMissionScheduler::callbackState, this, std::placeholders::_1)
+    );
+
+    attitudeSubscription_ = this->create_subscription<px4_msgs::msg::VehicleAttitude>(
+        "/fmu/out/vehicle_attitude", qos, std::bind(&CameraCalibrateMissionScheduler::callbackAttitude, this, std::placeholders::_1)
     );
 
     controlModePublisher_ = this->create_publisher<px4_msgs::msg::OffboardControlMode>(
