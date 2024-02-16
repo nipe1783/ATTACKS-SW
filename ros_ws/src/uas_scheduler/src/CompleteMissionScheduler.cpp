@@ -127,44 +127,6 @@ void CompleteMissionScheduler::timerCallback(){
     }
 
 
-    // if(currentPhase_ == "exploration"){
-    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // if(currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
-    //     currentPhase_ = "trailing";
-    //     goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() > 0){
-    //     currentPhase_ = "coarse";
-    //     goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() == 0){
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
-    //     goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() == 0){
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
-    //     goalState_ = trailingPhase_->generateDesiredState(cvImg_, uas_.state_);
-    // }
-    // if(currentPhase_ == "coarse" && cvImg_.blobs.size() == 0){
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(cvImg_, uas_.state_);
-    // }
-    // if(currentPhase_ == "trailing" && cvImg_.blobs.size() > 0){
-    //     currentPhase_ = "coarse";
-    //     goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
-    // }
-    // if(currentPhase_ == "coarse" && cvImg_.blobs.size() > 0){
-    //     rgvState_ = coarsePhase_->localize(cvImg_, uas_, rgv_);
-    //     std::cout << "RGV x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
-    //     goalState_ = coarsePhase_->generateDesiredState(cvImg_, uas_.state_);
-    // }
 
     cv::imshow("Primary Sensor", psDisplayFrame_);
     cv::waitKey(1);
@@ -185,7 +147,7 @@ int main(int argc, char *argv[])
 	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 	rclcpp::init(argc, argv);
     UAS missionUAS = UAS();
-    Camera camera1 = Camera(640, 360, 114.592, 64.457752);
+    Camera camera1 = Camera(640, 360, 2, 1.125);
     missionUAS.addCamera(camera1);
 	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(missionUAS, rgv1, rgv2));
 	rclcpp::shutdown();
