@@ -106,9 +106,9 @@ void CompleteMissionScheduler::timerCallback(){
             goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
         }
         else if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
-        goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-        rgvState_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
-        std::cout << "RGV 2 x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
+            goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            rgvState_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
+            std::cout << "RGV 2 x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
         }
     }
     else if(rgv2CVData_.blobs.size() == 0){
