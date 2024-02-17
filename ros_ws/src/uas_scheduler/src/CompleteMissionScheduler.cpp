@@ -83,7 +83,7 @@ void CompleteMissionScheduler::timerCallback(){
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
 
     std::cout << "Phase: " << currentPhase_ << ". ";
-
+    std::cout << "UAS State: " << uas_.state_.ix_ << ", " << uas_.state_.iy_ << ", " << uas_.state_.iz_ << ". ";
     if(rgv1CVData_.blobs.size() > 0){
         cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
         cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
@@ -95,8 +95,6 @@ void CompleteMissionScheduler::timerCallback(){
         std::cout << "RGV2 detected. ";
     }
     std::cout << std::endl;
-
-    std::cout << "UAS x:" << uas_.state_.ix_ << ", y:" << uas_.state_.iy_ << ", z:" << uas_.state_.iz_ << "\n" << std::endl;
 
     if(rgv2CVData_.blobs.size() > 0){
         if(currentPhase_ == "exploration"){
