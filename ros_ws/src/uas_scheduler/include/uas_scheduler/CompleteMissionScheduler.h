@@ -19,10 +19,10 @@ class CompleteMissionScheduler : public Scheduler
 
         // fields:
         std::vector<UASState> waypoints_ = {
-            UASState(-10, -10, -5, 0, 0, 0, 0), 
-            UASState(-10, 10, -5, 0, 0, 0, 0), 
-            UASState(10, 10, -5, 0, 0, 0, 0), 
-            UASState(10, -10, -5, 0, 0, 0, 0),
+            // UASState(-10, -10, -5, 0, 0, 0, 0), 
+            // UASState(-10, 10, -5, 0, 0, 0, 0), 
+            // UASState(10, 10, -5, 0, 0, 0, 0), 
+            // UASState(10, -10, -5, 0, 0, 0, 0),
             UASState(0, 0, -5, 0, 0, 0, 0)
         };
         unsigned int waypointIndex_;
