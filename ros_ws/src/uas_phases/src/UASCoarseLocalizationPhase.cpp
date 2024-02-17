@@ -42,19 +42,14 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     Camera camera = Camera(640, 360, 2, 1.125);
     centerX_ = float(cvImg.centerX);
     centerY_ = float(cvImg.centerY);
-
- 
     if(uas.cameras_.size()>0){
         camera = uas.cameras_[0];
     }
     else{
         std::cout<< " Unable to access camera from index 0. Vector size = 0" << std::endl;
     }    
-
     //Start calculations
-    //DOUBLE CHECK WHETHER CVIMG WIDTH IS X PIXELS AND Y PIXELS    //Distance from camera to center CF image assume alpha = 0
     rcp_ = uas.state_.iz_ * (1.0 / cos(alpha_));
-
     //Distance from edge to center point
     dx_ = rcp_ * tan(camera.xFOV_/2.0);
     dy_ = rcp_ * tan(camera.yFOV_/2.0);
@@ -73,38 +68,24 @@ RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
     xc_ = xn_ * rGround_;
     yc_ = yn_ * rGround_;
     zc_ = uas.state_.iz_;
-
     r_CameraRelRGV_ << xc_, yc_, zc_;
-
     r_BodyRelRGV_ = r_CameraRelRGV_;
-    
-    //Rotation Matricies -- MAY NEED TO UPDATE PHI AND THETA FOR UAS - PHI = ROLL, THETA = PITCH
     R1_ << 1, 0, 0,
         0, cos(uas.state_.iphi_), sin(uas.state_.iphi_),
         0, -sin(uas.state_.iphi_), cos(uas.state_.iphi_);
-   
     R2_ << cos(uas.state_.itheta_), 0, -sin(uas.state_.itheta_),
         0, 1, 0,
         sin(uas.state_.itheta_), 0, cos(uas.state_.itheta_);
     R3_ << cos(uas.state_.ipsi_), sin(uas.state_.ipsi_), 0,
         -sin(uas.state_.ipsi_), cos(uas.state_.ipsi_), 0,
         0, 0, 1;
-    
     r_DroneESDRelRGV_ = ((R1_*R2_*R3_)*r_BodyRelRGV_);
-    r_DroneESDRelRGV_(2) = uas.state_.iz_; // Flat Earth Assumption
+    r_DroneESDRelRGV_(2) = uas.state_.iz_;
     r_DroneENURelRGV_ = REnu_ * r_DroneESDRelRGV_;
-     
-    // Assuming drone is in NED frame and not ESD frame -- transforming from NED to ENU
-    // Eigen::MatrixXd r_droneENUrelRGV(3,1);
-    // r_droneENUrelRGV(0,0) = r_droneESDRelRGV(1,0);
-    // r_droneENUrelRGV(1,0) = r_droneESDRelRGV(0,0);
-    // r_droneENUrelRGV(2,0) = -r_droneESDRelRGV(2,0);
-
     // Adding UAS position to get RGV position
     r_DroneENURelRGV_(0) += uas.state_.ix_;
     r_DroneENURelRGV_(1) += uas.state_.iy_;
     r_DroneENURelRGV_(2) += uas.state_.iz_;
-
     //converting from matrix to RGV State  -- UPDATE FOR RGSTATE TO HAVE UPDATE FUNCTION  
     RGVState rgvState = RGVState(r_DroneENURelRGV_(0), r_DroneENURelRGV_(1), r_DroneENURelRGV_(2));
     rgv.state_ = rgvState;
