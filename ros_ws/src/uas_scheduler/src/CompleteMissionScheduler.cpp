@@ -93,17 +93,17 @@ void CompleteMissionScheduler::timerCallback(){
     if(currentPhase_ == "exploration"){
         goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     }
-    // if(currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
-    //     currentPhase_ = "trailing";
-    //     goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() > 0){
-    //     goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() == 0){
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
+    if(currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
+        currentPhase_ = "trailing";
+        goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    }
+    if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() > 0){
+        goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    }
+    if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() == 0){
+        currentPhase_ = "exploration";
+        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    }
 
     cv::imshow("Primary Sensor", psDisplayFrame_);
     cv::waitKey(1);
