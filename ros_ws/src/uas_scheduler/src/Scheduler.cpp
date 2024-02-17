@@ -46,6 +46,13 @@ void Scheduler::publishControlMode()
         msg.attitude = false;
         msg.body_rate = false;
     }
+    else if(currentPhase_ == "coarse"){
+        msg.position = false;
+        msg.velocity = true;
+        msg.acceleration = false;
+        msg.attitude = false;
+        msg.body_rate = false;
+    }
     msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
 	controlModePublisher_->publish(msg);
 }
@@ -58,6 +65,13 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
         msg.yaw = -3.14;
     }
     else if(currentPhase_ == "trailing"){
+        msg.velocity = {s.bxV_, s.byV_, s.bzV_};
+        msg.position[0] = std::numeric_limits<float>::quiet_NaN();
+        msg.position[1] = std::numeric_limits<float>::quiet_NaN();
+        msg.position[2] = std::numeric_limits<float>::quiet_NaN();
+        msg.yaw = std::numeric_limits<float>::quiet_NaN();
+    }
+    else if(currentPhase_ == "coarse"){
         msg.velocity = {s.bxV_, s.byV_, s.bzV_};
         msg.position[0] = std::numeric_limits<float>::quiet_NaN();
         msg.position[1] = std::numeric_limits<float>::quiet_NaN();
@@ -102,5 +116,9 @@ void Scheduler::callbackPS(const sensor_msgs::msg::Image::SharedPtr psMsg) {
 
 void Scheduler::callbackState(const px4_msgs::msg::VehicleLocalPosition::UniquePtr stateMsg) {
     stateMsgReceived_ = true;
-    uas_.state_ = UASState(stateMsg->x, stateMsg->y, stateMsg->z, stateMsg->heading, stateMsg->vx,  stateMsg->vy,  stateMsg->vz);
+    uas_.state_.updateState(stateMsg->x, stateMsg->y, stateMsg->z, stateMsg->heading, stateMsg->vx,  stateMsg->vy,  stateMsg->vz);
+}
+
+void Scheduler::callbackAttitude(const px4_msgs::msg::VehicleAttitude::UniquePtr attMsg) {
+    uas_.state_.updateAttitude(attMsg->q[0],attMsg->q[1],attMsg->q[2],attMsg->q[3]);
 }

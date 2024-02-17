@@ -5,9 +5,11 @@
 #include "uas_helpers/RGV.h"
 #include "uas_phases/UASTrailingPhase.h"
 #include "uas_phases/UASExplorationPhase.h"
+#include "uas_phases/UASCoarseLocalizationPhase.h"
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
+#include <px4_msgs/msg/vehicle_attitude.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <opencv2/opencv.hpp>
 #include <optional>
@@ -25,6 +27,7 @@ class CameraCalibrateMissionScheduler : public Scheduler
         unsigned int waypointIndex_;
         std::unique_ptr<UASExplorationPhase> explorationPhase_;
         std::unique_ptr<UASTrailingPhase> trailingPhase_;
+        std::unique_ptr<UASCoarseLocalizationPhase> coarsePhase_;
         BasicBlobDetector rgv1BlobDetector_;
         BasicBlobDetector rgv2BlobDetector_;
         RGV rgv1_;

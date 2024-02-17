@@ -1,12 +1,14 @@
 #include "uas_scheduler/CompleteMissionScheduler.h"
 #include "uas_scheduler/Scheduler.h"
 #include "uas/UAS.h"
+#include "uas_helpers/Camera.h"
 #include "uas_helpers/RGV.h"
 #include "uas_computer_vision/BasicBlobDetector.h"
 #include "uas_computer_vision/Blob.h"
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
+#include <px4_msgs/msg/vehicle_attitude.hpp>
 #include <iostream>
 #include <sensor_msgs/msg/image.hpp>
 #include <cv_bridge/cv_bridge.h>
@@ -23,6 +25,10 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
 
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
         "/fmu/out/vehicle_local_position", qos, std::bind(&CompleteMissionScheduler::callbackState, this, std::placeholders::_1)
+    );
+
+    attitudeSubscription_ = this->create_subscription<px4_msgs::msg::VehicleAttitude>(
+        "/fmu/out/vehicle_attitude", qos, std::bind(&CompleteMissionScheduler::callbackAttitude, this, std::placeholders::_1)
     );
 
     controlModePublisher_ = this->create_publisher<px4_msgs::msg::OffboardControlMode>(
@@ -57,6 +63,7 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
     currentPhase_ = "exploration";
     explorationPhase_ = std::make_unique<UASExplorationPhase>(waypoints_);
     trailingPhase_ = std::make_unique<UASTrailingPhase>();
+    coarsePhase_ = std::make_unique<UASCoarseLocalizationPhase>();
     waypointIndex_ = 0;
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
@@ -89,21 +96,40 @@ void CompleteMissionScheduler::timerCallback(){
     }
     std::cout << std::endl;
 
-
-    if(currentPhase_ == "exploration"){
-        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    }
-    if(currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
-        currentPhase_ = "trailing";
+    if(rgv2CVData_.blobs.size() > 0){
+        if(currentPhase_ == "exploration"){
+            currentPhase_ = "trailing";
         goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "trailing"){
+            currentPhase_ = "coarse";
+            goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
+        goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        rgvState_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
+        std::cout << "RGV 2 x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
+        }
     }
-    if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() > 0){
-        goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    else if(rgv2CVData_.blobs.size() == 0){
+        if(currentPhase_ == "exploration"){
+            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "trailing"){
+            currentPhase_ = "exploration";
+            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "coarse"){
+            currentPhase_ = "exploration";
+            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
     }
-    if(currentPhase_ == "trailing" && rgv2CVData_.blobs.size() == 0){
+    else{
         currentPhase_ = "exploration";
         goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     }
+
+
 
     cv::imshow("Primary Sensor", psDisplayFrame_);
     cv::waitKey(1);
@@ -123,7 +149,10 @@ int main(int argc, char *argv[])
     RGV rgv2 = RGV(2, 0, 10, 0, 10, 180, 255); // WHITE
 	setvbuf(stdout, NULL, _IONBF, BUFSIZ);
 	rclcpp::init(argc, argv);
-	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(UAS(), rgv1, rgv2));
+    UAS missionUAS = UAS();
+    Camera camera1 = Camera(640, 360, 2, 1.125);
+    missionUAS.addCamera(camera1);
+	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(missionUAS, rgv1, rgv2));
 	rclcpp::shutdown();
 	return 0;
 }

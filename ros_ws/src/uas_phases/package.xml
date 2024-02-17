@@ -27,6 +27,7 @@
   <depend>launch_testing_ros</depend>
   <depend>uas</depend>
   <depend>uas_computer_vision</depend>
+  <depend>uas_helpers</depend>
 
   <exec_depend>rosidl_default_runtime</exec_depend>
   <exec_depend>ros2launch</exec_depend>
