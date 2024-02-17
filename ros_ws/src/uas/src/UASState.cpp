@@ -15,7 +15,6 @@ void UASState::updateState(float ix, float iy, float iz, float ipsi, float bxV, 
     bzV_ = bzV;
 };
 void UASState::updateAttitude(float q0, float q1, float q2, float q3){
-    // ipsi_ = std::atan2(2.0 * (q1 * q2 + q3 * q0), q3 * q3 - q0 * q0 - q1 * q1 + q2 * q2);
     itheta_ = std::asin(-2.0 * (q0 * q2 - q3 * q1));
     iphi_ = std::atan2(2.0 * (q0 * q1 + q3 * q2), q3 * q3 + q0 * q0 - q1 * q1 - q2 * q2);
 };
