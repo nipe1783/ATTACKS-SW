@@ -10,6 +10,7 @@
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
 #include <px4_msgs/msg/vehicle_attitude.hpp>
+#include "std_msgs/msg/float64_multi_array.hpp"
 #include <sensor_msgs/msg/image.hpp>
 #include <opencv2/opencv.hpp>
 #include <optional>
@@ -32,6 +33,9 @@ class CompleteMissionScheduler : public Scheduler
         std::unique_ptr<UASTrailingPhase> trailingPhase_;
         std::unique_ptr<UASCoarseLocalizationPhase> coarsePhase_;
 
+        rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv1StatePublisher_;
+        rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv2StatePublisher_;
+
         BasicBlobDetector rgv1BlobDetector_;
         BasicBlobDetector rgv2BlobDetector_;
         RGV rgv1_;
@@ -41,5 +45,7 @@ class CompleteMissionScheduler : public Scheduler
         
         // methods:
         void timerCallback() override;
+        void publishRGV1State();
+        void publishRGV2State();
         
 };

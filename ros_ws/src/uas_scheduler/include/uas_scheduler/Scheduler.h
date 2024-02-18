@@ -32,9 +32,6 @@ class Scheduler : public rclcpp::Node
         cv::Mat psDisplayFrame_;
         cv::Mat ssFrame_;
         UASState goalState_;
-
-        //temporary vairable for printing state
-        RGVState rgvState_;
         BasicBlobDetector blobDetector_;
         CVImg cvImg_;
 

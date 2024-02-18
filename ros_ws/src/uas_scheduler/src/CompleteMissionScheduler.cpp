@@ -43,6 +43,14 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
         "/fmu/in/vehicle_command", qos
     );
 
+    rgv1StatePublisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>(
+        "/rgv1/state", qos
+    );
+
+    rgv2StatePublisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>(
+        "/rgv2/state", qos
+    );
+
     rgv1_ = rgv1;
     rgv2_ = rgv2;
 
@@ -68,6 +76,18 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
     timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&CompleteMissionScheduler::timerCallback, this));
+}
+
+void CompleteMissionScheduler::publishRGV1State(){
+    std_msgs::msg::Float64MultiArray msg;
+    msg.data = {rgv1_.state_.ix_, rgv1_.state_.iy_, rgv1_.state_.iz_};
+    rgv1StatePublisher_->publish(msg);
+}
+
+void CompleteMissionScheduler::publishRGV2State(){
+    std_msgs::msg::Float64MultiArray msg;
+    msg.data = {rgv2_.state_.ix_, rgv2_.state_.iy_, rgv2_.state_.iz_};
+    rgv2StatePublisher_->publish(msg);
 }
 
 void CompleteMissionScheduler::timerCallback(){
@@ -107,8 +127,8 @@ void CompleteMissionScheduler::timerCallback(){
         }
         else if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
             goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-            rgvState_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
-            std::cout << "RGV 2 x:" <<rgvState_.ix_ << ", y:" << rgvState_.iy_ << ", z:" << rgvState_.iz_ << "\n" << std::endl;
+            rgv2_.state_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
+            publishRGV2State();
         }
     }
     else if(rgv2CVData_.blobs.size() == 0){
