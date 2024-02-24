@@ -19,6 +19,9 @@ from rclpy.qos import ReliabilityPolicy, DurabilityPolicy, LivelinessPolicy
 import time
 import math
 
+truth_values = []
+estimate_values = []
+
 class PlotCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         self.fig = Figure(figsize=(width, height), dpi=dpi)
@@ -59,6 +62,50 @@ class PlotCanvas(FigureCanvas):
         self.axes.autoscale_view()
         self.draw()
 
+    def plot_rgv_points(self, dot_history):
+        
+        def interpolate_color(start_color, end_color, factor):
+            """Interpolates between two colors with a given factor."""
+            return tuple(start_color[i] + (end_color[i] - start_color[i]) * factor for i in range(3))
+
+        self.axes.clear()
+        self.fig.set_facecolor('white')
+        self.axes.set_facecolor('black')
+        self.axes.set_title('UAS and RGV Plotting (ENU Frame)')
+        self.axes.set_xlabel('East [m]')
+        self.axes.set_ylabel('North [m]')
+        # self.axes.tick_params(colors='white')
+        self.axes.set_xlim(-25, 25)
+        self.axes.set_ylim(-25, 25)
+
+        # Define start and end colors for "1 true" (e.g., light to dark red)
+        start_color_red = (1, 0.5, 0.5)
+        end_color_red = (0.8, .2, .2)
+        num_points = len(dot_history["1 true"])
+        for i, point in enumerate(dot_history["1 true"]):
+            color = interpolate_color(start_color_red, end_color_red, i / (num_points - 1) if num_points > 1 else 0)
+            self.axes.plot(point[0], point[1], marker='o', color=color, linestyle='None')
+
+        # Define start and end colors for "2 true" (e.g., light to dark green)
+        start_color_green = (1, 1, 1)
+        end_color_green = (0.7, 0.7, 0.7)
+        num_points = len(dot_history["2 true"])
+        for i, point in enumerate(dot_history["2 true"]):
+            color = interpolate_color(start_color_green, end_color_green, i / (num_points - 1) if num_points > 1 else 0)
+            self.axes.plot(point[0], point[1], marker='o', color=color, linestyle='None')
+
+        # Define start and end colors for "2 estimate" (e.g., light to dark gray)
+        start_color_gray = (0, 0.9, 0.9)
+        end_color_gray = (0, 0.8, 0.8)
+        num_points = len(dot_history["2 estimate"])
+        for i, point in enumerate(dot_history["2 estimate"]):
+            color = interpolate_color(start_color_gray, end_color_gray, i / (num_points - 1) if num_points > 1 else 0)
+            self.axes.plot(point[0], point[1], marker='.', color=color, linestyle='None')
+
+        self.axes.autoscale_view()
+        self.draw()
+
+
     def plot_uas_point(self, x,y):
         if math.isnan(x) or math.isnan(y):
             print("Skipping NaN point")
@@ -79,6 +126,12 @@ class App(QMainWindow):
         self.width = 800
         self.height = 600
         self.initUI()
+        self.dot_history = {
+            "1 true": [],
+            "1 estimate": [],
+            "2 true": [],
+            "2 estimate": [],
+        }
         #self.plotCanvas = PlotCanvas(self, width=5, height=4)
         #self.points = []
 
@@ -174,14 +227,22 @@ class App(QMainWindow):
     def updateRGVEstimate(self, x, y, z, type):
         self.rgvEstimateLabel.setText(f'Current RGV Estimate: x={x}, y={y}, z={z}')
         #self.points.append((x, y))  # Add new point to the list
-        if type == "1 true":
-            self.plotCanvas.plot_rgv1_point(x,y, 'ro')
-        elif type == "1 estimate":
-             self.plotCanvas.plot_rgv2_point(x,y, "k.")  
-        elif type == "2 true":
-             self.plotCanvas.plot_rgv2_point(x,y,"go") 
-        elif type == "2 estimate":
-             self.plotCanvas.plot_rgv2_point(x,y,"k.") 
+        self.dot_history[type].append((x, y))
+
+        if(len(self.dot_history[type]) > 10):
+            self.dot_history[type].pop(0)
+
+        # if type == "1 true":
+
+        #     self.plotCanvas.plot_rgv1_point(x,y, 'ro')
+        # elif type == "1 estimate":
+        #      self.plotCanvas.plot_rgv2_point(x,y, "k.")  
+        # elif type == "2 true":
+        #      self.plotCanvas.plot_rgv2_point(x,y,"go") 
+        # elif type == "2 estimate":
+        #      self.plotCanvas.plot_rgv2_point(x,y,"k.")
+
+        self.plotCanvas.plot_rgv_points(self.dot_history) 
          
 
     def updateMissionPhase(self, phase):
@@ -242,17 +303,18 @@ def update_state(uas_pos_node ,attitude_node, ex):
 
     ex.updateUASState(E, N, U, E_dot, N_dot, U_dot, roll, pitch, yaw)
 
-    QTimer.singleShot(2000, lambda: update_state(uas_pos_node, attitude_node, ex))
+    QTimer.singleShot(200, lambda: update_state(uas_pos_node, attitude_node, ex))
 
 def update_battery_level(battery_node, ex):
     rclpy.spin_once(battery_node)
     ex.updateBatteryLevel(battery_node.battery_remaining)
-    QTimer.singleShot(2000, lambda: update_battery_level(battery_node, ex))  # Schedule the next update after 2 seconds
+    QTimer.singleShot(200, lambda: update_battery_level(battery_node, ex))  # Schedule the next update after 2 seconds
 
 def update_rgv_estimate(rgv_node, ex):
     rclpy.spin_once(rgv_node)
+    print("RGV Estimate: ", rgv_node.rgv_x, rgv_node.rgv_y, rgv_node.rgv_z, rgv_node.rgv_type)
     ex.updateRGVEstimate(rgv_node.rgv_x, rgv_node.rgv_y, rgv_node.rgv_z, rgv_node.rgv_type)
-    QTimer.singleShot(2000, lambda: update_rgv_estimate(rgv_node, ex))
+    QTimer.singleShot(200, lambda: update_rgv_estimate(rgv_node, ex))
 
 def update_flight_time(clock_node, ex):
     rclpy.spin_once(clock_node)
@@ -260,12 +322,12 @@ def update_flight_time(clock_node, ex):
     minutes, seconds = divmod(clock_node.time_sec, 60)
     ex.updateFlightTime(minutes, seconds)
 
-    QTimer.singleShot(2000, lambda: update_flight_time(clock_node, ex))
+    QTimer.singleShot(200, lambda: update_flight_time(clock_node, ex))
 
 def update_mission_phase(phase_node,ex):
     rclpy.spin_once(phase_node)
     ex.updateMissionPhase(phase_node.mission_phase)
-    QTimer.singleShot(2000, lambda: update_mission_phase(phase_node, ex))
+    QTimer.singleShot(200, lambda: update_mission_phase(phase_node, ex))
 
 
 
@@ -285,7 +347,6 @@ def main(args=None):
     rgv2_estimate_node = RGV2CoarseLocalizationSubscriber()
     clock_node = ClockSubscriber()
     phase_node = MissionPhaseSubscriber()
-
     update_state(uas_pos_node, attitude_node, ex)
     update_battery_level(battery_node, ex)
     update_rgv_estimate(rgv1_state_node, ex)
