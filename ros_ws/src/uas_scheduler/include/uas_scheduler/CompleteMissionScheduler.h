@@ -14,6 +14,7 @@
 #include <sensor_msgs/msg/image.hpp>
 #include <opencv2/opencv.hpp>
 #include <optional>
+#include <chrono>
 
 class CompleteMissionScheduler : public Scheduler
 {
@@ -42,8 +43,12 @@ class CompleteMissionScheduler : public Scheduler
         RGV rgv2_;
         CVImg rgv1CVData_;
         CVImg rgv2CVData_;
+        std::chrono::steady_clock::time_point uasStoppedTime_;
+        bool uasStopped_;
+        float stopVelocityThresh_;
         
         // methods:
+        void checkUASStopped();
         void timerCallback() override;
         void publishRGV1State();
         void publishRGV2State();
