@@ -23,11 +23,11 @@ class CompleteMissionScheduler : public Scheduler
 
         // fields:
         std::vector<UASState> waypoints_ = {
-            UASState(-10, -10, -5, 0, 0, 0, 0), 
-            UASState(-10, 10, -5, 0, 0, 0, 0), 
-            UASState(10, 10, -5, 0, 0, 0, 0), 
-            UASState(10, -10, -5, 0, 0, 0, 0),
-            UASState(0, 0, -5, 0, 0, 0, 0)
+            UASState(-10, -10, -10, 0, 0, 0, 0), 
+            UASState(-10, 10, -10, 0, 0, 0, 0), 
+            UASState(10, 10, -10, 0, 0, 0, 0), 
+            UASState(10, -10, -10, 0, 0, 0, 0),
+            UASState(0, 0, -10, 0, 0, 0, 0)
         };
         unsigned int waypointIndex_;
         std::unique_ptr<UASExplorationPhase> explorationPhase_;
@@ -43,6 +43,10 @@ class CompleteMissionScheduler : public Scheduler
         RGV rgv2_;
         CVImg rgv1CVData_;
         CVImg rgv2CVData_;
+
+        float maxHeight_ = -0.3048*60.0;
+        float minHeight_ = -0.3048*30.0;
+
         std::chrono::steady_clock::time_point uasStoppedTime_;
         bool uasStopped_;
         float stopVelocityThresh_;

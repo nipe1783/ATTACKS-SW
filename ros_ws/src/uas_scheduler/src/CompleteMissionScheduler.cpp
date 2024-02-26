@@ -71,7 +71,9 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
     currentPhase_ = "exploration";
     explorationPhase_ = std::make_unique<UASExplorationPhase>(waypoints_);
     trailingPhase_ = std::make_unique<UASTrailingPhase>();
+    trailingPhase_->desiredAltitude_ = minHeight_;
     coarsePhase_ = std::make_unique<UASCoarseLocalizationPhase>();
+    coarsePhase_->desiredAltitude_ = minHeight_;
     waypointIndex_ = 0;
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
@@ -135,7 +137,7 @@ void CompleteMissionScheduler::timerCallback(){
         goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
         }
         else if(currentPhase_ == "trailing"){
-            if (sqrt(pow(uas_.state_.bxV_, 2) + pow(uas_.state_.byV_, 2) + pow(uas_.state_.bzV_, 2)) < stopVelocityThresh_) { 
+            if (sqrt(pow(uas_.state_.bxV_, 2) + pow(uas_.state_.byV_, 2)) < stopVelocityThresh_) { 
                 if (!uasStopped_) {
                     uasStopped_ = true;
                     uasStoppedTime_ = std::chrono::steady_clock::now();

@@ -33,6 +33,9 @@ UASState UASCoarseLocalizationPhase::generateDesiredState(CVImg cvImg, UASState 
 
     desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
     desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
+
+    desiredUASState.bzV_ = (desiredAltitude_ - uasState.iz_) * kpZ_;
+
     return desiredUASState;
 }
 
