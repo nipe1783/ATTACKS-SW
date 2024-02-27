@@ -71,11 +71,26 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
     currentPhase_ = "exploration";
     explorationPhase_ = std::make_unique<UASExplorationPhase>(waypoints_);
     trailingPhase_ = std::make_unique<UASTrailingPhase>();
+    trailingPhase_->desiredAltitude_ = minHeight_;
     coarsePhase_ = std::make_unique<UASCoarseLocalizationPhase>();
+    coarsePhase_->desiredAltitude_ = minHeight_;
     waypointIndex_ = 0;
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
     timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&CompleteMissionScheduler::timerCallback, this));
+    stopVelocityThresh_ = 0.01;
+}
+
+
+void CompleteMissionScheduler::checkUASStopped() {
+    if (uasStopped_) {
+        auto currentTime = std::chrono::steady_clock::now();
+        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - uasStoppedTime_).count();
+        if (elapsedTime >= 2000 && currentPhase_ == "trailing") { // 2 seconds and in trailing mode
+            currentPhase_ = "coarse";
+            std::cout << "Phase changed to coarse after UAS stopped for 2 seconds in trailing mode.\n";
+        }
+    }
 }
 
 void CompleteMissionScheduler::publishRGV1State(){
@@ -122,10 +137,24 @@ void CompleteMissionScheduler::timerCallback(){
         goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
         }
         else if(currentPhase_ == "trailing"){
-            currentPhase_ = "coarse";
-            goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            if (sqrt(pow(uas_.state_.bxV_, 2) + pow(uas_.state_.byV_, 2)) < stopVelocityThresh_) { 
+                if (!uasStopped_) {
+                    uasStopped_ = true;
+                    uasStoppedTime_ = std::chrono::steady_clock::now();
+                }
+            } 
+            else {
+                    uasStopped_ = false;
+                }
+            checkUASStopped();
+            if(currentPhase_ == "coarse"){
+                goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            }
+            else{
+                goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            }
         }
-        else if(currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
+        else if(currentPhase_ == "coarse"){
             goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
             rgv2_.state_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
             publishRGV2State();

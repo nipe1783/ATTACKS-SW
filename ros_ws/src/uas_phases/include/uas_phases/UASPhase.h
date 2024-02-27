@@ -9,10 +9,12 @@ class UASPhase
     public:
 
         // constructors:
-        UASPhase() { }
+        UASPhase(): desiredAltitude_(-10.0f), kpZ_(0.1f) { }
 
         // fields:
         std::string phaseName_;
+        float desiredAltitude_;
+        float kpZ_;
 
         // methods:
         /**
