@@ -1,0 +1,99 @@
+---
+minHeight: -5.0
+maxHeight: -11.0
+trailing:
+  stopVelocityThresh: 0.05
+  stopTimeThresh: 2
+coarse:
+  coarseLocalizationTime: 30
+fine:
+  fineLocalizationTime: 10
+exploration:
+  waypoints:
+    - ix: -10
+      iy: -10
+      iz: -5
+      iphi: 0
+      itheta: 0
+      ipsi: 0
+      bxV: 0
+      byV: 0
+      bzV: 0
+    - ix: -10
+      iy: 10
+      iz: -5
+      iphi: 0
+      itheta: 0
+      ipsi: 0
+      bxV: 0
+      byV: 0
+      bzV: 0
+    - ix: 10
+      iy: 10
+      iz: -5
+      iphi: 0
+      itheta: 0
+      ipsi: 0
+      bxV: 0
+      byV: 0
+      bzV: 0
+    - ix: 10
+      iy: -10
+      iz: -5
+      iphi: 0
+      itheta: 0
+      ipsi: 0
+      bxV: 0
+      byV: 0
+      bzV: 0
+    - ix: 0
+      iy: 0
+      iz: -5
+      iphi: 0
+      itheta: 0
+      ipsi: 0
+      bxV: 0
+      byV: 0
+      bzV: 0
+rgv1:
+  id: 0
+  hsvColor:
+    hLow: 0
+    hHigh: 30
+    sLow: 180
+    sHigh: 255
+    vLow: 180
+    vHigh: 255
+rgv2:
+  id: 1
+  hsvColor:
+    hLow: 0
+    hHigh: 10
+    sLow: 0
+    sHigh: 10
+    vLow: 180
+    vHigh: 255
+camera1:
+  id: 0
+  xFOV: 2
+  yFOV: 1.125
+  width: 640
+  height: 360
+  distortion:
+    k1: 0
+    k2: 0
+    k3: 0
+    p1: 0
+    p2: 0
+camera2:
+  id: 1
+  xFOV: 2
+  yFOV: 1.125
+  width: 1280
+  height: 720
+  distortion:
+    k1: 0
+    k2: 0
+    k3: 0
+    p1: 0
+    p2: 0

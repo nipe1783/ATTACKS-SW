@@ -4,7 +4,8 @@
 class Camera {
     public:
         // constructor
-        Camera(int width, int height, double xFOV, double yFOV);
+        Camera(int id, int width, int height, double xFOV, double yFOV);
+        Camera();
 
         //fields
         int id_;

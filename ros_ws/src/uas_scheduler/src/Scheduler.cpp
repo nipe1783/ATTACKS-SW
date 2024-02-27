@@ -5,11 +5,21 @@
 #include <cv_bridge/cv_bridge.h>
 #include <limits>
 
-void Scheduler::imageConvert(const sensor_msgs::msg::Image::SharedPtr sImg)
+void Scheduler::imageConvertPS(const sensor_msgs::msg::Image::SharedPtr sImg)
 {
     try {
         psFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
         psDisplayFrame_ = psFrame_.clone();
+    } catch (cv_bridge::Exception& e) {
+        RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
+    }
+}
+
+void Scheduler::imageConvertSS(const sensor_msgs::msg::Image::SharedPtr sImg)
+{
+    try {
+        ssFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
+        ssDisplayFrame_ = ssFrame_.clone();
     } catch (cv_bridge::Exception& e) {
         RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
     }
@@ -111,7 +121,12 @@ void Scheduler::disarm()
 
 void Scheduler::callbackPS(const sensor_msgs::msg::Image::SharedPtr psMsg) {
     psMsgReceived_ = true;
-    imageConvert(psMsg);
+    imageConvertPS(psMsg);
+}
+
+void Scheduler::callbackSS(const sensor_msgs::msg::Image::SharedPtr ssMsg) {
+    ssMsgReceived_ = true;
+    imageConvertSS(ssMsg);
 }
 
 void Scheduler::callbackState(const px4_msgs::msg::VehicleLocalPosition::UniquePtr stateMsg) {
