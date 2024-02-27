@@ -21,15 +21,15 @@ class Scheduler : public rclcpp::Node
     public:
 
         // constructors:
-        Scheduler(const std::string& node_name, UAS uas) : Node(node_name), uas_(uas) { }
+        Scheduler(const std::string& node_name) : Node(node_name){}
 
         // fields:
         UAS uas_;
-        RGV rgv_ = RGV();
         std::string currentPhase_;
         std::string nextPhase_;
         cv::Mat psFrame_;
         cv::Mat psDisplayFrame_;
+        cv::Mat ssDisplayFrame_;
         cv::Mat ssFrame_;
         UASState goalState_;
         BasicBlobDetector blobDetector_;
@@ -38,6 +38,7 @@ class Scheduler : public rclcpp::Node
         rclcpp::Subscription<px4_msgs::msg::VehicleAttitude>::SharedPtr attitudeSubscription_;
         rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr stateSubscription_;
         rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr psSubscription_;
+        rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr ssSubscription_;
         rclcpp::Publisher<px4_msgs::msg::OffboardControlMode>::SharedPtr controlModePublisher_;
         rclcpp::Publisher<px4_msgs::msg::TrajectorySetpoint>::SharedPtr trajectorySetpointPublisher_;
         rclcpp::Publisher<px4_msgs::msg::VehicleCommand>::SharedPtr vehicleCommandPublisher_;
@@ -45,6 +46,7 @@ class Scheduler : public rclcpp::Node
         uint64_t offboardSetpointCounter_;
         bool stateMsgReceived_ = false;
         bool psMsgReceived_ = false;
+        bool ssMsgReceived_ = false;
 
         // methods:
         /**
@@ -58,7 +60,14 @@ class Scheduler : public rclcpp::Node
          *
          * @param msg The ROS image message.
          */
-        void imageConvert(const sensor_msgs::msg::Image::SharedPtr sImg);
+        void imageConvertPS(const sensor_msgs::msg::Image::SharedPtr sImg);
+
+        /**
+         * @brief Converts the ROS vision sensor image message to an OpenCV image.
+         *
+         * @param msg The ROS image message.
+         */
+        void imageConvertSS(const sensor_msgs::msg::Image::SharedPtr sImg);
 
         /**
          * @brief Saves the last frame from the primary sensor.
@@ -99,6 +108,11 @@ class Scheduler : public rclcpp::Node
          * @brief Converts the ROS vision sensor image message from the ROS topic to an OpenCV image and stores it in psFrame_.
          */
         void callbackPS(const sensor_msgs::msg::Image::SharedPtr msg);
+
+        /**
+         * @brief Converts the ROS vision sensor image message from the ROS topic to an OpenCV image and stores it in psFrame_.
+         */
+        void callbackSS(const sensor_msgs::msg::Image::SharedPtr msg);
 
         /**
          * @brief Stores the current UAS state from the ROS topic in uasState_.

@@ -9,6 +9,9 @@ RGV::RGV(int id, int hLow, int hHigh, int sLow, int sHigh, int vLow, int vHigh){
     sHigh_ = sHigh;
     vLow_ = vLow;
     vHigh_ = vHigh;
+    currentPhase_ = "exploration";
+    phaseStartTime_ = std::chrono::system_clock::now();
+
 }
 
 

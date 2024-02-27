@@ -42,7 +42,7 @@ UASState UASCoarseLocalizationPhase::generateDesiredState(CVImg cvImg, UASState 
 RGVState UASCoarseLocalizationPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
 {
     //Initialize values
-    Camera camera = Camera(640, 360, 2, 1.125);
+    Camera camera = Camera(0, 640, 360, 2, 1.125); // TODO: Load in camera from mission
     centerX_ = float(cvImg.centerX);
     centerY_ = float(cvImg.centerY);
     if(uas.cameras_.size()>0){

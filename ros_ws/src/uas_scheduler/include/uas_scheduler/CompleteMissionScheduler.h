@@ -15,20 +15,16 @@
 #include <opencv2/opencv.hpp>
 #include <optional>
 #include <chrono>
+#include <yaml-cpp/yaml.h>
+
 
 class CompleteMissionScheduler : public Scheduler
 {
     public:
-        CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2);
+        CompleteMissionScheduler(std::string configPath);
 
         // fields:
-        std::vector<UASState> waypoints_ = {
-            UASState(-10, -10, -10, 0, 0, 0, 0), 
-            UASState(-10, 10, -10, 0, 0, 0, 0), 
-            UASState(10, 10, -10, 0, 0, 0, 0), 
-            UASState(10, -10, -10, 0, 0, 0, 0),
-            UASState(0, 0, -10, 0, 0, 0, 0)
-        };
+        std::vector<UASState> waypoints_;
         unsigned int waypointIndex_;
         std::unique_ptr<UASExplorationPhase> explorationPhase_;
         std::unique_ptr<UASTrailingPhase> trailingPhase_;
@@ -41,15 +37,16 @@ class CompleteMissionScheduler : public Scheduler
         BasicBlobDetector rgv2BlobDetector_;
         RGV rgv1_;
         RGV rgv2_;
-        bool trackingRGV1_ = true;
-        bool trackingRGV2_ = true;
+        Camera camera1_;
+        Camera camera2_;
         CVImg rgv1CVData_;
         CVImg rgv2CVData_;
-
-        float maxHeight_ = -0.3048*60.0;
-        float minHeight_ = -0.3048*30.0;
-
+        float maxHeight_;
+        float minHeight_;
         float stopVelocityThresh_;
+        float stopTimeThresh_;
+        float coarseLocalizationTime_;
+        float fineLocalizationTime_;
         
         // methods:
         bool isUASStopped(RGV rgv);

@@ -14,7 +14,7 @@
 #include <opencv2/opencv.hpp>
 #include <chrono>
 
-CameraCalibrateMissionScheduler::CameraCalibrateMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) : Scheduler("uas_camera_calibration_mission", uas) {
+CameraCalibrateMissionScheduler::CameraCalibrateMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) : Scheduler("uas_camera_calibration_mission") {
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
 
