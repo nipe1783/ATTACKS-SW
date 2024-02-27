@@ -13,6 +13,9 @@ ros_ws/log/*
 ros_ws/install/*
 ros_ws/build/*
 
+# UI
+User-Interface/_pycache_/*
+
 # Datasets
 Datasets/*
 
