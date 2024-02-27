@@ -41,18 +41,19 @@ class CompleteMissionScheduler : public Scheduler
         BasicBlobDetector rgv2BlobDetector_;
         RGV rgv1_;
         RGV rgv2_;
+        bool trackingRGV1_ = true;
+        bool trackingRGV2_ = true;
         CVImg rgv1CVData_;
         CVImg rgv2CVData_;
 
         float maxHeight_ = -0.3048*60.0;
         float minHeight_ = -0.3048*30.0;
 
-        std::chrono::steady_clock::time_point uasStoppedTime_;
-        bool uasStopped_;
         float stopVelocityThresh_;
         
         // methods:
-        void checkUASStopped();
+        bool isUASStopped(RGV rgv);
+        bool isRGVCoarseLocalized(RGV rgv);
         void timerCallback() override;
         void publishRGV1State();
         void publishRGV2State();

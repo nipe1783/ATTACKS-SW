@@ -24,7 +24,6 @@ UASState UASTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
     if (std::abs(blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) > tolerance_) {
         bodyY = (blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) * 3;
     }
-
     desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
     desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
 

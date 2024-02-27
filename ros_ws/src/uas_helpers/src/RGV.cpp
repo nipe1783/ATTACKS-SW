@@ -1,4 +1,5 @@
 #include "uas_helpers/RGV.h"
+#include <chrono>
 
 RGV::RGV(int id, int hLow, int hHigh, int sLow, int sHigh, int vLow, int vHigh){
     id_ = id;
@@ -19,4 +20,6 @@ RGV::RGV(){
     sHigh_ = 255;
     vLow_ = 255;
     vHigh_ = 255;
+    currentPhase_ = "exploration";
+    phaseStartTime_ = std::chrono::system_clock::now();
 }

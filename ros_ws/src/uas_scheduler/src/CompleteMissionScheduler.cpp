@@ -14,6 +14,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/opencv.hpp>
 #include <chrono>
+#include <ctime>
 
 CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) : Scheduler("uas_complete_mission", uas) {
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
@@ -78,19 +79,29 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
     timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&CompleteMissionScheduler::timerCallback, this));
-    stopVelocityThresh_ = 0.01;
+    stopVelocityThresh_ = 0.05;
 }
 
-
-void CompleteMissionScheduler::checkUASStopped() {
-    if (uasStopped_) {
-        auto currentTime = std::chrono::steady_clock::now();
-        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - uasStoppedTime_).count();
-        if (elapsedTime >= 2000 && currentPhase_ == "trailing") { // 2 seconds and in trailing mode
-            currentPhase_ = "coarse";
-            std::cout << "Phase changed to coarse after UAS stopped for 2 seconds in trailing mode.\n";
-        }
+bool CompleteMissionScheduler::isUASStopped(RGV rgv) {
+    std::cout<<"UAS Velocity: "<<sqrt(pow(uas_.state_.bxV_, 2) + pow(uas_.state_.byV_, 5))<<std::endl;
+    if (sqrt(pow(uas_.state_.bxV_, 2) + pow(uas_.state_.byV_, 2)) > stopVelocityThresh_) {
+        rgv.phaseStartTime_ = std::chrono::system_clock::now();
+        return false;
     }
+    else{
+        if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(2)) {
+            return true;
+        }
+        return false;
+    }
+}
+
+bool CompleteMissionScheduler::isRGVCoarseLocalized(RGV rgv) {
+    if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(10)) {
+        std::cout << "TEST"<< std::endl;
+        return true;
+    }
+    return false;
 }
 
 void CompleteMissionScheduler::publishRGV1State(){
@@ -118,7 +129,9 @@ void CompleteMissionScheduler::timerCallback(){
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
 
     std::cout << "Phase: " << currentPhase_ << ". ";
-    std::cout << "UAS State: " << uas_.state_.ix_ << ", " << uas_.state_.iy_ << ", " << uas_.state_.iz_ << ". ";
+    // std::cout << "UAS State: " << uas_.state_.ix_ << ", " << uas_.state_.iy_ << ", " << uas_.state_.iz_ << ". ";
+    std::cout << "Tracking RGV1: " << trackingRGV1_ << ". ";
+    std::cout << "Tracking RGV2: " << trackingRGV2_ << ". ";
     if(rgv1CVData_.blobs.size() > 0){
         cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
         cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
@@ -131,23 +144,50 @@ void CompleteMissionScheduler::timerCallback(){
     }
     std::cout << std::endl;
 
-    if(rgv2CVData_.blobs.size() > 0){
+    if (rgv1CVData_.blobs.size() > 0 && trackingRGV1_){
+        trackingRGV2_ = false;
         if(currentPhase_ == "exploration"){
             currentPhase_ = "trailing";
-        goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            rgv1_.currentPhase_ = "trailing";
+            goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
         }
         else if(currentPhase_ == "trailing"){
-            if (sqrt(pow(uas_.state_.bxV_, 2) + pow(uas_.state_.byV_, 2)) < stopVelocityThresh_) { 
-                if (!uasStopped_) {
-                    uasStopped_ = true;
-                    uasStoppedTime_ = std::chrono::steady_clock::now();
-                }
-            } 
-            else {
-                    uasStopped_ = false;
-                }
-            checkUASStopped();
-            if(currentPhase_ == "coarse"){
+            if (isUASStopped(rgv1_)) {
+                currentPhase_ = "coarse";
+                rgv1_.currentPhase_ = "coarse";
+                rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
+                goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+            }
+            else{
+                goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+            }
+        }
+        else if(currentPhase_ == "coarse"){
+            if (isRGVCoarseLocalized(rgv1_)) {
+                currentPhase_ = "exploration";
+                trackingRGV1_ = false;
+                trackingRGV2_ = true;
+                goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            }
+            else{
+                goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+                rgv1_.state_ = coarsePhase_->localize(rgv1CVData_, uas_, rgv1_);
+                publishRGV2State();
+            }
+        }
+    }
+    else if(rgv2CVData_.blobs.size() > 0 && trackingRGV2_){
+        trackingRGV1_ = false;
+        if(currentPhase_ == "exploration"){
+            currentPhase_ = "trailing";
+            rgv2_.currentPhase_ = "trailing";
+            goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else if(currentPhase_ == "trailing"){
+            if (isUASStopped(rgv2_)) {
+                currentPhase_ = "coarse";
+                rgv2_.currentPhase_ = "coarse";
+                rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
                 goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
             }
             else{
@@ -155,26 +195,23 @@ void CompleteMissionScheduler::timerCallback(){
             }
         }
         else if(currentPhase_ == "coarse"){
-            goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-            rgv2_.state_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
-            publishRGV2State();
-        }
-    }
-    else if(rgv2CVData_.blobs.size() == 0){
-        if(currentPhase_ == "exploration"){
-            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-        }
-        else if(currentPhase_ == "trailing"){
-            currentPhase_ = "exploration";
-            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-        }
-        else if(currentPhase_ == "coarse"){
-            currentPhase_ = "exploration";
-            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            if (isRGVCoarseLocalized(rgv2_)) {
+                currentPhase_ = "exploration";
+                trackingRGV1_ = true;
+                trackingRGV2_ = false;
+                goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+            }
+            else{
+                goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+                rgv2_.state_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
+                publishRGV2State();
+            }
         }
     }
     else{
         currentPhase_ = "exploration";
+        trackingRGV1_ = true;
+        trackingRGV2_ = true;
         goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     }
 
