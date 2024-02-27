@@ -51,6 +51,10 @@ CompleteMissionScheduler::CompleteMissionScheduler(UAS uas, RGV rgv1, RGV rgv2) 
         "/rgv2/state", qos
     );
 
+    missionPhasePublisher_ = this->create_publisher<std_msgs::msg::String>(
+        "/mission/phase", qos
+    );
+
     rgv1_ = rgv1;
     rgv2_ = rgv2;
 
@@ -88,6 +92,12 @@ void CompleteMissionScheduler::publishRGV2State(){
     std_msgs::msg::Float64MultiArray msg;
     msg.data = {rgv2_.state_.ix_, rgv2_.state_.iy_, rgv2_.state_.iz_};
     rgv2StatePublisher_->publish(msg);
+}
+
+void CompleteMissionScheduler::publishMissionPhase(){
+    std_msgs::msg::String msg;
+    msg.data = currentPhase_;
+    missionPhasePublisher_->publish(msg);
 }
 
 void CompleteMissionScheduler::timerCallback(){
@@ -153,7 +163,7 @@ void CompleteMissionScheduler::timerCallback(){
 
     cv::imshow("Primary Sensor", psDisplayFrame_);
     cv::waitKey(1);
-
+    publishMissionPhase();
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
     if (offboardSetpointCounter_ < 11) {
