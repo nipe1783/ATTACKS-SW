@@ -162,11 +162,8 @@ bool CompleteMissionScheduler::isRGVCoarseLocalized(RGV rgv) {
     return false;
 }
 
-bool CompleteMissionScheduler::isWaypointReached() {
-    if (std::chrono::system_clock::now() - waypointDelayStart_  > std::chrono::seconds(waypointWaitDuration_) && (sqrt(pow(uas_.state_.ix_ - goalState_.ix_, 2) + pow(uas_.state_.iy_ - goalState_.iy_, 2) + pow(uas_.state_.iz_ - goalState_.iz_, 2))< minWaypointDistanceThresh_)) {
-        return true;
-    }
-    if (std::chrono::system_clock::now() - waypointDelayStart_  > std::chrono::seconds(maxWaypointWaitDuration_)){
+bool CompleteMissionScheduler::isRGVNearCenter(CVImg cvImg) {
+    if ((cvImg.blobs[0].x > 0.1*float(cvImg.width)) && (cvImg.blobs[0].x < 0.9*float(cvImg.width)) && (cvImg.blobs[0].y > 0.1*float(cvImg.height)) && (cvImg.blobs[0].y < 0.9*float(cvImg.height))) {
         return true;
     }
     return false;
@@ -211,7 +208,7 @@ void CompleteMissionScheduler::timerCallback(){
     std::cout << std::endl;
 
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0){
-        if(isWaypointReached()){
+        if(isRGVNearCenter(rgv1CVData_)){
             rgv1_.currentPhase_ = "trailing";
             currentPhase_ = "trailing";
             rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
@@ -220,7 +217,7 @@ void CompleteMissionScheduler::timerCallback(){
         }
     }
     else if (rgv2_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
-        if(isWaypointReached()){
+        if(isRGVNearCenter(rgv2CVData_)){
             rgv2_.currentPhase_ = "trailing";
             currentPhase_ = "trailing";
             rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
@@ -295,11 +292,10 @@ void CompleteMissionScheduler::timerCallback(){
         goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
     }
     else{
-        if(isWaypointReached()){
-            currentPhase_ = "exploration";
-            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-            waypointDelayStart_ = std::chrono::system_clock::now();
-        }
+        currentPhase_ = "exploration";
+        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        waypointDelayStart_ = std::chrono::system_clock::now();
+        
     }
 
 

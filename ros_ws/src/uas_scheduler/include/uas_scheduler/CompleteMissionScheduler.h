@@ -56,9 +56,9 @@ class CompleteMissionScheduler : public Scheduler
         // methods:
         bool isUASStopped(RGV rgv);
         bool isRGVCoarseLocalized(RGV rgv);
+        bool isRGVNearCenter(CVImg cvImg);
         void timerCallback() override;
         void publishRGV1State();
         void publishRGV2State();
-        bool isWaypointReached();
         
 };
