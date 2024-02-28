@@ -72,6 +72,7 @@
     sudo make install
     ```
     ```bash
+    sudo apt install libyaml-cpp-dev
     sudo apt install libimage-exiftool-perl
     sudo apt install aptitude
     sudo apt install ros-dev-tools
