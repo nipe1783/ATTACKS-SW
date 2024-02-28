@@ -99,8 +99,6 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     coarseLocalizationTime_ = config["coarse"]["coarseLocalizationTime"].as<int>();
     fineLocalizationTime_ = config["fine"]["fineLocalizationTime"].as<int>();
     waypointWaitDuration_ = config["waypointWaitDuration"].as<int>();
-    maxWaypointWaitDuration_ = config["maxWaypointWaitDuration"].as<int>();
-    minWaypointDistanceThresh_ = config["minWaypointDistanceThresh"].as<float>();
     if (config["exploration"]["waypoints"].IsSequence()) {
         for (const auto& wp : config["exploration"]["waypoints"]) {
             UASState waypoint(

@@ -2,7 +2,6 @@
 minHeight: -5.0
 maxHeight: -11.0
 waypointWaitDuration: 1
-maxWaypointWaitDuration: 5
 minWaypointDistanceThresh: 0.5
 trailing:
   stopVelocityThresh: 0.05

@@ -48,8 +48,7 @@ class CompleteMissionScheduler : public Scheduler
         int coarseLocalizationTime_;
         int fineLocalizationTime_;
         int waypointWaitDuration_;
-        int maxWaypointWaitDuration_;
-        float minWaypointDistanceThresh_;
+
 
         std::chrono::time_point<std::chrono::system_clock> waypointDelayStart_;
         
