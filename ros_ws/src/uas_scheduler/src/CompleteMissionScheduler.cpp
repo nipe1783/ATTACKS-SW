@@ -94,10 +94,13 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     uas_.addCamera(camera2_);
     maxHeight_ = config["maxHeight"].as<float>();
     minHeight_ = config["minHeight"].as<float>();
-    stopTimeThresh_ = config["trailing"]["stopTimeThresh"].as<float>();
+    stopTimeThresh_ = config["trailing"]["stopTimeThresh"].as<int>();
     stopVelocityThresh_ = config["trailing"]["stopVelocityThresh"].as<float>();
-    coarseLocalizationTime_ = config["coarse"]["coarseLocalizationTime"].as<float>();
-    fineLocalizationTime_ = config["fine"]["fineLocalizationTime"].as<float>();
+    coarseLocalizationTime_ = config["coarse"]["coarseLocalizationTime"].as<int>();
+    fineLocalizationTime_ = config["fine"]["fineLocalizationTime"].as<int>();
+    waypointWaitDuration_ = config["waypointWaitDuration"].as<int>();
+    maxWaypointWaitDuration_ = config["maxWaypointWaitDuration"].as<int>();
+    minWaypointDistanceThresh_ = config["minWaypointDistanceThresh"].as<float>();
     if (config["exploration"]["waypoints"].IsSequence()) {
         for (const auto& wp : config["exploration"]["waypoints"]) {
             UASState waypoint(
@@ -133,6 +136,7 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     coarsePhase_ = std::make_unique<UASCoarseLocalizationPhase>();
     coarsePhase_->desiredAltitude_ = minHeight_;
     waypointIndex_ = 0;
+    waypointDelayStart_ = std::chrono::system_clock::now();
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
     timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&CompleteMissionScheduler::timerCallback, this));
@@ -144,7 +148,7 @@ bool CompleteMissionScheduler::isUASStopped(RGV rgv) {
         return false;
     }
     else{
-        if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(2)) {
+        if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(stopTimeThresh_)) {
             return true;
         }
         return false;
@@ -152,7 +156,17 @@ bool CompleteMissionScheduler::isUASStopped(RGV rgv) {
 }
 
 bool CompleteMissionScheduler::isRGVCoarseLocalized(RGV rgv) {
-    if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(10)) {
+    if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(coarseLocalizationTime_)) {
+        return true;
+    }
+    return false;
+}
+
+bool CompleteMissionScheduler::isWaypointReached() {
+    if (std::chrono::system_clock::now() - waypointDelayStart_  > std::chrono::seconds(waypointWaitDuration_) && (sqrt(pow(uas_.state_.ix_ - goalState_.ix_, 2) + pow(uas_.state_.iy_ - goalState_.iy_, 2) + pow(uas_.state_.iz_ - goalState_.iz_, 2))< minWaypointDistanceThresh_)) {
+        return true;
+    }
+    if (std::chrono::system_clock::now() - waypointDelayStart_  > std::chrono::seconds(maxWaypointWaitDuration_)){
         return true;
     }
     return false;
@@ -197,16 +211,22 @@ void CompleteMissionScheduler::timerCallback(){
     std::cout << std::endl;
 
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0){
-        rgv1_.currentPhase_ = "trailing";
-        currentPhase_ = "trailing";
-        rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
-        goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+        if(isWaypointReached()){
+            rgv1_.currentPhase_ = "trailing";
+            currentPhase_ = "trailing";
+            rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
+            goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+            waypointDelayStart_ = std::chrono::system_clock::now();
+        }
     }
     else if (rgv2_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
-        rgv2_.currentPhase_ = "trailing";
-        currentPhase_ = "trailing";
-        rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
-        goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        if(isWaypointReached()){
+            rgv2_.currentPhase_ = "trailing";
+            currentPhase_ = "trailing";
+            rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
+            goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            waypointDelayStart_ = std::chrono::system_clock::now();
+        }
     }
     else if (rgv1_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv1CVData_.blobs.size() > 0){
         if (isUASStopped(rgv1_)) {
@@ -275,8 +295,11 @@ void CompleteMissionScheduler::timerCallback(){
         goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
     }
     else{
-        currentPhase_ = "exploration";
-        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        if(isWaypointReached()){
+            currentPhase_ = "exploration";
+            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            waypointDelayStart_ = std::chrono::system_clock::now();
+        }
     }
 
 

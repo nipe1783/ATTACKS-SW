@@ -15,7 +15,7 @@ class UASPhase
         std::string phaseName_;
         float desiredAltitude_;
         float kpZ_;
-
+        
         // methods:
         /**
          * @brief Primary function of all UAS mission phases. Tells the UAS where to go.

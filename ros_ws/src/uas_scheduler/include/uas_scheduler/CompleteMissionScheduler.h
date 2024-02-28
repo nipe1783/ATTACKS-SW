@@ -44,9 +44,14 @@ class CompleteMissionScheduler : public Scheduler
         float maxHeight_;
         float minHeight_;
         float stopVelocityThresh_;
-        float stopTimeThresh_;
-        float coarseLocalizationTime_;
-        float fineLocalizationTime_;
+        int stopTimeThresh_;
+        int coarseLocalizationTime_;
+        int fineLocalizationTime_;
+        int waypointWaitDuration_;
+        int maxWaypointWaitDuration_;
+        float minWaypointDistanceThresh_;
+
+        std::chrono::time_point<std::chrono::system_clock> waypointDelayStart_;
         
         // methods:
         bool isUASStopped(RGV rgv);
@@ -54,5 +59,6 @@ class CompleteMissionScheduler : public Scheduler
         void timerCallback() override;
         void publishRGV1State();
         void publishRGV2State();
+        bool isWaypointReached();
         
 };
