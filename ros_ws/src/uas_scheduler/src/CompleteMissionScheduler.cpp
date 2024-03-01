@@ -94,12 +94,12 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     uas_.addCamera(camera2_);
     maxHeight_ = config["maxHeight"].as<float>();
     minHeight_ = config["minHeight"].as<float>();
-    stopTimeThresh_ = config["trailing"]["stopTimeThresh"].as<float>();
-    stopVelocityThresh_ = config["trailing"]["stopVelocityThresh"].as<float>();
-    coarseLocalizationTime_ = config["coarse"]["coarseLocalizationTime"].as<float>();
-    fineLocalizationTime_ = config["fine"]["fineLocalizationTime"].as<float>();
-    if (config["exploration"]["waypoints"].IsSequence()) {
-        for (const auto& wp : config["exploration"]["waypoints"]) {
+    stopTimeThresh_ = config["phase"]["trailing"]["stopTimeThresh"].as<float>();
+    stopVelocityThresh_ = config["phase"]["trailing"]["stopVelocityThresh"].as<float>();
+    coarseLocalizationTime_ = config["phase"]["coarse"]["coarseLocalizationTime"].as<float>();
+    fineLocalizationTime_ = config["phase"]["fine"]["fineLocalizationTime"].as<float>();
+    if (config["phase"]["exploration"]["waypoints"].IsSequence()) {
+        for (const auto& wp : config["phase"]["exploration"]["waypoints"]) {
             UASState waypoint(
                 wp["ix"].as<float>(),
                 wp["iy"].as<float>(),
@@ -129,13 +129,15 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     currentPhase_ = "exploration";
     explorationPhase_ = std::make_unique<UASExplorationPhase>(waypoints_);
     trailingPhase_ = std::make_unique<UASTrailingPhase>();
-    trailingPhase_->desiredAltitude_ = minHeight_;
+    trailingPhase_->desiredAltitude_ = config["phase"]["trailing"]["desiredAlt"].as<float>();
+    trailingPhase_->kpZ_ = config["phase"]["kpZ"].as<float>();
+    coarsePhase_ = std::make_unique<UASCoarseLocalizationPhase>();
+    coarsePhase_->desiredAltitude_ = config["phase"]["coarse"]["desiredAlt"].as<float>();
+    coarsePhase_->kpZ_ = config["phase"]["kpZ"].as<float>();
     jointExplorationPhase_ = std::make_unique<UASJointExplorationPhase>();
     jointExplorationPhase_->desiredAltitude_ = maxHeight_;
     jointTrailingPhase_ = std::make_unique<UASJointTrailingPhase>();
     jointTrailingPhase_->desiredAltitude_ = maxHeight_;
-    coarsePhase_ = std::make_unique<UASCoarseLocalizationPhase>();
-    coarsePhase_->desiredAltitude_ = minHeight_;
     waypointIndex_ = 0;
     goalState_ = waypoints_[0];
     offboardSetpointCounter_ = 0;
@@ -197,6 +199,7 @@ void CompleteMissionScheduler::timerCallback(){
     std::cout << "Phase: " << currentPhase_ << ". ";
     std::cout<< "RGV 1 Phase: " << rgv1_.currentPhase_ << ". ";
     std::cout<< "RGV 2 Phase: " << rgv2_.currentPhase_ << ". ";
+    // std::cout<< "UAS State: " << uas_.state_.ix_ << ", " << uas_.state_.iy_ << ", " << uas_.state_.iz_ << ". ";
     if(rgv1CVData_.blobs.size() > 0){
         cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
         cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
@@ -207,13 +210,13 @@ void CompleteMissionScheduler::timerCallback(){
     }
     std::cout << std::endl;
 
-    if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0){
+    if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
         rgv1_.currentPhase_ = "trailing";
         currentPhase_ = "trailing";
         rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
         goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
     }
-    else if (rgv2_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0){
+    else if (rgv2_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
         rgv2_.currentPhase_ = "trailing";
         currentPhase_ = "trailing";
         rgv2_.phaseStartTime_ = std::chrono::system_clock::now();

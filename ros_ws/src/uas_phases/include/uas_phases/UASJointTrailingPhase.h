@@ -9,5 +9,6 @@ class UASJointTrailingPhase : public UASPhase
         float tolerance_ = 0.1;
 
         //methods:
+        UASState generateDesiredState(CVImg cvImg, UASState uasState) override;
         UASState generateDesiredState(CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState) override;
 };

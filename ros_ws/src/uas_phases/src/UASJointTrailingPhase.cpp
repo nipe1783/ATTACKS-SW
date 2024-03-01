@@ -16,3 +16,13 @@ UASState UASJointTrailingPhase::generateDesiredState(CVImg rgv1CVData, CVImg rgv
     desiredUASState.ipsi_ = 0;
     return desiredUASState;
 }
+
+UASState UASJointTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
+{
+    UASState desiredUASState;
+    desiredUASState.ix_ = 0;
+    desiredUASState.iy_ = 0;
+    desiredUASState.iz_ = 0;
+    desiredUASState.ipsi_ = 0;
+    return desiredUASState;
+}

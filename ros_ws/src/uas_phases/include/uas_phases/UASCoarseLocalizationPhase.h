@@ -12,4 +12,5 @@ class UASCoarseLocalizationPhase : public UASPhase
 
         //methods:
         UASState generateDesiredState(CVImg cvImg, UASState uasState) override;
+        UASState generateDesiredState(CVImg rgv1, CVImg rgv2, UASState uasState) override;
 };

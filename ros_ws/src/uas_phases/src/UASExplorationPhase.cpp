@@ -18,3 +18,9 @@ UASState UASExplorationPhase::generateDesiredState(CVImg cvImg, UASState uasStat
 
     return waypoints_[waypointIndex_];
 }
+
+UASState UASExplorationPhase::generateDesiredState(CVImg rgv1, CVImg rgv2, UASState uasState)
+{   
+    std::cout<<"NOT IMPLEMENTED"<<std::endl;
+    return  waypoints_[waypointIndex_];;
+}
