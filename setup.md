@@ -106,10 +106,9 @@
     - Go to the Gazebo terminal.
 
     ```bash
-    gimbal test pitch -90
-    ```
-    ```bash
     param set MPC_XY_VEL_MAX 3
+    param set MC_PITCHRATE_MAX 50
+    param set MC_ROLLRATE_MAX 50
     param save
     ```
 

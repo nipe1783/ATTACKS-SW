@@ -1,60 +1,65 @@
 ---
-minHeight: -5.0
-maxHeight: -11.0
-trailing:
-  stopVelocityThresh: 0.05
-  stopTimeThresh: 2
-coarse:
-  coarseLocalizationTime: 30
-fine:
-  fineLocalizationTime: 10
-exploration:
-  waypoints:
-    - ix: -10
-      iy: -10
-      iz: -5
-      iphi: 0
-      itheta: 0
-      ipsi: 0
-      bxV: 0
-      byV: 0
-      bzV: 0
-    - ix: -10
-      iy: 10
-      iz: -5
-      iphi: 0
-      itheta: 0
-      ipsi: 0
-      bxV: 0
-      byV: 0
-      bzV: 0
-    - ix: 10
-      iy: 10
-      iz: -5
-      iphi: 0
-      itheta: 0
-      ipsi: 0
-      bxV: 0
-      byV: 0
-      bzV: 0
-    - ix: 10
-      iy: -10
-      iz: -5
-      iphi: 0
-      itheta: 0
-      ipsi: 0
-      bxV: 0
-      byV: 0
-      bzV: 0
-    - ix: 0
-      iy: 0
-      iz: -5
-      iphi: 0
-      itheta: 0
-      ipsi: 0
-      bxV: 0
-      byV: 0
-      bzV: 0
+minHeight: -10.0
+maxHeight: -20.0
+phase:
+  kpZ: 0.1
+  trailing:
+    stopVelocityThresh: 0.05
+    stopTimeThresh: 2
+    desiredAlt: -11.0
+  coarse:
+    coarseLocalizationTime: 30
+    desiredAlt: -11.0
+  fine:
+    fineLocalizationTime: 10
+    desiredAlt: -11.0
+  exploration:
+    waypoints:
+      - ix: -10
+        iy: -10
+        iz: -10
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
+      - ix: -10
+        iy: 10
+        iz: -10
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
+      - ix: 10
+        iy: 10
+        iz: -10
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
+      - ix: 10
+        iy: -10
+        iz: -10
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
+      - ix: 0
+        iy: 0
+        iz: -10
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
 rgv1:
   id: 0
   hsvColor:
