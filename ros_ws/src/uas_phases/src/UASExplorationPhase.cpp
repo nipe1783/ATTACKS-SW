@@ -15,5 +15,6 @@ UASState UASExplorationPhase::generateDesiredState(CVImg cvImg, UASState uasStat
             waypointIndex_ = 0;
         }
     }
+
     return waypoints_[waypointIndex_];
 }

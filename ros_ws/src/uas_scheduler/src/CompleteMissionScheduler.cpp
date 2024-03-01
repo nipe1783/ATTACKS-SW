@@ -130,6 +130,10 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     explorationPhase_ = std::make_unique<UASExplorationPhase>(waypoints_);
     trailingPhase_ = std::make_unique<UASTrailingPhase>();
     trailingPhase_->desiredAltitude_ = minHeight_;
+    jointExplorationPhase_ = std::make_unique<UASJointExplorationPhase>();
+    jointExplorationPhase_->desiredAltitude_ = maxHeight_;
+    jointTrailingPhase_ = std::make_unique<UASJointTrailingPhase>();
+    jointTrailingPhase_->desiredAltitude_ = maxHeight_;
     coarsePhase_ = std::make_unique<UASCoarseLocalizationPhase>();
     coarsePhase_->desiredAltitude_ = minHeight_;
     waypointIndex_ = 0;
@@ -153,6 +157,13 @@ bool CompleteMissionScheduler::isUASStopped(RGV rgv) {
 
 bool CompleteMissionScheduler::isRGVCoarseLocalized(RGV rgv) {
     if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(10)) {
+        return true;
+    }
+    return false;
+}
+
+bool CompleteMissionScheduler::areRGVsInFrame() {
+    if (rgv1CVData_.blobs.size() > 0 && rgv2CVData_.blobs.size() > 0) {
         return true;
     }
     return false;
@@ -210,10 +221,10 @@ void CompleteMissionScheduler::timerCallback(){
     }
     else if (rgv1_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv1CVData_.blobs.size() > 0){
         if (isUASStopped(rgv1_)) {
-            rgv1_.currentPhase_ = "coarse";
-            currentPhase_ = "coarse";
+            rgv1_.currentPhase_ = "jointExploration";
+            currentPhase_ = "jointExploration";
             rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
-            goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+            goalState_ = jointExplorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
         }
         else{
             goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
@@ -221,14 +232,47 @@ void CompleteMissionScheduler::timerCallback(){
     }
     else if (rgv2_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv2CVData_.blobs.size() > 0){
         if (isUASStopped(rgv2_)) {
-            rgv2_.currentPhase_ = "coarse";
-            currentPhase_ = "coarse";
+            rgv2_.currentPhase_ = "jointExploration";
+            currentPhase_ = "jointExploration";
             rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
-            goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            goalState_ = jointExplorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
         }
         else{
             goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
         }
+    }
+    else if (rgv1_.currentPhase_ == "jointExploration" && currentPhase_ == "jointExploration" && rgv1CVData_.blobs.size() > 0){
+       if (areRGVsInFrame()) {
+            rgv1_.currentPhase_ = "jointTrailing";
+            rgv2_.currentPhase_ = "jointTrailing";
+            currentPhase_ = "jointTrailing";
+            rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
+            rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
+            goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
+        }
+        else{
+            goalState_ = jointExplorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+        }
+    }
+    else if (rgv2_.currentPhase_ == "jointExploration" && currentPhase_ == "jointExploration" && rgv2CVData_.blobs.size() > 0){
+        if (areRGVsInFrame()) {
+            rgv1_.currentPhase_ = "jointTrailing";
+            rgv2_.currentPhase_ = "jointTrailing";
+            currentPhase_ = "jointTrailing";
+            rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
+            rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
+            goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
+        }
+        else{
+            goalState_ = jointExplorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+    }
+    else if (rgv1_.currentPhase_ == "jointTrailing" && rgv2_.currentPhase_ == "jointTrailing" && currentPhase_ == "jointTrailing"  && rgv1CVData_.blobs.size() > 0 && rgv2CVData_.blobs.size() > 0){
+        rgv1_.state_ = jointTrailingPhase_->localize(rgv1CVData_, uas_, rgv1_);
+        publishRGV1State();
+        rgv2_.state_ = jointTrailingPhase_->localize(rgv2CVData_, uas_, rgv2_);
+        publishRGV2State();
+        goalState_ = jointTrailingPhase_->generateDesiredState(rgv2CVData_, rgv2CVData_, uas_.state_);
     }
     else if (rgv1_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv1CVData_.blobs.size() > 0){
         if (isRGVCoarseLocalized(rgv1_)) {

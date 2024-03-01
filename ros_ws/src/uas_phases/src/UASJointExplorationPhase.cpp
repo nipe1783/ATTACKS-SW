@@ -1,19 +1,13 @@
-#include "uas_phases/UASCoarseLocalizationPhase.h"
+#include "uas_phases/UASJointExplorationPhase.h"
 #include <cmath>
-#include <Eigen/Dense>
-#include "uas_helpers/RGVState.h"
-#include "uas_helpers/RGV.h"
 
-UASCoarseLocalizationPhase::UASCoarseLocalizationPhase()
+
+UASJointExplorationPhase::UASJointExplorationPhase()
 {
-    phaseName_ = "coarse";
-    alpha_ = 0;
-    REnu_ << 1, 0, 0,
-             0, -1, 0,
-             0, 0, -1;
+    phaseName_ = "jointExploration";
 }
 
-UASState UASCoarseLocalizationPhase::generateDesiredState(CVImg cvImg, UASState uasState)
+UASState UASJointExplorationPhase::generateDesiredState(CVImg cvImg, UASState uasState)
 {   
     UASState desiredUASState;
     desiredUASState.bxV_ = 0.0f;
@@ -30,11 +24,9 @@ UASState UASCoarseLocalizationPhase::generateDesiredState(CVImg cvImg, UASState 
     if (std::abs(blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) > tolerance_) {
         bodyY = (blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) * 3;
     }
-
     desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
     desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
 
     desiredUASState.bzV_ = (desiredAltitude_ - uasState.iz_) * kpZ_;
-
     return desiredUASState;
 }

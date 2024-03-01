@@ -42,6 +42,7 @@
     pytest-rerunfailures \
     pytest
     ```
+    
     ```bash
     sudo apt install --no-install-recommends -y \
     libasio-dev \
@@ -77,6 +78,8 @@
     sudo apt install aptitude
     sudo apt install ros-dev-tools
     sudo apt install ros-foxy-desktop
+    sudo apt-get update
+    sudo apt-get install ros-foxy-gazebo-ros-pkgs
     ```
 
     - Enter `nano ~/.bashrc` and add `source /opt/ros/foxy/setup.bash` to the bottom.
@@ -110,6 +113,12 @@
     ```
     ```bash
     param set MPC_XY_VEL_MAX 3
+    param set MC_PITCHRATE_P 0.01 original .08
+    param set MC_ROLLRATE_P 0.01 original: .08
+    param set MPC_XY_VEL_P_ACC 1.8 original: 3
+    param set MPC_XY_VEL_P_ACC 4
+    param set MPC_Z_VEL_MAX_UP 1.5
+    param set
     param save
     ```
 

@@ -4,6 +4,8 @@
 #include "uas/UAS.h"
 #include "uas_helpers/RGV.h"
 #include "uas_phases/UASTrailingPhase.h"
+#include "uas_phases/UASJointExplorationPhase.h"
+#include "uas_phases/UASJointTrailingPhase.h"
 #include "uas_phases/UASExplorationPhase.h"
 #include "uas_phases/UASCoarseLocalizationPhase.h"
 #include <rclcpp/rclcpp.hpp>
@@ -28,6 +30,8 @@ class CompleteMissionScheduler : public Scheduler
         unsigned int waypointIndex_;
         std::unique_ptr<UASExplorationPhase> explorationPhase_;
         std::unique_ptr<UASTrailingPhase> trailingPhase_;
+        std::unique_ptr<UASJointExplorationPhase> jointExplorationPhase_;
+        std::unique_ptr<UASJointTrailingPhase> jointTrailingPhase_;
         std::unique_ptr<UASCoarseLocalizationPhase> coarsePhase_;
 
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv1StatePublisher_;
@@ -51,6 +55,7 @@ class CompleteMissionScheduler : public Scheduler
         // methods:
         bool isUASStopped(RGV rgv);
         bool isRGVCoarseLocalized(RGV rgv);
+        bool areRGVsInFrame();
         void timerCallback() override;
         void publishRGV1State();
         void publishRGV2State();

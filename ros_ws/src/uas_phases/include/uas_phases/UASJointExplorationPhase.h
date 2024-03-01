@@ -1,12 +1,10 @@
-#pragma once
 #include "uas_phases/UASPhase.h"
 
-
-class UASCoarseLocalizationPhase : public UASPhase
+class UASJointExplorationPhase : public UASPhase
 {
     public:
         //fields:
-        UASCoarseLocalizationPhase();
+        UASJointExplorationPhase();
         float velocityFactor_ = 0.1;
         float tolerance_ = 0.1;
 

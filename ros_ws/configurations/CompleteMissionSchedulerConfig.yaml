@@ -1,6 +1,6 @@
 ---
 minHeight: -5.0
-maxHeight: -11.0
+maxHeight: -18.00
 trailing:
   stopVelocityThresh: 0.05
   stopTimeThresh: 2
