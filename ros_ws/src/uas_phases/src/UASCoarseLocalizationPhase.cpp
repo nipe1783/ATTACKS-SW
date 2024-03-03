@@ -37,15 +37,3 @@ UASState UASCoarseLocalizationPhase::generateDesiredState(CVImg cvImg, UASState 
     desiredUASState.bzV_ = (desiredAltitude_ - uasState.iz_) * kpZ_;
     return desiredUASState;
 }
-
-UASState UASCoarseLocalizationPhase::generateDesiredState(CVImg rgv1, CVImg rgv2, UASState uasState)
-{   
-    UASState desiredUASState;
-    desiredUASState.bxV_ = 0.0f;
-    desiredUASState.byV_ = 0.0f;
-    desiredUASState.bzV_ = 0.0f;
-    float bodyX = 0.0f;
-    float bodyY = 0.0f;
-    std::cout<<"NOT IMPLEMENTED"<<std::endl;
-    return desiredUASState;
-}

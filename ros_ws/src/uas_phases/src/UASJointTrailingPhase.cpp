@@ -1,4 +1,5 @@
 #include "uas_phases/UASJointTrailingPhase.h"
+#include "uas_helpers/RGV.h"
 #include <cmath>
 
 
@@ -7,22 +8,41 @@ UASJointTrailingPhase::UASJointTrailingPhase()
     phaseName_ = "jointTrailing";
 }
 
-UASState UASJointTrailingPhase::generateDesiredState(CVImg rgv1CVData, CVImg rgv2CVData,  UASState uasState)
+bool UASJointTrailingPhase::isNearFrameEdge(const Blob &blob, const CVImg &cvImg)
 {   
-    UASState desiredUASState;
-    desiredUASState.ix_ = 0;
-    desiredUASState.iy_ = 0;
-    desiredUASState.iz_ = 0;
-    desiredUASState.ipsi_ = 0;
-    return desiredUASState;
+    if( blob.x < cvImg.width * tolerance_ || blob.x > cvImg.width * (1 - tolerance_) || blob.y < cvImg.height * tolerance_ || blob.y > cvImg.height * (1 - tolerance_)){
+        return true;
+    }
+    return false;
 }
 
-UASState UASJointTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
-{
+UASState UASJointTrailingPhase::generateDesiredState(RGV rgv1, RGV rgv2, CVImg rgv1CVData, CVImg rgv2CVData,  UASState uasState)
+{   
     UASState desiredUASState;
-    desiredUASState.ix_ = 0;
-    desiredUASState.iy_ = 0;
-    desiredUASState.iz_ = 0;
-    desiredUASState.ipsi_ = 0;
+    desiredUASState.bxV_ = 0.0f;
+    desiredUASState.byV_ = 0.0f;
+    desiredUASState.bzV_ = 0.0f;
+    float bodyX = 0.0f;
+    float bodyY = 0.0f;
+    Blob rgv1Blob = rgv1CVData.blobs[0];
+    Blob rgv2Blob = rgv2CVData.blobs[0];
+
+    if(isNearFrameEdge(rgv1Blob, rgv1CVData)){
+        std::cout<<"RGV1 is near the frame edge"<<std::endl;
+        bodyX = (rgv1Blob.x - rgv1CVData.centerX) / static_cast<float>(rgv1CVData.width) * velocityFactor_;
+        bodyY = (rgv1Blob.y - rgv1CVData.centerY) / static_cast<float>(rgv1CVData.height) * velocityFactor_;
+    }
+    else if(isNearFrameEdge(rgv2Blob, rgv2CVData)){
+        std::cout<<"RGV2 is near the frame edge"<<std::endl;
+        bodyX = (rgv2Blob.x - rgv2CVData.centerX) / static_cast<float>(rgv2CVData.width) * velocityFactor_;
+        bodyY = (rgv2Blob.y - rgv2CVData.centerY) / static_cast<float>(rgv2CVData.height) * velocityFactor_;
+    }
+    else{
+        std::cout<<"RGV1 and RGV2 are not near the frame edge"<<std::endl;
+    }
+    desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
+    desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
+    desiredUASState.bzV_ = (desiredAltitude_ - uasState.iz_) * kpZ_;
+
     return desiredUASState;
 }

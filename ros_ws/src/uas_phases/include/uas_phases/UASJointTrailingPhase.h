@@ -5,10 +5,10 @@ class UASJointTrailingPhase : public UASPhase
     public:
         //fields:
         UASJointTrailingPhase();
-        float velocityFactor_ = 0.1;
-        float tolerance_ = 0.1;
+        float velocityFactor_ = 3;
+        float tolerance_ = 0.3;
 
         //methods:
-        UASState generateDesiredState(CVImg cvImg, UASState uasState) override;
-        UASState generateDesiredState(CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState) override;
+        UASState generateDesiredState(RGV rgv1, RGV rgv2, CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState) override;
+        bool isNearFrameEdge(const Blob &blob,const CVImg &cvImg);
 };

@@ -3,6 +3,7 @@
 #include <opencv2/opencv.hpp>
 #include "uas/UASState.h"
 #include "uas_computer_vision/CVImg.h"
+#include "uas_helpers/RGV.h"
 #include "uas_helpers/RGVState.h"
 #include "uas_helpers/RGV.h"
 #include "uas/UAS.h"
@@ -29,8 +30,9 @@ class UASPhase
          * @brief Primary function of all UAS mission phases. Tells the UAS where to go.
          *
          */
-        virtual UASState generateDesiredState(CVImg cvImg, UASState uasState) = 0;
-        virtual UASState generateDesiredState(CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState) = 0;
+        virtual UASState generateDesiredState(CVImg rgvCVData, UASState uasState);
+        virtual UASState generateDesiredState(CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState);
+        virtual UASState generateDesiredState(RGV rgv1, RGV rgv2, CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState);
         
         /**
          * @brief Determines distance between the UAS and a waypoint.

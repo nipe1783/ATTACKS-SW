@@ -1,6 +1,6 @@
 ---
 minHeight: -10.0
-maxHeight: -20.0
+maxHeight: -15.0
 phase:
   kpZ: 0.1
   trailing:
@@ -82,8 +82,8 @@ camera1:
   id: 0
   xFOV: 2
   yFOV: 1.125
-  width: 640
-  height: 360
+  width: 1280
+  height: 720
   distortion:
     k1: 0
     k2: 0

@@ -211,14 +211,14 @@ void CompleteMissionScheduler::timerCallback(){
     std::cout << std::endl;
 
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
-        rgv1_.currentPhase_ = "trailing";
-        currentPhase_ = "trailing";
+        rgv1_.currentPhase_ = "jointExploration";
+        currentPhase_ = "jointExploration";
         rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
         goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
     }
     else if (rgv2_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
-        rgv2_.currentPhase_ = "trailing";
-        currentPhase_ = "trailing";
+        rgv2_.currentPhase_ = "jointExploration";
+        currentPhase_ = "jointExploration";
         rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
         goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     }
@@ -251,7 +251,7 @@ void CompleteMissionScheduler::timerCallback(){
             currentPhase_ = "jointTrailing";
             rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
             rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
-            goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
+            goalState_ = jointTrailingPhase_->generateDesiredState(rgv1_, rgv2_, rgv1CVData_, rgv2CVData_, uas_.state_);
         }
         else{
             goalState_ = jointExplorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
@@ -264,7 +264,7 @@ void CompleteMissionScheduler::timerCallback(){
             currentPhase_ = "jointTrailing";
             rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
             rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
-            goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
+            goalState_ = jointTrailingPhase_->generateDesiredState(rgv1_, rgv2_, rgv1CVData_, rgv2CVData_, uas_.state_);
         }
         else{
             goalState_ = jointExplorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
@@ -275,7 +275,7 @@ void CompleteMissionScheduler::timerCallback(){
         publishRGV1State();
         rgv2_.state_ = jointTrailingPhase_->localize(rgv2CVData_, uas_, rgv2_);
         publishRGV2State();
-        goalState_ = jointTrailingPhase_->generateDesiredState(rgv2CVData_, rgv2CVData_, uas_.state_);
+        goalState_ = jointTrailingPhase_->generateDesiredState(rgv1_, rgv2_, rgv2CVData_, rgv2CVData_, uas_.state_);
     }
     else if (rgv1_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv1CVData_.blobs.size() > 0){
         if (isRGVCoarseLocalized(rgv1_)) {
@@ -300,6 +300,18 @@ void CompleteMissionScheduler::timerCallback(){
             rgv2_.state_ = coarsePhase_->localize(rgv2CVData_, uas_, rgv2_);
             publishRGV2State();
         }
+    }
+    else if (rgv1_.currentPhase_ == "jointTrailing" && currentPhase_ == "jointTrailing" && rgv1CVData_.blobs.size() == 0){
+        rgv1_.currentPhase_ = "jointExploration";
+        rgv2_.currentPhase_ = "jointExploration";
+        currentPhase_ = "jointExploration";
+        goalState_ = jointExplorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    }
+    else if (rgv2_.currentPhase_ == "jointTrailing" && currentPhase_ == "jointTrailing" && rgv2CVData_.blobs.size() == 0){
+        rgv2_.currentPhase_ = "jointExploration";
+        rgv1_.currentPhase_ = "jointExploration";
+        currentPhase_ = "jointExploration";
+        goalState_ = jointExplorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
     }
     else if (rgv1_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv1CVData_.blobs.size() == 0){
         rgv1_.currentPhase_ = "exploration";

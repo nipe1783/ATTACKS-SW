@@ -110,8 +110,8 @@
 
     ```bash
     param set MPC_XY_VEL_MAX 3
-    param set MC_PITCHRATE_MAX 50
-    param set MC_ROLLRATE_MAX 50
+    param set MC_PITCHRATE_MAX 35
+    param set MC_ROLLRATE_MAX 35
     param save
     ```
 

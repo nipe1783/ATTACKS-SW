@@ -9,6 +9,21 @@ double UASPhase::distance(UASState s1, UASState s2)
     return sqrt(pow(s1.ix_ - s2.ix_, 2) + pow(s1.iy_ - s2.iy_, 2) + pow(s1.iz_ - s2.iz_, 2));
 }
 
+UASState UASPhase::generateDesiredState(CVImg rgvCVData, UASState uasState)
+{
+    throw std::logic_error("Not implemented");
+}
+
+UASState UASPhase::generateDesiredState(CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState)
+{
+    throw std::logic_error("Not implemented");
+}
+
+UASState UASPhase::generateDesiredState(RGV rgv1, RGV rgv2, CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState)
+{
+    throw std::logic_error("Not implemented");
+}
+
 RGVState UASPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
 {
     //Initialize values

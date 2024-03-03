@@ -42,14 +42,14 @@ double Scheduler::distance(UASState s1, UASState s2)
 void Scheduler::publishControlMode()
 {   
     px4_msgs::msg::OffboardControlMode msg{};
-    if(currentPhase_ == "exploration" || currentPhase_ == "jointTrailing"){
+    if(currentPhase_ == "exploration"){
         msg.position = true;
         msg.velocity = false;
         msg.acceleration = false;
         msg.attitude = false;
         msg.body_rate = false;
     }
-    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration"){
+    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
         msg.position = false;
         msg.velocity = true;
         msg.acceleration = false;
@@ -70,11 +70,11 @@ void Scheduler::publishControlMode()
 void Scheduler::publishTrajectorySetpoint(UASState s)
 {
     px4_msgs::msg::TrajectorySetpoint msg{};
-    if(currentPhase_ == "exploration" || currentPhase_ == "jointTrailing"){
+    if(currentPhase_ == "exploration"){
         msg.position = {s.ix_, s.iy_, s.iz_};
         msg.yaw = -3.14;
     }
-    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration"){
+    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
         msg.velocity = {s.bxV_, s.byV_, s.bzV_};
         msg.position[0] = std::numeric_limits<float>::quiet_NaN();
         msg.position[1] = std::numeric_limits<float>::quiet_NaN();
