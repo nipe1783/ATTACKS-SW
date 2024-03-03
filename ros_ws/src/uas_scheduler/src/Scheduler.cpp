@@ -49,7 +49,7 @@ void Scheduler::publishControlMode()
         msg.attitude = false;
         msg.body_rate = false;
     }
-    else if(currentPhase_ == "trailing"){
+    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
         msg.position = false;
         msg.velocity = true;
         msg.acceleration = false;
@@ -74,7 +74,7 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
         msg.position = {s.ix_, s.iy_, s.iz_};
         msg.yaw = -3.14;
     }
-    else if(currentPhase_ == "trailing"){
+    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
         msg.velocity = {s.bxV_, s.byV_, s.bzV_};
         msg.position[0] = std::numeric_limits<float>::quiet_NaN();
         msg.position[1] = std::numeric_limits<float>::quiet_NaN();

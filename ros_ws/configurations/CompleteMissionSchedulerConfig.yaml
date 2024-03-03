@@ -1,8 +1,9 @@
 ---
 minHeight: -10.0
-maxHeight: -20.0
+maxHeight: -15.0
 phase:
   kpZ: 0.1
+  velocityFactor: 3
   trailing:
     stopVelocityThresh: 0.05
     stopTimeThresh: 2
@@ -82,8 +83,8 @@ camera1:
   id: 0
   xFOV: 2
   yFOV: 1.125
-  width: 640
-  height: 360
+  width: 1280
+  height: 720
   distortion:
     k1: 0
     k2: 0

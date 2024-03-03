@@ -5,7 +5,7 @@
 
 using namespace cv;
 
-CVImg VaryingLightBlobDetector::detect(Mat& frame){
+CVImg VaryingLightBlobDetector::detect(const Mat& frame){
     Mat dst;
     std::vector<Blob> myblobVector; // Create an empty blob vector
 

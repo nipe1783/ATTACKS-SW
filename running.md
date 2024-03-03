@@ -10,11 +10,6 @@
 
 - **Step 2:**
   ```bash
-  gimbal test pitch -90
-  ```
-
-- **Step 3:**
-  ```bash
   param set MPC_XY_VEL_MAX 1.5
   param save
   ```
@@ -42,14 +37,4 @@
   ```
 
 
-  ### 3. Launch the ROS UAS Camera Calibration Mission Node
-
-- **Step 1:** Open a new Ubuntu terminal.
-  ```bash
-  cd ~/dev/ATTACKS-SW/ros_ws
-  colcon build
-  source /opt/ros/foxy/setup.bash
-  source install/local_setup.bash
-  ros2 launch uas_bringup uas_camera_calibrate_mission.launch.py
-  ```
 

@@ -9,6 +9,6 @@ class UASTrailingPhase : public UASPhase
         float tolerance_ = 0.1;
 
         //methods:
-        UASState generateDesiredState(CVImg cvImg, UASState uasState) override;
+        UASState generateDesiredState(const CVImg& cvImg, const UASState& uasState) override;
 
 };
