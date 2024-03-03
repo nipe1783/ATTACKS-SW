@@ -9,6 +9,6 @@ class UASJointTrailingPhase : public UASPhase
         float tolerance_ = 0.3;
 
         //methods:
-        UASState generateDesiredState(RGV rgv1, RGV rgv2, CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState) override;
+        UASState generateDesiredState(const CVImg& rgv1CVData, const CVImg& rgv2CVData, const UASState& uasState) override;
         bool isNearFrameEdge(const Blob &blob,const CVImg &cvImg);
 };

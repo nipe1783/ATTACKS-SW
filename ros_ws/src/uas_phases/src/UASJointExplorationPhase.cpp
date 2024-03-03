@@ -7,7 +7,7 @@ UASJointExplorationPhase::UASJointExplorationPhase()
     phaseName_ = "jointExploration";
 }
 
-UASState UASJointExplorationPhase::generateDesiredState(CVImg cvImg, UASState uasState)
+UASState UASJointExplorationPhase::generateDesiredState(const CVImg& cvImg, const UASState& uasState)
 {   
     UASState desiredUASState;
     desiredUASState.bxV_ = 0.0f;

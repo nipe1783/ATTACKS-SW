@@ -6,6 +6,7 @@
 #include "uas_helpers/RGV.h"
 #include "uas_helpers/RGVState.h"
 #include "uas_helpers/RGV.h"
+#include "uas_helpers/Camera.h"
 #include "uas/UAS.h"
 #include <Eigen/Dense>
 
@@ -30,13 +31,12 @@ class UASPhase
          * @brief Primary function of all UAS mission phases. Tells the UAS where to go.
          *
          */
-        virtual UASState generateDesiredState(CVImg rgvCVData, UASState uasState);
-        virtual UASState generateDesiredState(CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState);
-        virtual UASState generateDesiredState(RGV rgv1, RGV rgv2, CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState);
+        virtual UASState generateDesiredState(const CVImg& rgvCVData, const UASState& uasState);
+        virtual UASState generateDesiredState(const CVImg& rgv1CVData, const CVImg& rgv2CVData, const UASState& uasState);
         
         /**
          * @brief Determines distance between the UAS and a waypoint.
          */
-        double distance(UASState s1, UASState s2);
-        RGVState localize(CVImg cvImg, UAS uas, RGV rgv);
+        double distance(const UASState& s1, const UASState& s2);
+        RGVState localize(const Camera& camera, const CVImg& cvImg, const UAS& uas, RGV& rgv);
 };

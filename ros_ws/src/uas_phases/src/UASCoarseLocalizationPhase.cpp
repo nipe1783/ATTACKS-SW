@@ -13,7 +13,7 @@ UASCoarseLocalizationPhase::UASCoarseLocalizationPhase()
              0, 0, -1;
 }
 
-UASState UASCoarseLocalizationPhase::generateDesiredState(CVImg cvImg, UASState uasState)
+UASState UASCoarseLocalizationPhase::generateDesiredState(const CVImg& cvImg, const UASState& uasState)
 {   
     UASState desiredUASState;
     desiredUASState.bxV_ = 0.0f;

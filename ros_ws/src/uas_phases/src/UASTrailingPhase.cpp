@@ -7,7 +7,7 @@ UASTrailingPhase::UASTrailingPhase()
     phaseName_ = "Trailing";
 }
 
-UASState UASTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
+UASState UASTrailingPhase::generateDesiredState(const CVImg& cvImg, const UASState& uasState)
 {   
     UASState desiredUASState;
     desiredUASState.bxV_ = 0.0f;
@@ -18,15 +18,14 @@ UASState UASTrailingPhase::generateDesiredState(CVImg cvImg, UASState uasState)
 
     Blob blob = cvImg.blobs[0];
     if (std::abs(blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) > tolerance_) {
-        bodyX = (blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) * 3;
+        bodyX = (blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) * velocityFactor_;
     }
 
     if (std::abs(blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) > tolerance_) {
-        bodyY = (blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) * 3;
+        bodyY = (blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) * velocityFactor_;
     }
     desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
     desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
-
     desiredUASState.bzV_ = (desiredAltitude_ - uasState.iz_) * kpZ_;
 
     return desiredUASState;

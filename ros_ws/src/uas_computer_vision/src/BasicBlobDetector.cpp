@@ -12,7 +12,7 @@ BasicBlobDetector::BasicBlobDetector(int hLow, int hHigh, int sLow, int sHigh, i
     this->vHigh_ = vHigh;
 }
 
-CVImg BasicBlobDetector::detect(Mat& frame){
+CVImg BasicBlobDetector::detect(const Mat& frame){
     Mat labels, stats, centroids, dst;
     // Filtering image based on calibration values
     cvtColor(frame, dst, COLOR_BGR2HSV);

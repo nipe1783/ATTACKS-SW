@@ -3,6 +3,7 @@ minHeight: -10.0
 maxHeight: -15.0
 phase:
   kpZ: 0.1
+  velocityFactor: 3
   trailing:
     stopVelocityThresh: 0.05
     stopTimeThresh: 2

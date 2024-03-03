@@ -9,5 +9,5 @@ class UASJointExplorationPhase : public UASPhase
         float tolerance_ = 0.1;
 
         //methods:
-        UASState generateDesiredState(CVImg rgv1CVData,  UASState uasState) override;
+        UASState generateDesiredState(const CVImg& rgv1CVData, const UASState& uasState) override;
 };

@@ -4,38 +4,26 @@
 #include "uas/UASState.h"
 #include "uas_computer_vision/Blob.h"
 
-double UASPhase::distance(UASState s1, UASState s2)
+double UASPhase::distance(const UASState& s1, const UASState& s2)
 {
     return sqrt(pow(s1.ix_ - s2.ix_, 2) + pow(s1.iy_ - s2.iy_, 2) + pow(s1.iz_ - s2.iz_, 2));
 }
 
-UASState UASPhase::generateDesiredState(CVImg rgvCVData, UASState uasState)
+UASState UASPhase::generateDesiredState(const CVImg& rgvCVData, const UASState& uasState)
 {
     throw std::logic_error("Not implemented");
 }
 
-UASState UASPhase::generateDesiredState(CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState)
+UASState UASPhase::generateDesiredState(const CVImg& rgv1CVData, const CVImg& rgv2CVData, const UASState& uasState)
 {
     throw std::logic_error("Not implemented");
 }
 
-UASState UASPhase::generateDesiredState(RGV rgv1, RGV rgv2, CVImg rgv1CVData, CVImg rgv2CVData, UASState uasState)
-{
-    throw std::logic_error("Not implemented");
-}
-
-RGVState UASPhase::localize(CVImg cvImg, UAS uas, RGV rgv)
+RGVState UASPhase::localize(const Camera& camera, const CVImg& cvImg, const UAS& uas, RGV& rgv)
 {
     //Initialize values
-    Camera camera = Camera(0, 640, 360, 2, 1.125); // TODO: Load in camera from mission
     centerX_ = float(cvImg.centerX);
-    centerY_ = float(cvImg.centerY);
-    if(uas.cameras_.size()>0){
-        camera = uas.cameras_[0];
-    }
-    else{
-        std::cout<< " Unable to access camera from index 0. Vector size = 0" << std::endl;
-    }    
+    centerY_ = float(cvImg.centerY);  
     //Start calculations
     rcp_ = uas.state_.iz_ * (1.0 / cos(alpha_));
     //Distance from edge to center point
