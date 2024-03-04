@@ -34,17 +34,19 @@ std::vector<Blob> BasicBlobDetector::detect(Mat& frame, Mat& dst){
         cv::Rect bounding_box = cv::Rect(x, y, width, height);
         cv::rectangle(frame, bounding_box, cv::Scalar(255, 0, 0), 2);
         myblobVector.push_back(Blob(x, y, width, height, maxArea));
+    }else{
+        myblobVector.push_back(Blob(-1, -1, -1, -1, -1));
     }
     
-    if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
-        int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
-        int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
-        int width = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_WIDTH);
-        int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
-        cv::Rect bounding_box = cv::Rect(x, y, width, height);
-        cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
-        myblobVector.push_back(Blob(x, y, width, height, secondMaxArea));
-    }
+    // if (secondLargestBlobLabel != 0 && secondMaxArea > areaThreshold) { 
+    //     int x = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_LEFT);
+    //     int y = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_TOP);
+    //     int width = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_WIDTH);
+    //     int height = stats.at<int>(secondLargestBlobLabel, cv::CC_STAT_HEIGHT);
+    //     cv::Rect bounding_box = cv::Rect(x, y, width, height);
+    //     cv::rectangle(frame, bounding_box, cv::Scalar(0, 0, 255), 2);
+    //     myblobVector.push_back(Blob(x, y, width, height, secondMaxArea));
+    // }
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
     cv::findContours(dst.clone(), contours, hierarchy, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);

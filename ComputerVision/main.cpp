@@ -3,6 +3,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
 #include <memory>
+#include <fstream>
 
 // Blob Detection Imports
 #include "blobDetector/BasicBlobDetector.h"
@@ -25,10 +26,11 @@ int main()
 
     // benchmark.runBasic("../images", "../binaryImages/", basicBlobDetector);
     // benchmark.runDoG("../images", "../binaryImages/", doGBlobDetector);
-    benchmark.runVarying("../images", "../binaryImages/", VLBlobDetector);
+    // benchmark.runVarying("../images", "../binaryImages/", VLBlobDetector);
 
-    // Scripts::videoRunner("DJI_20231117032318_0005_S.MP4", basicBlobDetector);
-    // Scripts::cameraRunner(0, basicBlobDetector);
+    // Scripts::videoRunner("IMX477_default_lens_30ft_test_trim.mp4", basicBlobDetector);
+    Scripts::cameraRunner(0, basicBlobDetector);
+
 
     // Saving every 50 frames as an image
     // std::string videoPath = "/home/alex/Documents/ATTACKS-SW/ComputerVision/videos/DroneTestFootage.mp4";

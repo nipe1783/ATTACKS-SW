@@ -4,6 +4,7 @@
 #include <memory>
 #include <cmath>
 #include <vector>
+#include <fstream>
 
 //import classes
 #include "../visualizer/Visualizer.h"
@@ -15,7 +16,14 @@ using namespace cv;
 void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
 
     std::vector<Blob> blobVector;
-    VideoCapture cap(cameraNumber);
+
+    std::ofstream myFile;
+    myFile.open("../videos/blobInfo.csv");
+    myFile << "X, Y, Width, Height \n";
+
+    // VideoCapture cap(cameraNumber);
+    std::string pipeline = "nvarguscamerasrc ! video/x-raw(memory:NVMM),width=(int)1920,height=(int)1080,format=(string)NV12,framerate=(fraction)30/1 ! nvvidconv flip-method=0 ! video/x-raw,width=(int)1920,height=(int)1080,format=(string)BGRx ! videoconvert ! video/x-raw,format=(string)BGR ! appsink";
+    cv::VideoCapture cap(pipeline, cv::CAP_GSTREAMER);
 
     if (!cap.isOpened()) {
         std::cerr << "Error: Could not open the camera." << std::endl;
@@ -28,7 +36,9 @@ void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
     std::string outputFilename = "../videos/output_video.mp4";
 
     // Define the codec and create a VideoWriter object
-    cv::VideoWriter videoWriter(outputFilename, cv::VideoWriter::fourcc('H', '2', '6', '4'), fps, cv::Size(frameWidth, frameHeight));
+    // cv::VideoWriter videoWriter(outputFilename, cv::VideoWriter::fourcc('H', '2', '6', '4'), fps, cv::Size(frameWidth, frameHeight));
+    cv::VideoWriter videoWriter(outputFilename, cv::VideoWriter::fourcc('a', 'v', 'c', '1'), fps, cv::Size(frameWidth, frameHeight));
+
 
     if (!videoWriter.isOpened()) {
         std::cerr << "Error: Could not create the VideoWriter object." << std::endl;
@@ -43,14 +53,15 @@ void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
             std::cout << "End of video." << std::endl;
             break;
         }
-        if(counter == 0){
-            // Calibrate
-            blobDetector.calibrate(frame);
-            counter++;
-        }
+        // if(counter == 0){
+        //     // Calibrate
+        //     blobDetector.calibrate(frame);
+        //     counter++;
+        // }
 
         // Detect
         blobVector = blobDetector.detect(frame,dst);
+        myFile << blobVector[0].x << "," << blobVector[0].y << "," << blobVector[0].width << "," << blobVector[0].height << "\n";
         imshow("Frame", frame);
 
         //Writing frames to a video, use visualizer class to save individual frames
@@ -63,6 +74,7 @@ void Scripts::cameraRunner(int cameraNumber, BlobDetector& blobDetector){
             break;
         }
     }
+    myFile.close();
     videoWriter.release();  // Release the VideoWriter
     cap.release();  // Release the VideoCapture
 }
@@ -95,6 +107,10 @@ void Scripts::videoRunner(const std::string&fileName, BlobDetector& blobDetector
     }
 
     Mat frame, dst;
+    // cap.set(1, 420);
+    // cap >> frame;
+    // blobDetector.calibrate(frame);
+    // cap.set(1,0);
     int counter = 0;
     while(true){
         cap >> frame;
