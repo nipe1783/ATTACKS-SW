@@ -8,6 +8,7 @@
 #include "uas_phases/UASJointTrailingPhase.h"
 #include "uas_phases/UASExplorationPhase.h"
 #include "uas_phases/UASCoarseLocalizationPhase.h"
+#include "uas_phases/UASFineLocalizationPhase.h"
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>
@@ -33,6 +34,7 @@ class CompleteMissionScheduler : public Scheduler
         std::unique_ptr<UASJointExplorationPhase> jointExplorationPhase_;
         std::unique_ptr<UASJointTrailingPhase> jointTrailingPhase_;
         std::unique_ptr<UASCoarseLocalizationPhase> coarsePhase_;
+        std::unique_ptr<UASFineLocalizationPhase> finePhase_;
 
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv1StatePublisher_;
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv2StatePublisher_;
@@ -49,12 +51,13 @@ class CompleteMissionScheduler : public Scheduler
         float minHeight_;
         float stopVelocityThresh_;
         float stopTimeThresh_;
-        float coarseLocalizationTime_;
-        float fineLocalizationTime_;
+        int coarseLocalizationTime_;
+        int fineLocalizationTime_;
         
         // methods:
         bool isUASStopped(RGV rgv);
         bool isRGVCoarseLocalized(RGV rgv);
+        bool isRGVFineLocalized(RGV rgv);
         bool areRGVsInFrame();
         void timerCallback() override;
         void publishRGV1State();

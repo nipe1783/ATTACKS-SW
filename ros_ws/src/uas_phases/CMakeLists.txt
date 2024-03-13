@@ -39,6 +39,7 @@ add_library(uas_phases
   src/UASExplorationPhase.cpp
   src/UASTrailingPhase.cpp
   src/UASCoarseLocalizationPhase.cpp
+  src/UASFineLocalizationPhase.cpp
   src/UASJointExplorationPhase.cpp
   src/UASJointTrailingPhase.cpp
 )

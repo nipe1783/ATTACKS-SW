@@ -6,6 +6,7 @@
 #include "uas_phases/UASTrailingPhase.h"
 #include "uas_phases/UASExplorationPhase.h"
 #include "uas_phases/UASCoarseLocalizationPhase.h"
+#include "uas_phases/UASFineLocalizationPhase.h"
 #include <rclcpp/rclcpp.hpp>
 #include <px4_msgs/msg/sensor_combined.hpp>
 #include <px4_msgs/msg/vehicle_local_position.hpp>

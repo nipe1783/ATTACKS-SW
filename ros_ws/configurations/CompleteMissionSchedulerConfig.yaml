@@ -15,6 +15,7 @@ phase:
     fineLocalizationTime: 10
     desiredAlt: -11.0
   exploration:
+    distanceThresh: 0.5
     waypoints:
       - ix: -10
         iy: -10

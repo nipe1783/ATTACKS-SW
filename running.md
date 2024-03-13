@@ -8,14 +8,6 @@
   make px4_sitl gazebo-classic_uas__field
   ```
 
-- **Step 2:**
-  ```bash
-  param set MPC_XY_VEL_MAX 1.5
-  param save
-  ```
-   ```
-  *Note: This only needs to be ran the first time you are running the sim. If you wish to change the maximum horizontal velocity of the UAS you can reset it.*
-  ```
 
 ### 2. Creating a uXRCE-DDS Client
 

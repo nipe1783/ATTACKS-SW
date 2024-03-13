@@ -88,6 +88,13 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
         msg.position[2] = std::numeric_limits<float>::quiet_NaN();
         msg.yaw = std::numeric_limits<float>::quiet_NaN();
     }
+    else if(currentPhase_ == "fine"){
+        msg.velocity = {s.bxV_, s.byV_, s.bzV_};
+        msg.position[0] = std::numeric_limits<float>::quiet_NaN();
+        msg.position[1] = std::numeric_limits<float>::quiet_NaN();
+        msg.position[2] = std::numeric_limits<float>::quiet_NaN();
+        msg.yaw = std::numeric_limits<float>::quiet_NaN();
+    }
     msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
     trajectorySetpointPublisher_->publish(msg);
 }

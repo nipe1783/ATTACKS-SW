@@ -96,8 +96,8 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     minHeight_ = config["minHeight"].as<float>();
     stopTimeThresh_ = config["phase"]["trailing"]["stopTimeThresh"].as<float>();
     stopVelocityThresh_ = config["phase"]["trailing"]["stopVelocityThresh"].as<float>();
-    coarseLocalizationTime_ = config["phase"]["coarse"]["coarseLocalizationTime"].as<float>();
-    fineLocalizationTime_ = config["phase"]["fine"]["fineLocalizationTime"].as<float>();
+    coarseLocalizationTime_ = config["phase"]["coarse"]["coarseLocalizationTime"].as<int>();
+    fineLocalizationTime_ = config["phase"]["fine"]["fineLocalizationTime"].as<int>();
     if (config["phase"]["exploration"]["waypoints"].IsSequence()) {
         for (const auto& wp : config["phase"]["exploration"]["waypoints"]) {
             UASState waypoint(
@@ -128,6 +128,7 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
 
     currentPhase_ = "exploration";
     explorationPhase_ = std::make_unique<UASExplorationPhase>(waypoints_);
+    explorationPhase_->distanceThresh_ = config["phase"]["exploration"]["distanceThresh"].as<float>();
 
     trailingPhase_ = std::make_unique<UASTrailingPhase>();
     trailingPhase_->desiredAltitude_ = config["phase"]["trailing"]["desiredAlt"].as<float>();
@@ -137,6 +138,10 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     coarsePhase_ = std::make_unique<UASCoarseLocalizationPhase>();
     coarsePhase_->desiredAltitude_ = config["phase"]["coarse"]["desiredAlt"].as<float>();
     coarsePhase_->kpZ_ = config["phase"]["kpZ"].as<float>();
+
+    finePhase_ = std::make_unique<UASFineLocalizationPhase>();
+    finePhase_->desiredAltitude_ = config["phase"]["fine"]["desiredAlt"].as<float>();
+    finePhase_->kpZ_ = config["phase"]["kpZ"].as<float>();
 
     jointExplorationPhase_ = std::make_unique<UASJointExplorationPhase>();
     jointExplorationPhase_->desiredAltitude_ = maxHeight_;
@@ -166,7 +171,14 @@ bool CompleteMissionScheduler::isUASStopped(RGV rgv) {
 }
 
 bool CompleteMissionScheduler::isRGVCoarseLocalized(RGV rgv) {
-    if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(10)) {
+    if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(coarseLocalizationTime_)) {
+        return true;
+    }
+    return false;
+}
+
+bool CompleteMissionScheduler::isRGVFineLocalized(RGV rgv) {
+    if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(fineLocalizationTime_)) {
         return true;
     }
     return false;
@@ -201,8 +213,14 @@ void CompleteMissionScheduler::timerCallback(){
         arm();
     }
 
-    rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
-    rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
+    if(currentPhase_ == "fine"){
+        rgv1CVData_ = rgv1BlobDetector_.detect(ssFrame_);
+        rgv2CVData_ = rgv2BlobDetector_.detect(ssFrame_);
+    }
+    else{
+        rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
+        rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
+    }
 
     std::cout << "Phase: " << currentPhase_ << ". ";
     std::cout<< "RGV 1 Phase: " << rgv1_.currentPhase_ << ". ";
@@ -254,9 +272,10 @@ void CompleteMissionScheduler::timerCallback(){
     }
     else if (rgv1_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv1CVData_.blobs.size() > 0){
         if (isRGVCoarseLocalized(rgv1_)) {
-            rgv1_.currentPhase_ = "jointExploration";
-            currentPhase_ = "exploration";
-            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            rgv1_.currentPhase_ = "fine";
+            currentPhase_ = "fine";
+            rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
+            goalState_ = finePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
         }
         else{
             goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
@@ -266,13 +285,38 @@ void CompleteMissionScheduler::timerCallback(){
     }
     else if (rgv2_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
         if (isRGVCoarseLocalized(rgv2_)) {
+            rgv2_.currentPhase_ = "fine";
+            currentPhase_ = "fine";
+            rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
+            goalState_ = finePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else{
+            goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            rgv2_.state_ = coarsePhase_->localize(camera1_, rgv2CVData_, uas_, rgv2_);
+            publishRGV2State();
+        }
+    }
+    else if (rgv1_.currentPhase_ == "fine" && currentPhase_ == "fine" && rgv1CVData_.blobs.size() > 0){
+        if (isRGVFineLocalized(rgv1_)) {
+            rgv1_.currentPhase_ = "jointExploration";
+            currentPhase_ = "exploration";
+            goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+        }
+        else{
+            goalState_ = finePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+            rgv1_.state_ = finePhase_->localize(camera2_, rgv1CVData_, uas_, rgv1_);
+            publishRGV1State();
+        }
+    }
+    else if (rgv2_.currentPhase_ == "fine" && currentPhase_ == "fine" && rgv2CVData_.blobs.size() > 0){
+        if (isRGVFineLocalized(rgv2_)) {
             rgv2_.currentPhase_ = "jointExploration";
             currentPhase_ = "exploration";
             goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
         }
         else{
-            goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-            rgv2_.state_ = coarsePhase_->localize(camera1_, rgv2CVData_, uas_, rgv2_);
+            goalState_ = finePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+            rgv2_.state_ = finePhase_->localize(camera2_, rgv2CVData_, uas_, rgv2_);
             publishRGV2State();
         }
     }
@@ -341,6 +385,16 @@ void CompleteMissionScheduler::timerCallback(){
         goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     }
     else if (rgv2_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv2CVData_.blobs.size() == 0){
+        rgv2_.currentPhase_ = "exploration";
+        currentPhase_ = "exploration";
+        goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+    }
+    else if (rgv1_.currentPhase_ == "fine" && currentPhase_ == "fine" && rgv1CVData_.blobs.size() == 0){
+        rgv1_.currentPhase_ = "exploration";
+        currentPhase_ = "exploration";
+        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    }
+    else if (rgv2_.currentPhase_ == "fine" && currentPhase_ == "fine" && rgv2CVData_.blobs.size() == 0){
         rgv2_.currentPhase_ = "exploration";
         currentPhase_ = "exploration";
         goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);

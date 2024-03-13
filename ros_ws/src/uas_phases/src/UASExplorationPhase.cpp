@@ -9,7 +9,7 @@ UASExplorationPhase::UASExplorationPhase(std::vector<UASState> waypoints) : wayp
 
 UASState UASExplorationPhase::generateDesiredState(const CVImg& cvImg, const UASState& uasState)
 {   
-    if(distance(uasState, waypoints_[waypointIndex_]) < 0.5) {
+    if(distance(uasState, waypoints_[waypointIndex_]) < distanceThresh_) {
         waypointIndex_++;
         if(waypointIndex_ == waypoints_.size()) {
             waypointIndex_ = 0;

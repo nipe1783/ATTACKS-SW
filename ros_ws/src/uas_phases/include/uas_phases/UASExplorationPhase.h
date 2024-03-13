@@ -7,6 +7,7 @@ class UASExplorationPhase : public UASPhase
         UASExplorationPhase(std::vector<UASState> waypoints);
         std::vector<UASState> waypoints_;
         unsigned int waypointIndex_;
+        float distanceThresh_;
 
         //methods:
         UASState generateDesiredState(const CVImg& cvImg, const UASState& uasState) override;
