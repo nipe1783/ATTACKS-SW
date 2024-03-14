@@ -15,6 +15,7 @@
 #include <px4_msgs/msg/offboard_control_mode.hpp>
 #include <px4_msgs/msg/trajectory_setpoint.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
+#include <px4_msgs/msg/timesync.hpp>
 
 class Scheduler : public rclcpp::Node
 {   
@@ -42,6 +43,8 @@ class Scheduler : public rclcpp::Node
         rclcpp::Publisher<px4_msgs::msg::OffboardControlMode>::SharedPtr controlModePublisher_;
         rclcpp::Publisher<px4_msgs::msg::TrajectorySetpoint>::SharedPtr trajectorySetpointPublisher_;
         rclcpp::Publisher<px4_msgs::msg::VehicleCommand>::SharedPtr vehicleCommandPublisher_;
+        rclcpp::Subscription<px4_msgs::msg::Timesync>::SharedPtr timesync_sub_;
+        std::atomic<uint64_t> timestamp_; 
         rclcpp::TimerBase::SharedPtr timer_;
         uint64_t offboardSetpointCounter_;
         bool stateMsgReceived_ = false;

@@ -109,7 +109,7 @@
     - Go to the Gazebo terminal.
 
     ```bash
-    param set MPC_XY_VEL_MAX 3
+    param set MPC_XY_VEL_MAX 2
     param set MC_PITCHRATE_MAX 35
     param set MC_ROLLRATE_MAX 35
     param save

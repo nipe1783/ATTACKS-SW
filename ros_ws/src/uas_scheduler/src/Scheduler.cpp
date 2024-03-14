@@ -63,7 +63,7 @@ void Scheduler::publishControlMode()
         msg.attitude = false;
         msg.body_rate = false;
     }
-    msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+    msg.timestamp = timestamp_.load();
 	controlModePublisher_->publish(msg);
 }
 
@@ -71,22 +71,28 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
 {
     px4_msgs::msg::TrajectorySetpoint msg{};
     if(currentPhase_ == "exploration"){
-        msg.position = {s.ix_, s.iy_, s.iz_};
-        msg.yaw = -3.14;
+        msg.x = s.ix_;
+        msg.y = s.iy_;
+        msg.z = s.iz_;
+        msg.yaw = -3.14; 
     }
     else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
-        msg.velocity = {s.bxV_, s.byV_, s.bzV_};
-        msg.position[0] = std::numeric_limits<float>::quiet_NaN();
-        msg.position[1] = std::numeric_limits<float>::quiet_NaN();
-        msg.position[2] = std::numeric_limits<float>::quiet_NaN();
-        msg.yaw = std::numeric_limits<float>::quiet_NaN();
+        msg.set__vx(s.bxV_);
+        msg.set__vy(s.byV_);
+        msg.set__vz(s.bzV_);
+        msg.set__x(std::numeric_limits<float>::quiet_NaN());
+        msg.set__y(std::numeric_limits<float>::quiet_NaN());
+        msg.set__z(std::numeric_limits<float>::quiet_NaN());
+        msg.set__yaw(std::numeric_limits<float>::quiet_NaN());
     }
     else if(currentPhase_ == "coarse"){
-        msg.velocity = {s.bxV_, s.byV_, s.bzV_};
-        msg.position[0] = std::numeric_limits<float>::quiet_NaN();
-        msg.position[1] = std::numeric_limits<float>::quiet_NaN();
-        msg.position[2] = std::numeric_limits<float>::quiet_NaN();
-        msg.yaw = std::numeric_limits<float>::quiet_NaN();
+        msg.set__vx(s.bxV_);
+        msg.set__vy(s.byV_);
+        msg.set__vz(s.bzV_);
+        msg.set__x(std::numeric_limits<float>::quiet_NaN());
+        msg.set__y(std::numeric_limits<float>::quiet_NaN());
+        msg.set__z(std::numeric_limits<float>::quiet_NaN());
+        msg.set__yaw(std::numeric_limits<float>::quiet_NaN());
     }
     msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
     trajectorySetpointPublisher_->publish(msg);

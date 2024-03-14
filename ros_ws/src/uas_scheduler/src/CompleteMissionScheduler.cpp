@@ -31,23 +31,23 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
     );
 
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
-        "/fmu/out/vehicle_local_position", qos, std::bind(&CompleteMissionScheduler::callbackState, this, std::placeholders::_1)
+        "/fmu/vehicle_local_position/out", qos, std::bind(&CompleteMissionScheduler::callbackState, this, std::placeholders::_1)
     );
 
     attitudeSubscription_ = this->create_subscription<px4_msgs::msg::VehicleAttitude>(
-        "/fmu/out/vehicle_attitude", qos, std::bind(&CompleteMissionScheduler::callbackAttitude, this, std::placeholders::_1)
+        "/fmu/vehicle_attitude/out", qos, std::bind(&CompleteMissionScheduler::callbackAttitude, this, std::placeholders::_1)
     );
 
     controlModePublisher_ = this->create_publisher<px4_msgs::msg::OffboardControlMode>(
-        "/fmu/in/offboard_control_mode", qos
+        "/fmu/offboard_control_mode/in", qos
     );
 
     trajectorySetpointPublisher_ = this->create_publisher<px4_msgs::msg::TrajectorySetpoint>(
-        "/fmu/in/trajectory_setpoint", qos
+        "/fmu/trajectory_setpoint/in", qos
     );
 
     vehicleCommandPublisher_ = this->create_publisher<px4_msgs::msg::VehicleCommand>(
-        "/fmu/in/vehicle_command", qos
+        "/fmu/vehicle_command/in", qos
     );
 
     rgv1StatePublisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>(
@@ -148,6 +148,14 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
 
     waypointIndex_ = 0;
     goalState_ = waypoints_[0];
+
+    timesync_sub_ =
+			this->create_subscription<px4_msgs::msg::Timesync>("fmu/timesync/out", 10,
+				[this](const px4_msgs::msg::Timesync::UniquePtr msg) {
+					timestamp_.store(msg->timestamp);
+				});
+
+
     offboardSetpointCounter_ = 0;
     timer_ = create_wall_timer(std::chrono::milliseconds(50), std::bind(&CompleteMissionScheduler::timerCallback, this));
 }
@@ -207,15 +215,15 @@ void CompleteMissionScheduler::timerCallback(){
     std::cout << "Phase: " << currentPhase_ << ". ";
     std::cout<< "RGV 1 Phase: " << rgv1_.currentPhase_ << ". ";
     std::cout<< "RGV 2 Phase: " << rgv2_.currentPhase_ << ". ";
-    // std::cout<< "UAS State: " << uas_.state_.ix_ << ", " << uas_.state_.iy_ << ", " << uas_.state_.iz_ << ". ";
-    // if(rgv1CVData_.blobs.size() > 0){
-    //     cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
-    //     cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
-    // }
-    // if(rgv2CVData_.blobs.size() > 0){
-    //     cv::Rect bounding_box = cv::Rect(rgv2CVData_.blobs[0].x, rgv2CVData_.blobs[0].y, rgv2CVData_.blobs[0].width, rgv2CVData_.blobs[0].height);
-    //     cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(0, 255, 0), 2);
-    // }
+    std::cout<< "UAS State: " << uas_.state_.ix_ << ", " << uas_.state_.iy_ << ", " << uas_.state_.iz_ << ". ";
+    if(rgv1CVData_.blobs.size() > 0){
+        cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
+        cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
+    }
+    if(rgv2CVData_.blobs.size() > 0){
+        cv::Rect bounding_box = cv::Rect(rgv2CVData_.blobs[0].x, rgv2CVData_.blobs[0].y, rgv2CVData_.blobs[0].width, rgv2CVData_.blobs[0].height);
+        cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(0, 255, 0), 2);
+    }
     std::cout << std::endl;
 
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
