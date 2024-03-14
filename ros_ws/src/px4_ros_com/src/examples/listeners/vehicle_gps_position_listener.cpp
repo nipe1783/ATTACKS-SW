@@ -38,7 +38,7 @@
  */
 
 #include <rclcpp/rclcpp.hpp>
-#include <px4_msgs/msg/sensor_gps.hpp>
+#include <px4_msgs/msg/vehicle_gps_position.hpp>
 
 /**
  * @brief Vehicle GPS position uORB topic data callback
@@ -46,21 +46,21 @@
 class VehicleGpsPositionListener : public rclcpp::Node
 {
 public:
-	explicit VehicleGpsPositionListener() : Node("vehicle_global_position_listener")
-	{
-		rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
-		auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
-		
-		subscription_ = this->create_subscription<px4_msgs::msg::SensorGps>("/fmu/out/vehicle_gps_position", qos,
-		[this](const px4_msgs::msg::SensorGps::UniquePtr msg) {
+	explicit VehicleGpsPositionListener() : Node("vehicle_global_position_listener") {
+		subscription_ = this->create_subscription<px4_msgs::msg::VehicleGpsPosition>(
+			"fmu/vehicle_gps_position/out",
+#ifdef ROS_DEFAULT_API
+            10,
+#endif
+			[this](const px4_msgs::msg::VehicleGpsPosition::UniquePtr msg) {
 			std::cout << "\n\n\n\n\n\n\n\n\n\n";
 			std::cout << "RECEIVED VEHICLE GPS POSITION DATA"   << std::endl;
 			std::cout << "=================================="   << std::endl;
 			std::cout << "ts: "      << msg->timestamp    << std::endl;
-			std::cout << "lat: " << msg->latitude_deg  << std::endl;
-			std::cout << "lon: " << msg->longitude_deg << std::endl;
-			std::cout << "alt: " << msg->altitude_msl_m  << std::endl;
-			std::cout << "alt_ellipsoid: " << msg->altitude_ellipsoid_m << std::endl;
+			std::cout << "lat: " << msg->lat  << std::endl;
+			std::cout << "lon: " << msg->lon << std::endl;
+			std::cout << "alt: " << msg->alt  << std::endl;
+			std::cout << "alt_ellipsoid: " << msg->alt_ellipsoid << std::endl;
 			std::cout << "s_variance_m_s: " << msg->s_variance_m_s << std::endl;
 			std::cout << "c_variance_rad: " << msg->c_variance_rad << std::endl;
 			std::cout << "fix_type: " << msg->fix_type << std::endl;
@@ -84,7 +84,7 @@ public:
 	}
 
 private:
-	rclcpp::Subscription<px4_msgs::msg::SensorGps>::SharedPtr subscription_;
+	rclcpp::Subscription<px4_msgs::msg::VehicleGpsPosition>::SharedPtr subscription_;
 };
 
 int main(int argc, char *argv[])
