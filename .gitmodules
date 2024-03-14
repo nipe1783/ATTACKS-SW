@@ -4,10 +4,6 @@
 [submodule "ros_ws/src/px4_ros_com"]
     path = ros_ws/src/px4_ros_com
     url = https://github.com/PX4/px4_ros_com.git
-[submodule "PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic"]
-	path = PX4-Autopilot/Tools/simulation/gazebo-classic/sitl_gazebo-classic
-	url = https://github.com/nipe1783/sitl_gazebo-classic.git
-	branch = attacks
 [submodule "PX4-Autopilot"]
 	path = PX4-Autopilot
 	url = https://github.com/nipe1783/PX4-Autopilot.git
