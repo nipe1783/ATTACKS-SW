@@ -45,7 +45,7 @@
 
 - **Step 1:** Open a new Ubuntu terminal.
   ```bash
-  cd ~/ATTACKS-SW/PX4-Autopilot
+  cd ~/dev/ATTACKS-SW/PX4-Autopilot
   make px4_sitl_rtps gazebo_uas__field
   ```
 
@@ -53,7 +53,7 @@
 
 - **Step 1:** Open a new Ubuntu terminal.
   ```bash
-  cd ~/ATTACKS-SW/ros_ws
+  cd ~/dev/ATTACKS-SW/ros_ws
   colcon build
   source /opt/ros/foxy/setup.bash
   source install/local_setup.bash
@@ -64,7 +64,7 @@
 
 - **Step 1:** Open a new Ubuntu terminal.
   ```bash
-  cd ~/ATTACKS-SW/ros_ws
+  cd ~/dev/ATTACKS-SW/ros_ws
   colcon build
   source /opt/ros/foxy/setup.bash
   source install/local_setup.bash

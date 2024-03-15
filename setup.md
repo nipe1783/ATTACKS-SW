@@ -102,7 +102,7 @@
 
     ```bash
     cd ~/dev/ATTACKS-SW/PX4-Autopilot
-    make px4_sitl gazebo-classic_uas__field
+    make px4_sitl_rtps gazebo_uas__field
     ```
 
     - The Gazebo sim should now be running.
@@ -114,36 +114,3 @@
     param set MC_ROLLRATE_MAX 35
     param save
     ```
-
-- **3:** Setting up Micro-XRCE-DDS-Agent:
-
-    - Open a new Ubuntu terminal.
-    ```bash
-    cd ~/dev/ATTACKS-SW/Micro-XRCE-DDS-Agent
-    mkdir build
-    cd build
-    cmake ..
-    make
-    sudo make install
-    sudo ldconfig /usr/local/lib/
-    ```
-
-    ```bash
-    cd ~/dev/ATTACKS-SW/Micro-XRCE-DDS-Agent/build
-    MicroXRCEAgent udp4 -p 8888
-    ```
-    - The Micro-XRCE-DDS-Agent should now be running.
-
-- **4:** Setting up ROS workspace:
-
-    - Open a new Ubuntu terminal.
-
-    ```bash
-    cd ~/dev/ATTACKS-SW/ros_ws
-    colcon build
-    source /opt/ros/foxy/setup.bash
-    source install/local_setup.bash
-    ros2 launch uas_bringup uas_complete_mission.launch.py
-    ```
-
-    The UAS should start moving.
