@@ -2,9 +2,12 @@ import rclpy
 from rclpy.node import Node
 from rclpy.qos import QoSProfile
 from rclpy.qos import ReliabilityPolicy, DurabilityPolicy, LivelinessPolicy
-from px4_msgs.msg import VehicleAttitude,BatteryStatus,VehicleGlobalPosition, VehicleLocalPosition  # Make sure this matches the actual message type
+from px4_msgs.msg import VehicleAttitude,BatteryStatus,VehicleGlobalPosition, VehicleLocalPosition, VehicleStatus  # Make sure this matches the actual message type
 from std_msgs.msg import Float64MultiArray, String
 from rosgraph_msgs.msg import Clock
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
+from PyQt5.QtGui import QImage, QPixmap
 
 
 class VehicleAttitudeSubscriber(Node):
@@ -153,7 +156,7 @@ class RGV2TruthDataSubscriber(Node):
         )
 
         self.subscription = self.create_subscription(
-            Float64MultiArray,  # Change the message type to Float64MultiArray
+            Float64MultiArray,  
             '/rgv2_truth/pose/uas_i_frame', 
             self.listener_callback, 
             custom_qos_profile)
@@ -183,7 +186,7 @@ class RGV2CoarseLocalizationSubscriber(Node):
         )
 
         self.subscription = self.create_subscription(
-            Float64MultiArray,  # Change the message type to Float64MultiArray
+            Float64MultiArray,  
             '/rgv2/state', 
             self.listener_callback, 
             custom_qos_profile)
@@ -213,7 +216,7 @@ class ClockSubscriber(Node):
         )
 
         self.subscription = self.create_subscription(
-            Clock,  # Change the message type to Float64MultiArray
+            Clock,  
             '/clock', 
             self.listener_callback, 
             custom_qos_profile)
@@ -246,48 +249,108 @@ class MissionPhaseSubscriber(Node):
         self.get_logger().info(f'PHASE: {msg.data}\n')
         self.mission_phase = msg.data
 
+class ModeSubscriber(Node):
+    def __init__(self):
+        super().__init__('mode_subscriber')
 
 
+        custom_qos_profile = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            depth=10,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+            liveliness=LivelinessPolicy.AUTOMATIC
+        )
+
+        self.subscription = self.create_subscription(
+            VehicleStatus,  
+            '/fmu/out/vehicle_status', 
+            self.listener_callback, 
+            custom_qos_profile)
+        self.subscription  # prevent unused variable warning
+
+    def listener_callback(self, msg):
+        mode_names = [
+            'Manual', 'Altitude Control', 'Position Control',
+            'Auto Mission', 'Auto Loiter', 'Auto Return to Launch', 'Position Slow',
+            'Free5', 'Free4', 'Free3', 'Acro', 'Free2', 'Descend', 'Termination', 'Offboard'
+        ]
+        mode_index = msg.nav_state
+        if mode_index < len(mode_names):
+            mode_name = mode_names[mode_index]
+            self.get_logger().info(f'MODE: {mode_name}')
+            self.flight_mode = mode_name
+
+
+class ImageSubscriber(Node):
+    def __init__(self):
+        super().__init__('image_subscriber')
+        self.bridge = CvBridge()
+
+        custom_qos_profile = QoSProfile(
+            reliability=ReliabilityPolicy.RELIABLE,
+            depth=10,
+            durability=DurabilityPolicy.VOLATILE,
+            liveliness=LivelinessPolicy.AUTOMATIC
+        )
+
+        self.subscription = self.create_subscription(
+            Image,
+            '/camera/image_raw',
+            self.listener_callback,
+            custom_qos_profile)
+        self.subscription
+
+    def listener_callback(self, msg: Image):
+        cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+        self.image_data = cv_image
+        print('Received an image message')
+   
        
 
 
-def main(args=None):
-    rclpy.init(args=args)
+# def main(args=None):
+#     rclpy.init(args=args)
     
-    attitude_node = VehicleAttitudeSubscriber()
-    battery_node = BatteryStatusSubscriber()
-    vehicle_global_pos_node = VehicleGlobalPositionSubscriber()
-    vehicle_local_pos_node = VehicleLocalPositionSubscriber()
-    rgv1_truth_node = RGV1TruthDataSubscriber()
-    rgv2_truth_node = RGV2TruthDataSubscriber()
-    rgv2_coarse_node = RGV2CoarseLocalizationSubscriber()
-    clock_node = ClockSubscriber()
-    phase_node = MissionPhaseSubscriber()
+#     attitude_node = VehicleAttitudeSubscriber()
+#     battery_node = BatteryStatusSubscriber()
+#     vehicle_global_pos_node = VehicleGlobalPositionSubscriber()
+#     vehicle_local_pos_node = VehicleLocalPositionSubscriber()
+#     rgv1_truth_node = RGV1TruthDataSubscriber()
+#     rgv2_truth_node = RGV2TruthDataSubscriber()
+#     rgv2_coarse_node = RGV2CoarseLocalizationSubscriber()
+#     clock_node = ClockSubscriber()
+#     phase_node = MissionPhaseSubscriber()
+#     mode_node = ModeSubscriber()
+#     image_node = ImageSubscriber()
 
-    while True: 
-        try:
-            rclpy.spin_once(attitude_node)
-            rclpy.spin_once(battery_node)
-            rclpy.spin_once(vehicle_global_pos_node)
-            rclpy.spin_once(vehicle_local_pos_node)
-            rclpy.spin_once(rgv1_truth_node)
-            rclpy.spin_once(rgv2_truth_node)
-            rclpy.spin_once(rgv2_coarse_node)
-            rclpy.spin_once(clock_node)
-            rclpy.spin_once(phase_node)
-        except KeyboardInterrupt:
-            # Code to handle any other type of exception
-            print("Exiting UI ROS Test...")
-            attitude_node.destroy_node()
-            battery_node.destroy_node()
-            vehicle_global_pos_node.destroy_node()
-            vehicle_local_pos_node.destroy_node()
-            rgv1_truth_node.destroy_node()
-            rgv2_truth_node.destroy_node()
-            rgv2_coarse_node.destroy_node()
-            clock_node.destroy_node()
-            phase_node.destroy_node()
-            rclpy.shutdown()
+#     while True: 
+#         try:
+#             rclpy.spin_once(attitude_node)
+#             rclpy.spin_once(battery_node)
+#             rclpy.spin_once(vehicle_global_pos_node)
+#             rclpy.spin_once(vehicle_local_pos_node)
+#             rclpy.spin_once(rgv1_truth_node)
+#             rclpy.spin_once(rgv2_truth_node)
+#             rclpy.spin_once(rgv2_coarse_node)
+#             rclpy.spin_once(clock_node)
+#             rclpy.spin_once(phase_node)
+#             rclpy.spin_once(mode_node)
+#             rclpy.spin_once(image_node)
+#         except KeyboardInterrupt:
+            
+#             print("Exiting UI ROS Test...")
+#             attitude_node.destroy_node()
+#             battery_node.destroy_node()
+#             vehicle_global_pos_node.destroy_node()
+#             vehicle_local_pos_node.destroy_node()
+#             rgv1_truth_node.destroy_node()
+#             rgv2_truth_node.destroy_node()
+#             rgv2_coarse_node.destroy_node()
+#             clock_node.destroy_node()
+#             phase_node.destroy_node()
+#             mode_node.destroy_node()
+#             image_node.destroy_node()
+#             rclpy.shutdown()
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
