@@ -7,7 +7,7 @@ UASExplorationPhase::UASExplorationPhase(std::vector<UASState> waypoints) : wayp
     waypointIndex_ = 0;
 }
 
-UASState UASExplorationPhase::generateDesiredState(CVImg cvImg, UASState uasState)
+UASState UASExplorationPhase::generateDesiredState(const CVImg& cvImg, const UASState& uasState)
 {   
     if(distance(uasState, waypoints_[waypointIndex_]) < 0.5) {
         waypointIndex_++;
@@ -15,5 +15,6 @@ UASState UASExplorationPhase::generateDesiredState(CVImg cvImg, UASState uasStat
             waypointIndex_ = 0;
         }
     }
+
     return waypoints_[waypointIndex_];
 }

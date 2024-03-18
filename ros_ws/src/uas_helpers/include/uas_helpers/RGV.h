@@ -1,5 +1,7 @@
 #pragma once
 #include "RGVState.h"
+#include <string>
+#include <chrono>
 
 class RGV {
     public:
@@ -17,4 +19,6 @@ class RGV {
         int sHigh_;
         int vLow_;
         int vHigh_;
+        std::string currentPhase_;
+        std::chrono::time_point<std::chrono::system_clock> phaseStartTime_;
 };      

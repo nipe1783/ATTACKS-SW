@@ -6,13 +6,19 @@ if(NOT CMAKE_C_STANDARD)
     set(CMAKE_C_STANDARD 99)
 endif()
 
-# Default to C++14
+# Default to C++17
 if(NOT CMAKE_CXX_STANDARD)
-    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD 17)
 endif()
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    set(FILESYSTEM_LIBRARY "stdc++fs")
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9.0)
+    set(FILESYSTEM_LIBRARY "c++fs")
 endif()
 
 # find dependencies
@@ -31,6 +37,7 @@ find_package(uas REQUIRED)
 find_package(uas_phases REQUIRED)
 find_package(uas_computer_vision REQUIRED)
 find_package(uas_helpers REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 #################
 # Setup targets #
@@ -54,6 +61,7 @@ ament_target_dependencies(
 target_link_libraries(completeMissionScheduler
   ${cv_bridge_LIBRARIES}
   ${OpenCV_LIBRARIES}
+  yaml-cpp
 )
 install(TARGETS completeMissionScheduler DESTINATION lib/${PROJECT_NAME})
 
@@ -94,6 +102,7 @@ ament_target_dependencies(
 target_link_libraries(cameraCalibrateMissionScheduler
   ${cv_bridge_LIBRARIES}
   ${OpenCV_LIBRARIES}
+  yaml-cpp
 )
 install(TARGETS cameraCalibrateMissionScheduler DESTINATION lib/${PROJECT_NAME})
 

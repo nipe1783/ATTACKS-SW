@@ -12,7 +12,7 @@ class VaryingLightBlobDetector : public BlobDetector
         // methods:
         VaryingLightBlobDetector() = default;
         ~VaryingLightBlobDetector() = default;
-        CVImg detect(Mat& frame) override;
+        CVImg detect(const Mat& frame) override;
         std::vector<Blob> detect(Mat& frame, Mat& dst) override;
         void calibrate(Mat& frame) override;
         void gammaCorrection(Mat& frame, Mat& dst);

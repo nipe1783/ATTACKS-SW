@@ -42,6 +42,7 @@
     pytest-rerunfailures \
     pytest
     ```
+    
     ```bash
     sudo apt install --no-install-recommends -y \
     libasio-dev \
@@ -72,10 +73,13 @@
     sudo make install
     ```
     ```bash
+    sudo apt install libyaml-cpp-dev
     sudo apt install libimage-exiftool-perl
     sudo apt install aptitude
     sudo apt install ros-dev-tools
     sudo apt install ros-foxy-desktop
+    sudo apt-get update
+    sudo apt-get install ros-foxy-gazebo-ros-pkgs
     ```
 
     - Enter `nano ~/.bashrc` and add `source /opt/ros/foxy/setup.bash` to the bottom.
@@ -105,10 +109,9 @@
     - Go to the Gazebo terminal.
 
     ```bash
-    gimbal test pitch -90
-    ```
-    ```bash
     param set MPC_XY_VEL_MAX 3
+    param set MC_PITCHRATE_MAX 35
+    param set MC_ROLLRATE_MAX 35
     param save
     ```
 

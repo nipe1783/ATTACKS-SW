@@ -9,5 +9,5 @@ class UASExplorationPhase : public UASPhase
         unsigned int waypointIndex_;
 
         //methods:
-        UASState generateDesiredState(CVImg cvImg, UASState uasState) override;
+        UASState generateDesiredState(const CVImg& cvImg, const UASState& uasState) override;
 };

@@ -5,11 +5,21 @@
 #include <cv_bridge/cv_bridge.h>
 #include <limits>
 
-void Scheduler::imageConvert(const sensor_msgs::msg::Image::SharedPtr sImg)
+void Scheduler::imageConvertPS(const sensor_msgs::msg::Image::SharedPtr sImg)
 {
     try {
         psFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
         psDisplayFrame_ = psFrame_.clone();
+    } catch (cv_bridge::Exception& e) {
+        RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
+    }
+}
+
+void Scheduler::imageConvertSS(const sensor_msgs::msg::Image::SharedPtr sImg)
+{
+    try {
+        ssFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
+        ssDisplayFrame_ = ssFrame_.clone();
     } catch (cv_bridge::Exception& e) {
         RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
     }
@@ -39,7 +49,7 @@ void Scheduler::publishControlMode()
         msg.attitude = false;
         msg.body_rate = false;
     }
-    else if(currentPhase_ == "trailing"){
+    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
         msg.position = false;
         msg.velocity = true;
         msg.acceleration = false;
@@ -64,7 +74,7 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
         msg.position = {s.ix_, s.iy_, s.iz_};
         msg.yaw = -3.14;
     }
-    else if(currentPhase_ == "trailing"){
+    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
         msg.velocity = {s.bxV_, s.byV_, s.bzV_};
         msg.position[0] = std::numeric_limits<float>::quiet_NaN();
         msg.position[1] = std::numeric_limits<float>::quiet_NaN();
@@ -111,7 +121,12 @@ void Scheduler::disarm()
 
 void Scheduler::callbackPS(const sensor_msgs::msg::Image::SharedPtr psMsg) {
     psMsgReceived_ = true;
-    imageConvert(psMsg);
+    imageConvertPS(psMsg);
+}
+
+void Scheduler::callbackSS(const sensor_msgs::msg::Image::SharedPtr ssMsg) {
+    ssMsgReceived_ = true;
+    imageConvertSS(ssMsg);
 }
 
 void Scheduler::callbackState(const px4_msgs::msg::VehicleLocalPosition::UniquePtr stateMsg) {
