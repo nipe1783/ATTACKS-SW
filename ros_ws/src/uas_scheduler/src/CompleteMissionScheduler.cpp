@@ -113,17 +113,12 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
         }
     }
 
-<<<<<<< HEAD
     missionPhasePublisher_ = this->create_publisher<std_msgs::msg::String>(
         "/mission/phase", qos
     );
 
-    rgv1_ = rgv1;
-    rgv2_ = rgv2;
 
     // Setting blob detector parameters:
-=======
->>>>>>> 77d56a6ae686309a61104b8169823a1d680d0928
     rgv1BlobDetector_.hLow_ = rgv1_.hLow_;
     rgv1BlobDetector_.hHigh_ = rgv1_.hHigh_;
     rgv1BlobDetector_.sLow_ = rgv1_.sLow_;

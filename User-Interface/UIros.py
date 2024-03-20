@@ -26,7 +26,7 @@ class VehicleAttitudeSubscriber(Node):
             '/fmu/out/vehicle_attitude', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
 
     def listener_callback(self, msg):
         self.get_logger().info(f'{msg.q}')
@@ -50,7 +50,7 @@ class BatteryStatusSubscriber(Node):
             '/fmu/out/battery_status', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
 
     def listener_callback(self, msg):
         # self.get_logger().info(f'Voltage: {msg.voltage_v} V\n')
@@ -74,7 +74,7 @@ class VehicleGlobalPositionSubscriber(Node):
             '/fmu/out/vehicle_global_position', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
 
     def listener_callback(self, msg):
         self.get_logger().info(f'Lattitude: {msg.lat}\n')
@@ -98,7 +98,7 @@ class VehicleLocalPositionSubscriber(Node):
             '/fmu/out/vehicle_local_position', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
 
     def listener_callback(self, msg):
         self.get_logger().info(f'X: {msg.x}\n')
@@ -127,7 +127,7 @@ class RGV1TruthDataSubscriber(Node):
             '/rgv1_truth/pose/uas_i_frame', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
 
     def listener_callback(self, msg):
        if len(msg.data) >= 3:
@@ -140,6 +140,7 @@ class RGV1TruthDataSubscriber(Node):
             self.rgv_y = y
             self.rgv_z = z
             self.rgv_type = "1 true"
+            self.msg_count = 0
 
 
 class RGV2TruthDataSubscriber(Node):
@@ -160,7 +161,7 @@ class RGV2TruthDataSubscriber(Node):
             '/rgv2_truth/pose/uas_i_frame', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
     def listener_callback(self, msg):
        if len(msg.data) >= 3:
             x, y, z = msg.data[:3]
@@ -190,18 +191,55 @@ class RGV2CoarseLocalizationSubscriber(Node):
             '/rgv2/state', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
+
+        self.rgv_type = "2 estimate"
+        self.rgv_x = self.rgv_y = self.rgv_z = 0
     def listener_callback(self, msg):
        if len(msg.data) >= 3:
             x, y, z = msg.data[:3]
-            print("LOCALIZING")
-            self.get_logger().info(f'X: {x}\n')
-            self.get_logger().info(f'Y: {y}\n')
-            self.get_logger().info(f'Z: {z}\n')
+            # print("LOCALIZING")
+            # self.get_logger().info(f'X: {x}\n')
+            # self.get_logger().info(f'Y: {y}\n')
+            # self.get_logger().info(f'Z: {z}\n')
             self.rgv_x = x
             self.rgv_y = y
             self.rgv_z = z
-            self.rgv_type = "2 estimate"
+            
+
+class RGV1CoarseLocalizationSubscriber(Node):
+    def __init__(self):
+        super().__init__('rgv1_coarse_localization_subscriber')
+
+
+        custom_qos_profile = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            depth=10,
+            durability=DurabilityPolicy.VOLATILE,
+            liveliness=LivelinessPolicy.AUTOMATIC
+        )
+
+        self.subscription = self.create_subscription(
+            Float64MultiArray,  
+            '/rgv1/state', 
+            self.listener_callback, 
+            custom_qos_profile)
+        self.subscription 
+
+        self.rgv_type = "1 estimate"
+        self.rgv_x = self.rgv_y = self.rgv_z = 0
+
+    def listener_callback(self, msg):
+       if len(msg.data) >= 3:
+            x, y, z = msg.data[:3]
+            # print("LOCALIZING")
+            # self.get_logger().info(f'X: {x}\n')
+            # self.get_logger().info(f'Y: {y}\n')
+            # self.get_logger().info(f'Z: {z}\n')
+            self.rgv_x = x
+            self.rgv_y = y
+            self.rgv_z = z
+            
 
 class ClockSubscriber(Node):
     def __init__(self):
@@ -220,7 +258,7 @@ class ClockSubscriber(Node):
             '/clock', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
     def listener_callback(self, msg):
         self.get_logger().info(f'clock: {msg.clock.sec}\n')
         self.time_sec = msg.clock.sec
@@ -243,7 +281,7 @@ class MissionPhaseSubscriber(Node):
             '/mission/phase', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
 
     def listener_callback(self, msg):
         self.get_logger().info(f'PHASE: {msg.data}\n')
@@ -266,7 +304,7 @@ class ModeSubscriber(Node):
             '/fmu/out/vehicle_status', 
             self.listener_callback, 
             custom_qos_profile)
-        self.subscription  # prevent unused variable warning
+        self.subscription  
 
     def listener_callback(self, msg):
         mode_names = [
@@ -318,24 +356,28 @@ class ImageSubscriber(Node):
 #     rgv1_truth_node = RGV1TruthDataSubscriber()
 #     rgv2_truth_node = RGV2TruthDataSubscriber()
 #     rgv2_coarse_node = RGV2CoarseLocalizationSubscriber()
+#     rgv1_coarse_node = RGV1CoarseLocalizationSubscriber()
 #     clock_node = ClockSubscriber()
 #     phase_node = MissionPhaseSubscriber()
 #     mode_node = ModeSubscriber()
 #     image_node = ImageSubscriber()
 
-#     while True: 
+#     while rclpy.ok(): 
 #         try:
-#             rclpy.spin_once(attitude_node)
-#             rclpy.spin_once(battery_node)
-#             rclpy.spin_once(vehicle_global_pos_node)
-#             rclpy.spin_once(vehicle_local_pos_node)
-#             rclpy.spin_once(rgv1_truth_node)
-#             rclpy.spin_once(rgv2_truth_node)
+#             # rclpy.spin_once(attitude_node)
+#             # rclpy.spin_once(battery_node)
+#             # rclpy.spin_once(vehicle_global_pos_node)
+#             # rclpy.spin_once(vehicle_local_pos_node)
+#             # rclpy.spin_once(rgv1_truth_node)
+#             # rclpy.spin_once(rgv2_truth_node)
+#             # rclpy.spin_once(rgv2_coarse_node)
+#             # rclpy.spin_once(clock_node)
+#             # rclpy.spin_once(phase_node)
+#             # rclpy.spin_once(mode_node)
+#             # rclpy.spin_once(image_node)
+#             print("trying")
 #             rclpy.spin_once(rgv2_coarse_node)
-#             rclpy.spin_once(clock_node)
-#             rclpy.spin_once(phase_node)
-#             rclpy.spin_once(mode_node)
-#             rclpy.spin_once(image_node)
+#             print(rgv2_coarse_node.rgv_x)
 #         except KeyboardInterrupt:
             
 #             print("Exiting UI ROS Test...")

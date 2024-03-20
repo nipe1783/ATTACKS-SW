@@ -1,7 +1,7 @@
 import sys
 import matplotlib.pyplot as plt
 from PyQt5.QtCore import QUrl, QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QPushButton, QButtonGroup
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QPushButton, QButtonGroup, QSizePolicy, QSpacerItem
 from PyQt5.QtMultimedia import QCamera, QCameraInfo #, QCameraViewfinder
 from PyQt5.QtGui import QImage, QPixmap
 import cv2
@@ -11,7 +11,7 @@ from matplotlib.lines import Line2D
 import socket
 import threading
 import time, math
-from UIros import BatteryStatusSubscriber, VehicleAttitudeSubscriber, VehicleLocalPositionSubscriber, RGV2TruthDataSubscriber, RGV1TruthDataSubscriber, RGV2CoarseLocalizationSubscriber, ClockSubscriber, MissionPhaseSubscriber, ModeSubscriber, ImageSubscriber
+from UIros import BatteryStatusSubscriber, VehicleAttitudeSubscriber, VehicleLocalPositionSubscriber, RGV2TruthDataSubscriber, RGV1TruthDataSubscriber, RGV2CoarseLocalizationSubscriber, ClockSubscriber, MissionPhaseSubscriber, ModeSubscriber, ImageSubscriber, RGV1CoarseLocalizationSubscriber
 from px4_msgs.msg import VehicleAttitude,BatteryStatus,VehicleGlobalPosition, VehicleLocalPosition, VehicleStatus  # Make sure this matches the actual message type
 from std_msgs.msg import Float64MultiArray, String
 from rosgraph_msgs.msg import Clock
@@ -22,6 +22,7 @@ from rclpy.qos import QoSProfile
 from rclpy.qos import ReliabilityPolicy, DurabilityPolicy, LivelinessPolicy
 import time
 import math
+import ros2topic
 
 truth_values = []
 estimate_values = []
@@ -56,8 +57,8 @@ class PlotCanvas(FigureCanvas):
         self.axes.set_xlabel('East [m]')
         self.axes.set_ylabel('North [m]')
         # self.axes.tick_params(colors='white')
-        self.axes.set_xlim(-15, 15)
-        self.axes.set_ylim(-15, 15)
+        self.axes.set_xlim(-17, 15)
+        self.axes.set_ylim(-17, 15)
 
         # Define start and end colors for "1 true" (e.g., light to dark red)
         start_color_red = (1, 0.5, 0.5)
@@ -83,6 +84,14 @@ class PlotCanvas(FigureCanvas):
             color = interpolate_color(start_color_gray, end_color_gray, i / (num_points - 1) if num_points > 1 else 0)
             self.axes.plot(point[0], point[1], marker='.', color=color, linestyle='None')
 
+         # Define start and end colors for "1 estimate" (e.g., light to dark gray)
+        start_color_yellow = (1, 1, 0)
+        end_color_yellow = (0.8, 0.8, 0)
+        num_points = len(dot_history["1 estimate"])
+        for i, point in enumerate(dot_history["1 estimate"]):
+            color = interpolate_color(start_color_yellow, end_color_yellow, i / (num_points - 1) if num_points > 1 else 0)
+            self.axes.plot(point[0], point[1], marker='.', color=color, linestyle='None')
+
          # Define start and end colors for "uas" (e.g., light to dark blue)
         start_color_blue = (0.8, 0.8, 1)  # light blue
         end_color_blue = (0, 0, 0.6)      # dark blue
@@ -95,6 +104,7 @@ class PlotCanvas(FigureCanvas):
             Line2D([0], [0], marker='o', label='RGV1 Truth', markersize=7, markerfacecolor=end_color_red),
             Line2D([0], [0], marker='o', label='RGV2 Truth', markersize=7, markerfacecolor=end_color_green),
             Line2D([0], [0], marker='.', label='RGV2 Estimate', markersize=10, markerfacecolor=end_color_gray),
+            Line2D([0], [0], marker='.', label='RGV1 Estimate', markersize=10, markerfacecolor=end_color_yellow),
             Line2D([0], [0], marker='x', label='UAS', markersize=7, markerfacecolor=end_color_blue)
         ]
         self.axes.legend(handles=legend_elements)
@@ -120,8 +130,7 @@ class App(QMainWindow):
             "2 estimate": [],
             "uas": [],
         }
-        #self.plotCanvas = PlotCanvas(self, width=5, height=4)
-        #self.points = []
+        
 
     def initUI(self):
         self.setWindowTitle(self.title)
@@ -134,17 +143,19 @@ class App(QMainWindow):
         topLayout = QHBoxLayout()
 
         # Plot area
+
+        
         self.plotCanvas = PlotCanvas(self, width=5, height=4)
         topLayout.addWidget(self.plotCanvas)
-
-        # Camera previews
         
-
-        cameraLayout = QVBoxLayout()
+        
+       
         self.camera2Label = QLabel('Camera 2 Preview')
         self.camera2Label.setStyleSheet("background-color: gray")
+        self.camera2Label.setFixedSize(800, 400)
         topLayout.addWidget(self.camera2Label)
-        topLayout.addLayout(cameraLayout)
+       
+       
 
         mainLayout.addLayout(topLayout)
 
@@ -155,9 +166,14 @@ class App(QMainWindow):
         self.uasStateLabel.setStyleSheet("border: 1px solid black; padding: 5px;")
         mainLayout.addWidget(self.uasStateLabel)
 
-        self.rgvEstimateLabel = QLabel('Current RGV Estimate: x=?, y=?, z=?')
-        self.rgvEstimateLabel.setStyleSheet("border: 1px solid black; padding: 5px;")
-        mainLayout.addWidget(self.rgvEstimateLabel)
+        self.rgv1EstimateLabel = QLabel('Current RGV1 Estimate: x=?, y=?, z=?')
+        self.rgv1EstimateLabel.setStyleSheet("border: 1px solid black; padding: 5px;")
+        mainLayout.addWidget(self.rgv1EstimateLabel)
+
+        self.rgv2EstimateLabel = QLabel('Current RGV2 Estimate: x=?, y=?, z=?')
+        self.rgv2EstimateLabel.setStyleSheet("border: 1px solid black; padding: 5px;")
+        mainLayout.addWidget(self.rgv2EstimateLabel)
+
 
         self.missionPhaseLabel = QLabel('Mission Phase: Unknown')
         self.missionPhaseLabel.setStyleSheet("border: 1px solid black; padding: 5px;")
@@ -168,15 +184,11 @@ class App(QMainWindow):
         mainLayout.addWidget(self.controlModeLabel)
 
 
-        #Battery, Storage, Flight Time
         self.batteryStorageLabel = QLabel('Battery Level: ---%')
         self.batteryStorageLabel.setStyleSheet("border: 1px solid black; padding: 5px;")
         mainLayout.addWidget(self.batteryStorageLabel)
 
-        # self.memoryStorageLabel = QLabel('Storage Level: -- GB / -- GB ~ -- %')
-        # self.memoryStorageLabel.setStyleSheet("border: 1px solid black; padding: 5px;")
-        # mainLayout.addWidget(self.memoryStorageLabel)
-
+      
         
         self.flightTime = QLabel('Fight Time: MM:SS')
         self.flightTime.setStyleSheet("border: 1px solid black; padding: 5px;")
@@ -192,8 +204,7 @@ class App(QMainWindow):
         self.show()
 
     def updateUASState(self, x, y, z, u, v, q, phi, theta, psi):
-        self.uasStateLabel.setText(f'UAS State: x={x}, y={y}, z={z}, u={u}, v={v}, q={q}, φ={phi}, θ={theta}, ψ={psi}')
-        #self.plotCanvas.plot_uas_point(x,y)  
+        self.uasStateLabel.setText(f'UAS State: x={x}, y={y}, z={z}, u={u}, v={v}, q={q}, φ={phi}, θ={theta}, ψ={psi}')  
         self.dot_history["uas"].append((x,y))
 
         if(len(self.dot_history["uas"]) > 10):
@@ -202,14 +213,19 @@ class App(QMainWindow):
         self.plotCanvas.plot_points(self.dot_history)
 
     def updateRGVEstimate(self, x, y, z, type):
-        self.rgvEstimateLabel.setText(f'Current RGV Estimate: x={x}, y={y}, z={z}')
-        #self.points.append((x, y))  # Add new point to the list
-        self.dot_history[type].append((x, y))
+        if type == "1 estimate":
+            self.rgv1EstimateLabel.setText(f'Current RGV1 Estimate: x={x}, y={y}, z={z}')
+        
+        if type == "2 estimate":
+            self.rgv2EstimateLabel.setText(f'Current RGV2 Estimate: x={x}, y={y}, z={z}')
 
-        if(len(self.dot_history[type]) > 10):
-            self.dot_history[type].pop(0)
+        if x != 0 and y != 0:        
+            self.dot_history[type].append((x, y))
 
-        self.plotCanvas.plot_points(self.dot_history) 
+            if(len(self.dot_history[type]) > 10):
+                self.dot_history[type].pop(0)
+
+            self.plotCanvas.plot_points(self.dot_history) 
          
 
     def updateMissionPhase(self, phase):
@@ -221,8 +237,7 @@ class App(QMainWindow):
     def updateBatteryLevel(self, batteryLevel):
         self.batteryStorageLabel.setText(f'Battery Level: {batteryLevel} %')
 
-    # def updateMemoryLevel(self, gb_used, percent_used):
-    #     self.memoryStorageLabel.setText(f'Memory Usage: {gb_used} GB / -- GB ~ {percent_used} %')
+    
 
     def updateFlightTime(self, flightMinutes, flightSeconds):
         self.flightTime.setText(f'Flight Time: {flightMinutes}:{flightSeconds}')
@@ -276,22 +291,22 @@ def update_state(uas_pos_node ,attitude_node, ex):
     ex.updateUASState(uas_pos_node.x_pos, uas_pos_node.y_pos, uas_pos_node.z_pos, E_dot, N_dot, U_dot, roll, pitch, yaw)
     #ex.updateUASState(E, N, U, E_dot, N_dot, U_dot, roll, pitch, yaw)
 
-    QTimer.singleShot(1000, lambda: update_state(uas_pos_node, attitude_node, ex))
+    QTimer.singleShot(500, lambda: update_state(uas_pos_node, attitude_node, ex))
 
 def update_battery_level(battery_node, ex):
     rclpy.spin_once(battery_node)
     ex.updateBatteryLevel(battery_node.battery_remaining)
-    QTimer.singleShot(1000, lambda: update_battery_level(battery_node, ex))  # Schedule the next update after 2 seconds
+    QTimer.singleShot(500, lambda: update_battery_level(battery_node, ex))  # Schedule the next update after 2 seconds
 
 def update_rgv_estimate(rgv_node, phase_node, ex):
     rclpy.spin_once(phase_node)
     phase = phase_node.mission_phase
 
-    if phase == 'coarse' or phase == 'fine' or phase == 'joint':
-        rclpy.spin_once(rgv_node)
-        ex.updateRGVEstimate(rgv_node.rgv_x, rgv_node.rgv_y, rgv_node.rgv_z, rgv_node.rgv_type)
+    # if phase == 'coarse' or phase == 'fine' or phase == 'jointTrailing':
+    rclpy.spin_once(rgv_node, timeout_sec=0.1)
+    ex.updateRGVEstimate(rgv_node.rgv_x, rgv_node.rgv_y, rgv_node.rgv_z, rgv_node.rgv_type)
 
-    QTimer.singleShot(1000, lambda: update_rgv_estimate(rgv_node, phase_node, ex))
+    QTimer.singleShot(500, lambda: update_rgv_estimate(rgv_node, phase_node, ex))
 
 def update_flight_time(clock_node, ex):
     rclpy.spin_once(clock_node)
@@ -299,24 +314,23 @@ def update_flight_time(clock_node, ex):
     minutes, seconds = divmod(clock_node.time_sec, 60)
     ex.updateFlightTime(minutes, seconds)
 
-    QTimer.singleShot(1000, lambda: update_flight_time(clock_node, ex))
+    QTimer.singleShot(500, lambda: update_flight_time(clock_node, ex))
 
 def update_mission_phase(phase_node,ex):
     rclpy.spin_once(phase_node)
     ex.updateMissionPhase(phase_node.mission_phase)
-    QTimer.singleShot(1000, lambda: update_mission_phase(phase_node, ex))
+    QTimer.singleShot(500, lambda: update_mission_phase(phase_node, ex))
 
 def update_control_mode(control_node, ex):
     rclpy.spin_once(control_node)
     ex.updateControlMode(control_node.flight_mode)
-    QTimer.singleShot(1000, lambda: update_control_mode(control_node, ex))
+    QTimer.singleShot(500, lambda: update_control_mode(control_node, ex))
 
 def update_image(image_node, ex):
     rclpy.spin_once(image_node)
     ex.updateCameraLabel(image_node.image_data)
     QTimer.singleShot(33.33, lambda: update_image(image_node, ex))
     
-
 
 
 def main(args=None):
@@ -331,7 +345,10 @@ def main(args=None):
     rgv1_state_node = RGV1TruthDataSubscriber()
     rgv2_state_node = RGV2TruthDataSubscriber()
     rgv2_estimate_node = RGV2CoarseLocalizationSubscriber()
-    #rgv1 estimate node
+    rgv1_estimate_node = RGV1CoarseLocalizationSubscriber()
+
+
+ 
     clock_node = ClockSubscriber()
     phase_node = MissionPhaseSubscriber()
     control_node = ModeSubscriber()
@@ -342,19 +359,22 @@ def main(args=None):
     update_rgv_estimate(rgv1_state_node, phase_node, ex)
     update_rgv_estimate(rgv2_state_node, phase_node, ex)
 
-    #need to differentiate which rgv is getting published 1,2, or both or UI will not load/update properly
+    
     update_rgv_estimate(rgv2_estimate_node, phase_node, ex)
-    #rgv1 update estimate
+
+    update_rgv_estimate(rgv1_estimate_node, phase_node, ex)
+    
 
     update_flight_time(clock_node, ex)
     update_mission_phase(phase_node, ex)
     update_control_mode(control_node, ex)
     update_image(image_node,ex)
 
-    
-
+   
 
     sys.exit(app.exec_())
+
+    
 
 if __name__ == '__main__':
     main()
