@@ -31,6 +31,14 @@
   ```
 
 
+### Starting hitl gazebo simulation
+**Step 1:** Open a new Ubuntu terminal.
+  ```bash
+  cd ~/hil/ATTACKS-SW/PX4-Autopilot
+  source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+  gazebo Tools/sitl_gazebo/worlds/hitl_mission.world
+  ```
+
 
 
 
