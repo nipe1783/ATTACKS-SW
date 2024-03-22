@@ -23,3 +23,4 @@ hitl_data/*
 !ComputerVision/videos/test.txt
 !ComputerVision/images/test.txt
 !ComputerVision/build/test.txt
+!hitl_data/test.txt
