@@ -15,6 +15,8 @@
 #include <px4_msgs/msg/offboard_control_mode.hpp>
 #include <px4_msgs/msg/trajectory_setpoint.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
+#include "uas_helpers/RGV.h"
+#include "std_msgs/msg/float64_multi_array.hpp"
 
 class Scheduler : public rclcpp::Node
 {   
@@ -34,6 +36,8 @@ class Scheduler : public rclcpp::Node
         UASState goalState_;
         BasicBlobDetector blobDetector_;
         CVImg cvImg_;
+        RGV truth1;
+        RGV truth2;
 
         rclcpp::Subscription<px4_msgs::msg::VehicleAttitude>::SharedPtr attitudeSubscription_;
         rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr stateSubscription_;
@@ -124,5 +128,8 @@ class Scheduler : public rclcpp::Node
          */
         void callbackAttitude(const px4_msgs::msg::VehicleAttitude::UniquePtr msg);
 
+        void callbackRGV1TruthState(const std_msgs::msg::Float64MultiArray::UniquePtr rgv1TruthMSG);
+
+        void callbackRGV2TruthState(const std_msgs::msg::Float64MultiArray::UniquePtr rgv2TruthMSG);
         
 };

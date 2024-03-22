@@ -4,6 +4,8 @@
 #include "uas_helpers/Camera.h"
 #include <cv_bridge/cv_bridge.h>
 #include <limits>
+#include <rclcpp/rclcpp.hpp>
+#include "std_msgs/msg/float64_multi_array.hpp"
 
 void Scheduler::imageConvertPS(const sensor_msgs::msg::Image::SharedPtr sImg)
 {
@@ -136,4 +138,16 @@ void Scheduler::callbackState(const px4_msgs::msg::VehicleLocalPosition::UniqueP
 
 void Scheduler::callbackAttitude(const px4_msgs::msg::VehicleAttitude::UniquePtr attMsg) {
     uas_.state_.updateAttitude(attMsg->q[0],attMsg->q[1],attMsg->q[2],attMsg->q[3]);
+}
+
+void Scheduler::callbackRGV1TruthState(const std_msgs::msg::Float64MultiArray::UniquePtr rgv1TruthMSG) {
+    truth1.state_.ix_ = rgv1TruthMSG->data[0];
+    truth1.state_.iy_ = rgv1TruthMSG->data[1];
+    truth1.state_.iz_ = rgv1TruthMSG->data[2];
+}
+
+void Scheduler::callbackRGV2TruthState(const std_msgs::msg::Float64MultiArray::UniquePtr rgv2TruthMSG) {
+    truth2.state_.ix_ = rgv2TruthMSG->data[0];
+    truth2.state_.iy_ = rgv2TruthMSG->data[1];
+    truth2.state_.iz_ = rgv2TruthMSG->data[2];
 }

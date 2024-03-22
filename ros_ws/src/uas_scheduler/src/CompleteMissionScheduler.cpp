@@ -10,6 +10,7 @@
 #include <px4_msgs/msg/vehicle_local_position.hpp>
 #include <px4_msgs/msg/vehicle_attitude.hpp>
 #include <iostream>
+#include <fstream>
 #include <sensor_msgs/msg/image.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <opencv2/opencv.hpp>
@@ -18,9 +19,16 @@
 #include <yaml-cpp/yaml.h>
 #include <filesystem>
 
-CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Scheduler("uas_complete_mission") {
+CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath, std::string csvPath) : Scheduler("uas_complete_mission") {
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
+   
+    myFile.open(csvPath);
+    if (!myFile.is_open()){
+        std::cout << "Unable to open CSV file" << std::endl;
+    }
+    myFile << "Timer Callback Calls (ns), UAS X, UAS Y, UAS Z, UAS Phi, UAS Theta, UAS Psi, RGV1 CV X, RGV1 CV Y, RGV1 CV Width, RGV1 CV Height, RGV2 CV X, RGV2 CV Y, RGV2 CV Width, RGV2 CV Height,";
+    myFile << "RGV1 X (Truth), RGV1 Y (Truth), RGV1 Z (Truth), RGV2 X (Truth), RGV2 Y (Truth), RGV2 Z (Truth) \n";
 
     psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
         "/camera/image_raw", qos, std::bind(&CompleteMissionScheduler::callbackPS, this, std::placeholders::_1)
@@ -32,6 +40,14 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Sch
 
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
         "/fmu/out/vehicle_local_position", qos, std::bind(&CompleteMissionScheduler::callbackState, this, std::placeholders::_1)
+    );
+
+    rgv1TruthSubscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
+        "/rgv1_truth/pose/uas_i_frame", qos, std::bind(&CompleteMissionScheduler::callbackRGV1TruthState, this, std::placeholders::_1)
+    );
+
+    rgv2TruthSubscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
+        "/rgv2_truth/pose/uas_i_frame", qos, std::bind(&CompleteMissionScheduler::callbackRGV2TruthState, this, std::placeholders::_1)
     );
 
     attitudeSubscription_ = this->create_subscription<px4_msgs::msg::VehicleAttitude>(
@@ -172,6 +188,13 @@ bool CompleteMissionScheduler::isRGVCoarseLocalized(RGV rgv) {
     return false;
 }
 
+bool CompleteMissionScheduler::isRGVJointLocalized(RGV rgv) {
+    if(std::chrono::system_clock::now() - rgv.phaseStartTime_ > std::chrono::seconds(10)) {
+        return true;
+    }
+    return false;
+}
+
 bool CompleteMissionScheduler::areRGVsInFrame() {
     if (rgv1CVData_.blobs.size() > 0 && rgv2CVData_.blobs.size() > 0) {
         return true;
@@ -200,6 +223,10 @@ void CompleteMissionScheduler::timerCallback(){
         publishVehicleCommand(px4_msgs::msg::VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
         arm();
     }
+    // myFile << std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()) << "\n";
+    myFile << (std::chrono::system_clock::now()).time_since_epoch().count() << ","; // System clock for latency calculations
+    myFile << uas_.state_.ix_ << "," << uas_.state_.iy_ << "," << uas_.state_.iz_ << ","; // UAS Inertial Position (X, Y, Z)
+    myFile << uas_.state_.iphi_ << "," << uas_.state_.itheta_ << "," << uas_.state_.ipsi_ << ","; // UAS Inertial Attitude (Phi, Theta, Psi)
 
     rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
@@ -216,7 +243,22 @@ void CompleteMissionScheduler::timerCallback(){
     //     cv::Rect bounding_box = cv::Rect(rgv2CVData_.blobs[0].x, rgv2CVData_.blobs[0].y, rgv2CVData_.blobs[0].width, rgv2CVData_.blobs[0].height);
     //     cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(0, 255, 0), 2);
     // }
-    std::cout << std::endl;
+
+    if(rgv1CVData_.blobs.size() > 0) {
+        myFile << rgv1CVData_.blobs[0].x  << "," << rgv1CVData_.blobs[0].y << "," << rgv1CVData_.blobs[0].width << "," << rgv1CVData_.blobs[0].height << ",";
+    } else {
+        myFile << "-1, -1, -1, -1,";
+    }
+    if(rgv2CVData_.blobs.size() > 0){
+        myFile << rgv2CVData_.blobs[0].x  << "," << rgv2CVData_.blobs[0].y << "," << rgv2CVData_.blobs[0].width << "," << rgv2CVData_.blobs[0].height << ",";
+    } else {
+        myFile << "-1, -1, -1, -1,";
+    }
+
+    myFile << truth1.state_.ix_ << "," << truth1.state_.iy_ << "," << truth1.state_.iz_ << ","; // RGV1 Truth Inertial Position
+    myFile << truth2.state_.ix_ << "," << truth2.state_.iy_ << "," << truth2.state_.iz_ << ","; // RGV2 Truth Inertial Position
+
+    myFile << "\n";
 
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
         rgv1_.currentPhase_ = "trailing";
@@ -312,6 +354,9 @@ void CompleteMissionScheduler::timerCallback(){
         rgv2_.state_ = jointTrailingPhase_->localize(camera1_, rgv2CVData_, uas_, rgv2_);
         publishRGV2State();
         goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
+        if (isRGVJointLocalized(rgv1_) && isRGVJointLocalized(rgv2_)) {
+            exit(0);
+        }
     }
     else if (rgv1_.currentPhase_ == "jointTrailing" && currentPhase_ == "jointTrailing" && rgv1CVData_.blobs.size() == 0){
         rgv1_.currentPhase_ = "jointExploration";
@@ -366,11 +411,12 @@ int main(int argc, char *argv[])
 {
     std::filesystem::path currentPath = std::filesystem::current_path();
     std::filesystem::path configPath = currentPath  / "configurations" / "CompleteMissionSchedulerConfig.yaml";
+    std::filesystem::path csvPath = "../hitl_data/data.csv";
     std::cout<<configPath<<std::endl;
     std::cout << "Starting UAS complete mission node..." << std::endl;
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
     rclcpp::init(argc, argv);
-	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(configPath));
+	rclcpp::spin(std::make_shared<CompleteMissionScheduler>(configPath, csvPath));
 	rclcpp::shutdown();
 	return 0;
 }
