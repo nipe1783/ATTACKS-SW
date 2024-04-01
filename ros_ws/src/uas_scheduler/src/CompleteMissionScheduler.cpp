@@ -355,6 +355,7 @@ void CompleteMissionScheduler::timerCallback(){
         publishRGV2State();
         goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
         if (isRGVJointLocalized(rgv1_) && isRGVJointLocalized(rgv2_)) {
+            myFile.close();
             exit(0);
         }
     }
