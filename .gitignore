@@ -20,3 +20,6 @@ Datasets/*
 !ComputerVision/videos/test.txt
 !ComputerVision/images/test.txt
 !ComputerVision/build/test.txt
+
+# MPV4s
+*.mp4
