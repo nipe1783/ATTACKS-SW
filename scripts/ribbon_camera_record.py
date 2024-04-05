@@ -9,14 +9,16 @@ def gstreamer_pipeline(capture_width=1280, capture_height=720, display_width=128
         "videoconvert ! video/x-raw, format=(string)BGR ! appsink drop=true sync=false"
     ).format(capture_width, capture_height, framerate, flip_method, display_width, display_height)
 
-def make_video_writer(width, height, fps=30):
-    script_dir = os.path.dirname(os.path.realpath(__file__) + "/Recordings")
+def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
+    recordings_path = os.path.join(os.getcwd(), recordings_dir)
+    if not os.path.exists(recordings_path):
+        os.makedirs(recordings_path)
+
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    filename = os.path.join(script_dir, f"Recording_{current_time}.mp4")
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    filename = os.path.join(recordings_path, f"Recording_{current_time}.mp4")
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
-
 cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 if not cap.isOpened():
     print("Failed to open camera.")
@@ -32,8 +34,11 @@ try:
         if not ret:
             print("Failed to capture frame.")
             break
-        video_writer.write(frame)  
+        
+        video_writer.write(frame)
+        
         cv2.imshow("CSI Camera", frame)
+
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 finally:
