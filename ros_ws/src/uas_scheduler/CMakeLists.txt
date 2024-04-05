@@ -65,6 +65,26 @@ target_link_libraries(completeMissionScheduler
 )
 install(TARGETS completeMissionScheduler DESTINATION lib/${PROJECT_NAME})
 
+# /hoverMissionScheduler
+add_executable(hoverMissionScheduler src/HoverMissionScheduler.cpp src/Scheduler.cpp)
+ament_target_dependencies(
+    hoverMissionScheduler
+    cv_bridge
+    uas
+    uas_phases
+    uas_computer_vision
+    uas_helpers
+    rclcpp 
+    px4_msgs 
+    sensor_msgs
+)
+target_link_libraries(hoverMissionScheduler
+  ${cv_bridge_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  yaml-cpp
+)
+install(TARGETS hoverMissionScheduler DESTINATION lib/${PROJECT_NAME})
+
 # /cameraCalibrateMissionScheduler
 add_executable(cameraCalibrateMissionScheduler src/CameraCalibrateMissionScheduler.cpp src/Scheduler.cpp)
 ament_target_dependencies(

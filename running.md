@@ -25,7 +25,7 @@
   MicroXRCEAgent udp4 -p 8888
   ```
 
-### 3. Launch the ROS UAS Mission Node
+### 3. Launch the ROS UAS Complete Mission Node
 
 - **Step 1:** Open a new Ubuntu terminal.
   ```bash
@@ -34,6 +34,16 @@
   source /opt/ros/foxy/setup.bash
   source install/local_setup.bash
   ros2 launch uas_bringup uas_complete_mission.launch.py
+  ```
+
+### Hover Mission Node:
+
+  ```bash
+  cd ~/dev/ATTACKS-SW/ros_ws
+  colcon build
+  source /opt/ros/foxy/setup.bash
+  source install/local_setup.bash
+  ros2 launch uas_bringup uas_hover_mission.launch.py
   ```
 
 ## Running HITL:
