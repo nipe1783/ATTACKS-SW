@@ -202,7 +202,7 @@ void HitlMissionScheduler::timerCallback(){
 
     rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
-    std::cout << "Phase: " << currentPhase_ << ". ";
+    std::cout << "Phase: " << currentPhase_ << ". "<< "Image Size: " << psFrame_.size() << ". "<< std::endl;
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
         rgv1_.currentPhase_ = "trailing";
         currentPhase_ = "trailing";
