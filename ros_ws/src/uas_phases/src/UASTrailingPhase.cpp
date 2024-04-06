@@ -28,8 +28,8 @@ UASState UASTrailingPhase::generateDesiredState(const CVImg& cvImg, const UASSta
     // desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
     // desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
     // desiredUASState.bzV_ = (desiredAltitude_ - uasState.iz_) * kpZ_;
-    desiredUASState.bxV_ = 1.0f;
-    desiredUASState.byV_ = 0.0f;
+    desiredUASState.bxV_ = 0.0f;
+    desiredUASState.byV_ = 1.0f;
     desiredUASState.bzV_ = 0.0f;
     std::cout<<"Desired bxV: "<<desiredUASState.bxV_<<" Desired byV: "<<desiredUASState.byV_<<" Desired bzV: "<<desiredUASState.bzV_<<std::endl;
 
