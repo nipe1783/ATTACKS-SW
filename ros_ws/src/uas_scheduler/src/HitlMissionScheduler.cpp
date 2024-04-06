@@ -20,17 +20,13 @@
 
 HitlMissionScheduler::HitlMissionScheduler(std::string configPath) : Scheduler("uas_complete_mission") {
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization::from_rmw(rmw_qos_profile_sensor_data))
-    .keep_last(5) // Adjust the depth to your needs
-    .best_effort() // For scenarios where message loss is acceptable
-    .durability_volatile(); // For scenarios where late-joining subscribers do not need old messages
+    .keep_last(5)
+    .best_effort()
+    .durability_volatile();
 
 
     psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
         "/camera/image_raw", qos, std::bind(&HitlMissionScheduler::callbackPS, this, std::placeholders::_1)
-    );
-
-    ssSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera2/image_raw", qos, std::bind(&HitlMissionScheduler::callbackSS, this, std::placeholders::_1)
     );
 
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
@@ -206,6 +202,7 @@ void HitlMissionScheduler::timerCallback(){
 
     rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
+    std::cout << "Phase: " << currentPhase_ << ". ";
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
         rgv1_.currentPhase_ = "trailing";
         currentPhase_ = "trailing";
