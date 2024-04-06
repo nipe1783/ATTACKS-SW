@@ -144,12 +144,10 @@ void HoverMissionScheduler::timerCallback(){
     rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
     std::cout << "Phase: " << currentPhase_ << ". ";
-    std::cout<< "RGV 1 Phase: " << rgv1_.currentPhase_ << ". ";
-    std::cout<< "RGV 2 Phase: " << rgv2_.currentPhase_ << ". ";
+    std::cout << "Image Size: " << psFrame_.size() << ". ";
     std::cout << std::endl;
     currentPhase_ = "exploration";
     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    cv::imshow("Primary Sensor", psDisplayFrame_);
     cv::waitKey(1);
 
     publishControlMode();
