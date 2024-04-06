@@ -105,6 +105,26 @@ target_link_libraries(cameraCalibrateMissionScheduler
 )
 install(TARGETS cameraCalibrateMissionScheduler DESTINATION lib/${PROJECT_NAME})
 
+# /hitlMissionScheduler
+add_executable(hitlMissionScheduler src/HitlMissionScheduler.cpp src/Scheduler.cpp)
+ament_target_dependencies(
+    hitlMissionScheduler
+    cv_bridge
+    uas
+    uas_phases
+    uas_computer_vision
+    uas_helpers
+    rclcpp 
+    px4_msgs 
+    sensor_msgs
+)
+target_link_libraries(hitlMissionScheduler
+  ${cv_bridge_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  yaml-cpp
+)
+install(TARGETS hitlMissionScheduler DESTINATION lib/${PROJECT_NAME})
+
 ############
 # Install ##
 ############

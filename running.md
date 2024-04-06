@@ -84,7 +84,7 @@ cd ~/dev/ATTACKS-SW/ros_ws
 colcon build
 source /opt/ros/foxy/setup.bash
 source install/local_setup.bash
-ros2 launch uas_bringup uas_complete_mission.launch.py
+ros2 launch uas_bringup uas_hitl_mission.launch.py
 ```
 
 ### On the high resource computer:
