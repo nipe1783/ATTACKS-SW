@@ -332,7 +332,7 @@ void HitlMissionScheduler::timerCallback(){
     // }
     // else{
     currentPhase_ = "trailing";
-    goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     // }
 
     publishControlMode();
