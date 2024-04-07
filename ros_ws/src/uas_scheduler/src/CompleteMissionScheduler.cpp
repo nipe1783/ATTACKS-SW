@@ -28,7 +28,8 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath, std::
         std::cout << "Unable to open CSV file" << std::endl;
     }
     myFile << "Timer Callback Calls (ns), UAS X, UAS Y, UAS Z, UAS Phi, UAS Theta, UAS Psi, RGV1 CV X, RGV1 CV Y, RGV1 CV Width, RGV1 CV Height, RGV2 CV X, RGV2 CV Y, RGV2 CV Width, RGV2 CV Height,";
-    myFile << "RGV1 X (Truth), RGV1 Y (Truth), RGV1 Z (Truth), RGV2 X (Truth), RGV2 Y (Truth), RGV2 Z (Truth) \n";
+    myFile << "RGV1 X (Truth), RGV1 Y (Truth), RGV1 Z (Truth), RGV2 X (Truth), RGV2 Y (Truth), RGV2 Z (Truth),";
+    myFile << "RGV1 X (Estimate), RGV1 Y (Estimate), RGV1 Z (Estimate), RGV2 X (Estimate), RGV2 Y (Estimate), RGV2 Z (Estimate) \n";
 
     psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
         "/camera/image_raw", qos, std::bind(&CompleteMissionScheduler::callbackPS, this, std::placeholders::_1)
@@ -43,11 +44,11 @@ CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath, std::
     );
 
     rgv1TruthSubscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
-        "/rgv1_truth/pose/uas_i_frame", qos, std::bind(&CompleteMissionScheduler::callbackRGV1TruthState, this, std::placeholders::_1)
+        "/rgv1_truth/pose/gazebo_i_frame", qos, std::bind(&CompleteMissionScheduler::callbackRGV1TruthState, this, std::placeholders::_1)
     );
 
     rgv2TruthSubscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
-        "/rgv2_truth/pose/uas_i_frame", qos, std::bind(&CompleteMissionScheduler::callbackRGV2TruthState, this, std::placeholders::_1)
+        "/rgv2_truth/pose/gazebo_i_frame", qos, std::bind(&CompleteMissionScheduler::callbackRGV2TruthState, this, std::placeholders::_1)
     );
 
     attitudeSubscription_ = this->create_subscription<px4_msgs::msg::VehicleAttitude>(
@@ -182,7 +183,7 @@ bool CompleteMissionScheduler::isUASStopped(RGV rgv) {
 }
 
 bool CompleteMissionScheduler::isRGVCoarseLocalized(RGV rgv) {
-    if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(10)) {
+    if (std::chrono::system_clock::now() - rgv.phaseStartTime_  > std::chrono::seconds(20)) {
         return true;
     }
     return false;
@@ -232,8 +233,8 @@ void CompleteMissionScheduler::timerCallback(){
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
 
     std::cout << "Phase: " << currentPhase_ << ". ";
-    std::cout<< "RGV 1 Phase: " << rgv1_.currentPhase_ << ". ";
-    std::cout<< "RGV 2 Phase: " << rgv2_.currentPhase_ << ". ";
+    std::cout << "RGV 1 Phase: " << rgv1_.currentPhase_ << ". ";
+    std::cout << "RGV 2 Phase: " << rgv2_.currentPhase_ << ". " << std::endl;
     // std::cout<< "UAS State: " << uas_.state_.ix_ << ", " << uas_.state_.iy_ << ", " << uas_.state_.iz_ << ". ";
     // if(rgv1CVData_.blobs.size() > 0){
     //     cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
@@ -258,6 +259,8 @@ void CompleteMissionScheduler::timerCallback(){
     myFile << truth1.state_.ix_ << "," << truth1.state_.iy_ << "," << truth1.state_.iz_ << ","; // RGV1 Truth Inertial Position
     myFile << truth2.state_.ix_ << "," << truth2.state_.iy_ << "," << truth2.state_.iz_ << ","; // RGV2 Truth Inertial Position
 
+    myFile << rgv1_.state_.ix_ << "," << rgv1_.state_.iy_ << "," << rgv1_.state_.iz_ << ","; // RGV1 Estimate Interial Position
+    myFile << rgv2_.state_.ix_ << "," << rgv2_.state_.iy_ << "," << rgv2_.state_.iz_ << ","; // RGV2 Estimate Inertial Position
     myFile << "\n";
 
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
@@ -355,7 +358,7 @@ void CompleteMissionScheduler::timerCallback(){
         publishRGV2State();
         goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
         if (isRGVJointLocalized(rgv1_) && isRGVJointLocalized(rgv2_)) {
-            myFile.close();
+            // myFile.close();
             exit(0);
         }
     }
