@@ -18,12 +18,13 @@
 #include <optional>
 #include <chrono>
 #include <yaml-cpp/yaml.h>
+#include <fstream>
 
 
 class HitlMissionScheduler : public Scheduler
 {
     public:
-        HitlMissionScheduler(std::string configPath);
+        HitlMissionScheduler(std::string configPath, std::string csvPath);
 
         // fields:
         std::vector<UASState> waypoints_;
@@ -33,7 +34,8 @@ class HitlMissionScheduler : public Scheduler
         std::unique_ptr<UASJointExplorationPhase> jointExplorationPhase_;
         std::unique_ptr<UASJointTrailingPhase> jointTrailingPhase_;
         std::unique_ptr<UASCoarseLocalizationPhase> coarsePhase_;
-
+        rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr rgv1TruthSubscription_;
+        rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr rgv2TruthSubscription_;
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv1StatePublisher_;
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv2StatePublisher_;
 
@@ -51,10 +53,12 @@ class HitlMissionScheduler : public Scheduler
         float stopTimeThresh_;
         float coarseLocalizationTime_;
         float fineLocalizationTime_;
+        std::ofstream myFile_;
         
         // methods:
         bool isUASStopped(RGV rgv);
         bool isRGVCoarseLocalized(RGV rgv);
+        bool isRGVJointLocalized(RGV rgv);
         bool areRGVsInFrame();
         void timerCallback() override;
         void publishRGV1State();

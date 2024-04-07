@@ -17,12 +17,21 @@
 #include <ctime>
 #include <yaml-cpp/yaml.h>
 #include <filesystem>
+#include <fstream>
 
-HitlMissionScheduler::HitlMissionScheduler(std::string configPath) : Scheduler("uas_complete_mission") {
+HitlMissionScheduler::HitlMissionScheduler(std::string configPath, std::string csvPath) : Scheduler("uas_hitl_mission") {
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization::from_rmw(rmw_qos_profile_sensor_data))
     .keep_last(5)
     .best_effort()
     .durability_volatile();
+
+    myFile_.open(csvPath);
+    if (!myFile_.is_open()){
+        std::cout << "Unable to open CSV file" << std::endl;
+    }
+    myFile_ << "Timer Callback Calls (ns), UAS X, UAS Y, UAS Z, UAS Phi, UAS Theta, UAS Psi, RGV1 CV X, RGV1 CV Y, RGV1 CV Width, RGV1 CV Height, RGV2 CV X, RGV2 CV Y, RGV2 CV Width, RGV2 CV Height,";
+    myFile_ << "RGV1 X (Truth), RGV1 Y (Truth), RGV1 Z (Truth), RGV2 X (Truth), RGV2 Y (Truth), RGV2 Z (Truth),";
+    myFile_ << "RGV1 X (Estimate), RGV1 Y (Estimate), RGV1 Z (Estimate), RGV2 X (Estimate), RGV2 Y (Estimate), RGV2 Z (Estimate) \n";
 
 
     psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
@@ -35,6 +44,14 @@ HitlMissionScheduler::HitlMissionScheduler(std::string configPath) : Scheduler("
 
     attitudeSubscription_ = this->create_subscription<px4_msgs::msg::VehicleAttitude>(
         "/fmu/out/vehicle_attitude", qos, std::bind(&HitlMissionScheduler::callbackAttitude, this, std::placeholders::_1)
+    );
+
+    rgv1TruthSubscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
+        "/rgv1_truth/pose/gazebo_i_frame", qos, std::bind(&HitlMissionScheduler::callbackRGV1TruthState, this, std::placeholders::_1)
+    );
+
+    rgv2TruthSubscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
+        "/rgv2_truth/pose/gazebo_i_frame", qos, std::bind(&HitlMissionScheduler::callbackRGV2TruthState, this, std::placeholders::_1)
     );
 
     controlModePublisher_ = this->create_publisher<px4_msgs::msg::OffboardControlMode>(
@@ -171,6 +188,13 @@ bool HitlMissionScheduler::isRGVCoarseLocalized(RGV rgv) {
     return false;
 }
 
+bool HitlMissionScheduler::isRGVJointLocalized(RGV rgv) {
+    if(std::chrono::system_clock::now() - rgv.phaseStartTime_ > std::chrono::seconds(10)) {
+        return true;
+    }
+    return false;
+}
+
 bool HitlMissionScheduler::areRGVsInFrame() {
     if (rgv1CVData_.blobs.size() > 0 && rgv2CVData_.blobs.size() > 0) {
         return true;
@@ -197,144 +221,40 @@ void HitlMissionScheduler::timerCallback(){
     }
     if (offboardSetpointCounter_ == 10) {
         publishVehicleCommand(px4_msgs::msg::VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
+        rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
         arm();
     }
 
+    myFile_ << (std::chrono::system_clock::now()).time_since_epoch().count() << ","; // System clock for latency calculations
+    myFile_ << uas_.state_.ix_ << "," << uas_.state_.iy_ << "," << uas_.state_.iz_ << ","; // UAS Inertial Position (X, Y, Z)
+    myFile_ << uas_.state_.iphi_ << "," << uas_.state_.itheta_ << "," << uas_.state_.ipsi_ << ","; // UAS Inertial Attitude (Phi, Theta, Psi)
     rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
     rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
-    std::cout << "Phase: " << currentPhase_ << ". "<< "Image Size: " << psFrame_.size() << ". "<< std::endl;
-    // if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
-    //     rgv1_.currentPhase_ = "trailing";
-    //     currentPhase_ = "trailing";
-    //     rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
-    //     goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    // }
-    // else if (rgv2_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv2CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
-    //     rgv2_.currentPhase_ = "trailing";
-    //     currentPhase_ = "trailing";
-    //     rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
-    //     goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // else if (rgv1_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv1CVData_.blobs.size() > 0){
-    //     if (isUASStopped(rgv1_)) {
-    //         rgv1_.currentPhase_ = "coarse";
-    //         currentPhase_ = "coarse";
-    //         rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
-    //         goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    //     }
-    //     else{
-    //         goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    //     }
-    // }
-    // else if (rgv2_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv2CVData_.blobs.size() > 0){
-    //     if (isUASStopped(rgv2_)) {
-    //         rgv2_.currentPhase_ = "coarse";
-    //         currentPhase_ = "coarse";
-    //         rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
-    //         goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    //     }
-    //     else{
-    //         goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    //     }
-    // }
-    // else if (rgv1_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv1CVData_.blobs.size() > 0){
-    //     if (isRGVCoarseLocalized(rgv1_)) {
-    //         rgv1_.currentPhase_ = "jointExploration";
-    //         currentPhase_ = "exploration";
-    //         goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    //     }
-    //     else{
-    //         goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    //         rgv1_.state_ = coarsePhase_->localize(camera1_, rgv1CVData_, uas_, rgv1_);
-    //         publishRGV1State();
-    //     }
-    // }
-    // else if (rgv2_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv2CVData_.blobs.size() > 0){
-    //     if (isRGVCoarseLocalized(rgv2_)) {
-    //         rgv2_.currentPhase_ = "jointExploration";
-    //         currentPhase_ = "exploration";
-    //         goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    //     }
-    //     else{
-    //         goalState_ = coarsePhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    //         rgv2_.state_ = coarsePhase_->localize(camera1_, rgv2CVData_, uas_, rgv2_);
-    //         publishRGV2State();
-    //     }
-    // }
-    // else if (rgv1_.currentPhase_ == "jointExploration" && rgv2_.currentPhase_ == "jointExploration" && currentPhase_ == "exploration"){
-    //     currentPhase_ = "jointExploration";
-    //     goalState_ = jointExplorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    // }
-    // else if (rgv1_.currentPhase_ == "jointExploration" && currentPhase_ == "jointExploration" && rgv1CVData_.blobs.size() > 0){
-    //    if (areRGVsInFrame()) {
-    //         rgv1_.currentPhase_ = "jointTrailing";
-    //         rgv2_.currentPhase_ = "jointTrailing";
-    //         currentPhase_ = "jointTrailing";
-    //         rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
-    //         rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
-    //         goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
-    //     }
-    //     else{
-    //         goalState_ = jointExplorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    //     }
-    // }
-    // else if (rgv2_.currentPhase_ == "jointExploration" && currentPhase_ == "jointExploration" && rgv2CVData_.blobs.size() > 0){
-    //     if (areRGVsInFrame()) {
-    //         rgv1_.currentPhase_ = "jointTrailing";
-    //         rgv2_.currentPhase_ = "jointTrailing";
-    //         currentPhase_ = "jointTrailing";
-    //         rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
-    //         rgv2_.phaseStartTime_ = std::chrono::system_clock::now();
-    //         goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
-    //     }
-    //     else{
-    //         goalState_ = jointExplorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    //     }
-    // }
-    // else if (rgv1_.currentPhase_ == "jointTrailing" && rgv2_.currentPhase_ == "jointTrailing" && currentPhase_ == "jointTrailing"  && rgv1CVData_.blobs.size() > 0 && rgv2CVData_.blobs.size() > 0){
-    //     rgv1_.state_ = jointTrailingPhase_->localize(camera1_ ,rgv1CVData_, uas_, rgv1_);
-    //     publishRGV1State();
-    //     rgv2_.state_ = jointTrailingPhase_->localize(camera1_, rgv2CVData_, uas_, rgv2_);
-    //     publishRGV2State();
-    //     goalState_ = jointTrailingPhase_->generateDesiredState(rgv1CVData_, rgv2CVData_, uas_.state_);
-    // }
-    // else if (rgv1_.currentPhase_ == "jointTrailing" && currentPhase_ == "jointTrailing" && rgv1CVData_.blobs.size() == 0){
-    //     rgv1_.currentPhase_ = "jointExploration";
-    //     rgv2_.currentPhase_ = "jointExploration";
-    //     currentPhase_ = "jointExploration";
-    //     goalState_ = jointExplorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // else if (rgv2_.currentPhase_ == "jointTrailing" && currentPhase_ == "jointTrailing" && rgv2CVData_.blobs.size() == 0){
-    //     rgv2_.currentPhase_ = "jointExploration";
-    //     rgv1_.currentPhase_ = "jointExploration";
-    //     currentPhase_ = "jointExploration";
-    //     goalState_ = jointExplorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    // }
-    // else if (rgv1_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv1CVData_.blobs.size() == 0){
-    //     rgv1_.currentPhase_ = "exploration";
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // else if (rgv2_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv2CVData_.blobs.size() == 0){
-    //     rgv2_.currentPhase_ = "exploration";
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    // }
-    // else if (rgv1_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv1CVData_.blobs.size() == 0){
-    //     rgv1_.currentPhase_ = "exploration";
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
-    // else if (rgv2_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv2CVData_.blobs.size() == 0){
-    //     rgv2_.currentPhase_ = "exploration";
-    //     currentPhase_ = "exploration";
-    //     goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-    // }
-    // else{
-    currentPhase_ = "trailing";
-    goalState_ = trailingPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    // }
 
+    if(rgv1CVData_.blobs.size() > 0) {
+        rgv1_.state_ = coarsePhase_->localize(camera1_, rgv1CVData_, uas_, rgv1_);
+        publishRGV1State();
+        myFile_ << rgv1CVData_.blobs[0].x  << "," << rgv1CVData_.blobs[0].y << "," << rgv1CVData_.blobs[0].width << "," << rgv1CVData_.blobs[0].height << ",";
+    } else {
+        myFile_ << "-1, -1, -1, -1,";
+    }
+    if(rgv2CVData_.blobs.size() > 0){
+        rgv2_.state_ = coarsePhase_->localize(camera2_, rgv2CVData_, uas_, rgv2_);
+        publishRGV2State();
+        myFile_ << rgv2CVData_.blobs[0].x  << "," << rgv2CVData_.blobs[0].y << "," << rgv2CVData_.blobs[0].width << "," << rgv2CVData_.blobs[0].height << ",";
+    } else {
+        myFile_ << "-1, -1, -1, -1,";
+    }
+    myFile_ << rgv1Truth_.state_.ix_ << "," << rgv1Truth_.state_.iy_ << "," << rgv1Truth_.state_.iz_ << ","; // RGV1 Truth Inertial Position
+    myFile_ << rgv2Truth_.state_.ix_ << "," << rgv2Truth_.state_.iy_ << "," << rgv2Truth_.state_.iz_ << ","; // RGV2 Truth Inertial Position
+    myFile_ << rgv1_.state_.ix_ << "," << rgv1_.state_.iy_ << "," << rgv1_.state_.iz_ << ","; // RGV1 Estimate Interial Position
+    myFile_ << rgv2_.state_.ix_ << "," << rgv2_.state_.iy_ << "," << rgv2_.state_.iz_ << ","; // RGV2 Estimate Inertial Position
+    myFile_ << "\n";
+    currentPhase_ = "exploration";
+    goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    if(std::chrono::system_clock::now() - rgv1_.phaseStartTime_ > std::chrono::seconds(60)){
+        exit(0);
+    }
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
     if (offboardSetpointCounter_ < 11) {
@@ -346,9 +266,10 @@ void HitlMissionScheduler::timerCallback(){
 int main(int argc, char *argv[])
 {
     std::filesystem::path currentPath = std::filesystem::current_path();
-    std::filesystem::path configPath = currentPath  / "configurations" / "CompleteMissionSchedulerConfig.yaml";
+    std::filesystem::path configPath = currentPath  / "configurations" / "HitlMissionSchedulerConfig.yaml";
+    std::filesystem::path csvPath = currentPath / "hitl_data" / "data.csv";
     std::cout<<configPath<<std::endl;
-    std::cout << "Starting UAS complete mission node..." << std::endl;
+    std::cout << "Starting UAS HITL mission node..." << std::endl;
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
     rclcpp::init(argc, argv);
 	rclcpp::spin(std::make_shared<HitlMissionScheduler>(configPath));

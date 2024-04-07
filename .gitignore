@@ -23,3 +23,7 @@ Datasets/*
 
 # MPV4s
 *.mp4
+
+# HITL DATA:
+ros_ws/hitl_data/*
+!ros_ws/hitl_data/test.txt
