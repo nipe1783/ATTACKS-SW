@@ -33,11 +33,6 @@ HitlMissionScheduler::HitlMissionScheduler(std::string configPath, std::string c
     myFile_ << "RGV1 X (Truth), RGV1 Y (Truth), RGV1 Z (Truth), RGV2 X (Truth), RGV2 Y (Truth), RGV2 Z (Truth),";
     myFile_ << "RGV1 X (Estimate), RGV1 Y (Estimate), RGV1 Z (Estimate), RGV2 X (Estimate), RGV2 Y (Estimate), RGV2 Z (Estimate) \n";
 
-
-    psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera/image_raw", qos, std::bind(&HitlMissionScheduler::callbackPS, this, std::placeholders::_1)
-    );
-
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
         "/fmu/out/vehicle_local_position", qos, std::bind(&HitlMissionScheduler::callbackState, this, std::placeholders::_1)
     );
@@ -216,7 +211,7 @@ void HitlMissionScheduler::publishRGV2State(){
 
 void HitlMissionScheduler::timerCallback(){
 
-    if(!psMsgReceived_ || !stateMsgReceived_) {
+    if(!stateMsgReceived_) {
         return;
     }
     if (offboardSetpointCounter_ == 10) {
@@ -228,8 +223,8 @@ void HitlMissionScheduler::timerCallback(){
     myFile_ << (std::chrono::system_clock::now()).time_since_epoch().count() << ","; // System clock for latency calculations
     myFile_ << uas_.state_.ix_ << "," << uas_.state_.iy_ << "," << uas_.state_.iz_ << ","; // UAS Inertial Position (X, Y, Z)
     myFile_ << uas_.state_.iphi_ << "," << uas_.state_.itheta_ << "," << uas_.state_.ipsi_ << ","; // UAS Inertial Attitude (Phi, Theta, Psi)
-    rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
-    rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
+    // rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
+    // rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
 
     if(rgv1CVData_.blobs.size() > 0) {
         rgv1_.state_ = coarsePhase_->localize(camera1_, rgv1CVData_, uas_, rgv1_);
@@ -252,6 +247,7 @@ void HitlMissionScheduler::timerCallback(){
     myFile_ << "\n";
     currentPhase_ = "exploration";
     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    std::cout<<currentPhase_<<std::endl;
     if(std::chrono::system_clock::now() - rgv1_.phaseStartTime_ > std::chrono::seconds(60)){
         exit(0);
     }
