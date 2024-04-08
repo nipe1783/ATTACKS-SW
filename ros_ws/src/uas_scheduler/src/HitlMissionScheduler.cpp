@@ -47,11 +47,11 @@ HitlMissionScheduler::HitlMissionScheduler(std::string configPath, std::string c
     );
 
     rgv1TruthSubscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
-        "/rgv1_truth/pose/gazebo_i_frame", qos, std::bind(&HitlMissionScheduler::callbackRGV1TruthState, this, std::placeholders::_1)
+        "/rgv1_truth/pose/uas_i_frame", qos, std::bind(&HitlMissionScheduler::callbackRGV1TruthState, this, std::placeholders::_1)
     );
 
     rgv2TruthSubscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
-        "/rgv2_truth/pose/gazebo_i_frame", qos, std::bind(&HitlMissionScheduler::callbackRGV2TruthState, this, std::placeholders::_1)
+        "/rgv2_truth/pose/uas_i_frame", qos, std::bind(&HitlMissionScheduler::callbackRGV2TruthState, this, std::placeholders::_1)
     );
 
     controlModePublisher_ = this->create_publisher<px4_msgs::msg::OffboardControlMode>(
@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
     std::cout << "Starting UAS HITL mission node..." << std::endl;
     setvbuf(stdout, NULL, _IONBF, BUFSIZ);
     rclcpp::init(argc, argv);
-	rclcpp::spin(std::make_shared<HitlMissionScheduler>(configPath));
+	rclcpp::spin(std::make_shared<HitlMissionScheduler>(configPath, csvPath));
 	rclcpp::shutdown();
 	return 0;
 }

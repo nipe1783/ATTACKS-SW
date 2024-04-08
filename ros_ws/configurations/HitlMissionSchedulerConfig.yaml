@@ -16,7 +16,7 @@ phase:
     desiredAlt: -11.0
   exploration:
     waypoints:
-      - ix: 0
+      - ix: -2
         iy: -1
         iz: -10
         iphi: 0
