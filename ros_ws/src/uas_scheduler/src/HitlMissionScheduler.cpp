@@ -246,8 +246,9 @@ void HitlMissionScheduler::timerCallback(){
     myFile_ << rgv2_.state_.ix_ << "," << rgv2_.state_.iy_ << "," << rgv2_.state_.iz_ << ","; // RGV2 Estimate Inertial Position
     myFile_ << "\n";
     currentPhase_ = "exploration";
+    std::cout<<"Current UAS State: "<<uas_.state_.ix_<<", "<<uas_.state_.iy_<<", "<<uas_.state_.iz_<<std::endl;
+    std::cout<<"Desired UAS State: "<<goalState_.ix_<<", "<<goalState_.iy_<<", "<<goalState_.iz_<<std::endl;
     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    std::cout<<currentPhase_<<std::endl;
     if(std::chrono::system_clock::now() - rgv1_.phaseStartTime_ > std::chrono::seconds(60)){
         exit(0);
     }
