@@ -19,7 +19,6 @@ def signal_handler(sig, frame):
     print('You pressed Ctrl+C! Saving the video and exiting.')
     cap.release()
     video_writer.release()
-    cv2.destroyAllWindows()
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
@@ -45,4 +44,3 @@ try:
 finally:
     cap.release()
     video_writer.release()
-    cv2.destroyAllWindows()
