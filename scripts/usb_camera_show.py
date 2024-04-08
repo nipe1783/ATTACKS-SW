@@ -1,14 +1,6 @@
 import cv2
 import datetime
 import os
-import keyboard
-
-def gstreamer_pipeline(capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=30, flip_method=0):
-    return (
-        "nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int){}, height=(int){}, format=(string)NV12, framerate=(fraction){}/1 ! "
-        "nvvidconv flip-method={} ! video/x-raw, width=(int){}, height=(int){}, format=(string)BGRx ! "
-        "videoconvert ! video/x-raw, format=(string)BGR ! appsink drop=true sync=false"
-    ).format(capture_width, capture_height, framerate, flip_method, display_width, display_height)
 
 def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     recordings_path = os.path.join(os.getcwd(), recordings_dir)
@@ -21,14 +13,15 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
 
-cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+cap = cv2.VideoCapture(0) 
 if not cap.isOpened():
     print("Failed to open camera.")
     exit()
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-video_writer = make_video_writer(width, height)
+fps = cap.get(cv2.CAP_PROP_FPS)
+video_writer = make_video_writer(width, height, fps)
 
 try:
     while True:
@@ -38,10 +31,11 @@ try:
             break
 
         video_writer.write(frame)
-        
-        if keyboard.is_pressed('q'):
-            print("Quitting...")
+        cv2.imshow("USB Camera", frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 finally:
     cap.release()
     video_writer.release()
+    cv2.destroyAllWindows()
