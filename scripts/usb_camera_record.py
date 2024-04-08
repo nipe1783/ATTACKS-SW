@@ -11,7 +11,7 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
 
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = os.path.join(recordings_path, f"Recording_{current_time}.mp4")
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
 
@@ -22,15 +22,15 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)
-
-cap = cv2.VideoCapture(0) 
+cap = cv2.VideoCapture(1)
 if not cap.isOpened():
     print("Failed to open camera.")
-    exit()
+    sys.exit(1)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-fps = cap.get(cv2.CAP_PROP_FPS)
+fps = cap.get(cv2.CAP_PROP_FPS) or 30
+
 video_writer = make_video_writer(width, height, fps)
 
 try:
@@ -41,6 +41,7 @@ try:
             break
 
         video_writer.write(frame)
+
 finally:
     cap.release()
     video_writer.release()

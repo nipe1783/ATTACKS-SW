@@ -13,7 +13,7 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
 
-cap = cv2.VideoCapture(0) 
+cap = cv2.VideoCapture(1) 
 if not cap.isOpened():
     print("Failed to open camera.")
     exit()
