@@ -1,7 +1,8 @@
 import cv2
 import datetime
 import os
-import keyboard
+import signal
+import sys
 
 def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     recordings_path = os.path.join(os.getcwd(), recordings_dir)
@@ -14,7 +15,16 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
 
-cap = cv2.VideoCapture(0)
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C! Saving the video and exiting.')
+    cap.release()
+    video_writer.release()
+    cv2.destroyAllWindows()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
+cap = cv2.VideoCapture(0) 
 if not cap.isOpened():
     print("Failed to open camera.")
     exit()
@@ -32,10 +42,7 @@ try:
             break
 
         video_writer.write(frame)
-
-        if keyboard.is_pressed('q'):
-            print("Quitting...")
-            break
 finally:
     cap.release()
     video_writer.release()
+    cv2.destroyAllWindows()

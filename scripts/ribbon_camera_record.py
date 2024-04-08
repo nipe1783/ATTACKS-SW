@@ -1,7 +1,8 @@
 import cv2
 import datetime
 import os
-import keyboard
+import signal
+import sys
 
 def gstreamer_pipeline(capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=30, flip_method=0):
     return (
@@ -17,9 +18,17 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
 
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = os.path.join(recordings_path, f"Recording_{current_time}.mp4")
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
+
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C! Saving the video and exiting.')
+    cap.release()
+    video_writer.release()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
 
 cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 if not cap.isOpened():
@@ -39,9 +48,6 @@ try:
 
         video_writer.write(frame)
         
-        if keyboard.is_pressed('q'):
-            print("Quitting...")
-            break
 finally:
     cap.release()
     video_writer.release()
