@@ -5,34 +5,6 @@
 #include <cv_bridge/cv_bridge.h>
 #include <limits>
 
-void Scheduler::imageConvertPS(const sensor_msgs::msg::Image::SharedPtr sImg)
-{
-    try {
-        psFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
-        psDisplayFrame_ = psFrame_.clone();
-    } catch (cv_bridge::Exception& e) {
-        RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
-    }
-}
-
-void Scheduler::imageConvertSS(const sensor_msgs::msg::Image::SharedPtr sImg)
-{
-    try {
-        ssFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
-        ssDisplayFrame_ = ssFrame_.clone();
-    } catch (cv_bridge::Exception& e) {
-        RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
-    }
-}
-
-void Scheduler::savePSFrame()
-{
-    if (!psFrame_.empty()) {
-        std::string filename = "saved_image_.jpg";
-        cv::imwrite(filename, psFrame_);
-        RCLCPP_INFO(this->get_logger(), "Saved image: %s", filename.c_str());
-    }
-}
 
 double Scheduler::distance(UASState s1, UASState s2)
 {
@@ -117,16 +89,6 @@ void Scheduler::disarm()
 {
 	publishVehicleCommand(px4_msgs::msg::VehicleCommand::VEHICLE_CMD_COMPONENT_ARM_DISARM, 0.0, 0.0);
 	RCLCPP_INFO(this->get_logger(), "Disarmed");
-}
-
-void Scheduler::callbackPS(const sensor_msgs::msg::Image::SharedPtr psMsg) {
-    psMsgReceived_ = true;
-    imageConvertPS(psMsg);
-}
-
-void Scheduler::callbackSS(const sensor_msgs::msg::Image::SharedPtr ssMsg) {
-    ssMsgReceived_ = true;
-    imageConvertSS(ssMsg);
 }
 
 void Scheduler::callbackState(const px4_msgs::msg::VehicleLocalPosition::UniquePtr stateMsg) {

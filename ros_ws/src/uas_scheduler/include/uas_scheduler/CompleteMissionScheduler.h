@@ -36,6 +36,12 @@ class CompleteMissionScheduler : public Scheduler
 
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv1StatePublisher_;
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv2StatePublisher_;
+        rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr psSubscription_;
+        rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr ssSubscription_;
+        cv::Mat psFrame_;
+        cv::Mat psDisplayFrame_;
+        cv::Mat ssDisplayFrame_;
+        cv::Mat ssFrame_;
 
         BasicBlobDetector rgv1BlobDetector_;
         BasicBlobDetector rgv2BlobDetector_;
@@ -51,6 +57,8 @@ class CompleteMissionScheduler : public Scheduler
         float stopTimeThresh_;
         float coarseLocalizationTime_;
         float fineLocalizationTime_;
+        bool psMsgReceived_ = false;
+        bool ssMsgReceived_ = false;
         
         // methods:
         bool isUASStopped(RGV rgv);
@@ -59,5 +67,10 @@ class CompleteMissionScheduler : public Scheduler
         void timerCallback() override;
         void publishRGV1State();
         void publishRGV2State();
+        void imageConvertPS(const sensor_msgs::msg::Image::SharedPtr sImg);
+        void imageConvertSS(const sensor_msgs::msg::Image::SharedPtr sImg);
+        void callbackPS(const sensor_msgs::msg::Image::SharedPtr msg);
+        void callbackSS(const sensor_msgs::msg::Image::SharedPtr msg);
+        void savePSFrame();
         
 };

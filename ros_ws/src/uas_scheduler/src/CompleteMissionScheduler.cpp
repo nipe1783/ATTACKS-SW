@@ -191,6 +191,45 @@ void CompleteMissionScheduler::publishRGV2State(){
     rgv2StatePublisher_->publish(msg);
 }
 
+void CompleteMissionScheduler::callbackPS(const sensor_msgs::msg::Image::SharedPtr psMsg) {
+    psMsgReceived_ = true;
+    imageConvertPS(psMsg);
+}
+
+void CompleteMissionScheduler::callbackSS(const sensor_msgs::msg::Image::SharedPtr ssMsg) {
+    ssMsgReceived_ = true;
+    imageConvertSS(ssMsg);
+}
+
+void CompleteMissionScheduler::imageConvertPS(const sensor_msgs::msg::Image::SharedPtr sImg)
+{
+    try {
+        psFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
+        psDisplayFrame_ = psFrame_.clone();
+    } catch (cv_bridge::Exception& e) {
+        RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
+    }
+}
+
+void CompleteMissionScheduler::imageConvertSS(const sensor_msgs::msg::Image::SharedPtr sImg)
+{
+    try {
+        ssFrame_ = cv_bridge::toCvCopy(sImg, "bgr8")->image;
+        ssDisplayFrame_ = ssFrame_.clone();
+    } catch (cv_bridge::Exception& e) {
+        RCLCPP_ERROR(this->get_logger(), "Could not convert from '%s' to 'bgr8'.", sImg->encoding.c_str());
+    }
+}
+
+void CompleteMissionScheduler::savePSFrame()
+{
+    if (!psFrame_.empty()) {
+        std::string filename = "saved_image_.jpg";
+        cv::imwrite(filename, psFrame_);
+        RCLCPP_INFO(this->get_logger(), "Saved image: %s", filename.c_str());
+    }
+}
+
 void CompleteMissionScheduler::timerCallback(){
 
     if(!psMsgReceived_ || !stateMsgReceived_) {

@@ -22,14 +22,6 @@ HoverMissionScheduler::HoverMissionScheduler(std::string configPath) : Scheduler
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
 
-    psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera/image_raw", qos, std::bind(&HoverMissionScheduler::callbackPS, this, std::placeholders::_1)
-    );
-
-    ssSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
-        "/camera2/image_raw", qos, std::bind(&HoverMissionScheduler::callbackSS, this, std::placeholders::_1)
-    );
-
     stateSubscription_ = this->create_subscription<px4_msgs::msg::VehicleLocalPosition>(
         "/fmu/out/vehicle_local_position", qos, std::bind(&HoverMissionScheduler::callbackState, this, std::placeholders::_1)
     );
@@ -49,14 +41,7 @@ HoverMissionScheduler::HoverMissionScheduler(std::string configPath) : Scheduler
     vehicleCommandPublisher_ = this->create_publisher<px4_msgs::msg::VehicleCommand>(
         "/fmu/in/vehicle_command", qos
     );
-
-    rgv1StatePublisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>(
-        "/rgv1/state", qos
-    );
-
-    rgv2StatePublisher_ = this->create_publisher<std_msgs::msg::Float64MultiArray>(
-        "/rgv2/state", qos
-    );
+    
     YAML::Node config = YAML::LoadFile(configPath);
     rgv1_ = RGV(
         config["rgv1"]["id"].as<int>(),
@@ -133,23 +118,16 @@ HoverMissionScheduler::HoverMissionScheduler(std::string configPath) : Scheduler
 
 void HoverMissionScheduler::timerCallback(){
 
-    if(!psMsgReceived_ || !stateMsgReceived_) {
+    if(!stateMsgReceived_) {
         return;
     }
     if (offboardSetpointCounter_ == 10) {
         publishVehicleCommand(px4_msgs::msg::VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
         arm();
+        std::cout<<"Arming UAS..."<<std::endl;
     }
-
-    rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
-    rgv2CVData_ = rgv2BlobDetector_.detect(psFrame_);
-    std::cout << "Phase: " << currentPhase_ << ". ";
-    std::cout << "Image Size: " << psFrame_.size() << ". ";
-    std::cout << std::endl;
     currentPhase_ = "exploration";
     goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
-    cv::waitKey(1);
-
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
     if (offboardSetpointCounter_ < 11) {
