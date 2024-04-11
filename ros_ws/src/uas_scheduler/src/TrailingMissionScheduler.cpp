@@ -282,8 +282,8 @@ void TrailingMissionScheduler::timerCallback(){
         currentPhase_ = "exploration";
         goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
     }
-    cv::imshow("Primary Sensor", psDisplayFrame_);
-    cv::waitKey(1);
+    // cv::imshow("Primary Sensor", psDisplayFrame_);
+    // cv::waitKey(1);
 
     publishControlMode();
     publishTrajectorySetpoint(goalState_);
