@@ -46,6 +46,29 @@
   ros2 launch uas_bringup uas_hover_mission.launch.py
   ```
 
+### Waypoint Mission Node:
+
+  ```bash
+  cd ~/dev/ATTACKS-SW/ros_ws
+  colcon build
+  source /opt/ros/foxy/setup.bash
+  source install/local_setup.bash
+  ros2 launch uas_bringup uas_waypoint_mission.launch.py
+  ```
+
+### Trailing Mission Node:
+
+  ```bash
+  cd ~/dev/ATTACKS-SW/ros_ws
+  colcon build
+  source /opt/ros/foxy/setup.bash
+  source install/local_setup.bash
+  ros2 launch uas_bringup uas_trailing_mission.launch.py
+  ```
+
+
+
+
 ## Running HITL:
 
 ### On the high resource computer:

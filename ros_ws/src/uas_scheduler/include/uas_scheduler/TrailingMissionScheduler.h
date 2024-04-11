@@ -18,32 +18,26 @@
 #include <optional>
 #include <chrono>
 #include <yaml-cpp/yaml.h>
+#include <fstream>
 
-
-class CompleteMissionScheduler : public Scheduler
+class TrailingMissionScheduler : public Scheduler
 {
     public:
-        CompleteMissionScheduler(std::string configPath);
+        TrailingMissionScheduler(std::string configPath, std::string csvPath);
 
         // fields:
         std::vector<UASState> waypoints_;
         unsigned int waypointIndex_;
         std::unique_ptr<UASExplorationPhase> explorationPhase_;
         std::unique_ptr<UASTrailingPhase> trailingPhase_;
-        std::unique_ptr<UASJointExplorationPhase> jointExplorationPhase_;
-        std::unique_ptr<UASJointTrailingPhase> jointTrailingPhase_;
         std::unique_ptr<UASCoarseLocalizationPhase> coarsePhase_;
         rclcpp::Subscription<px4_msgs::msg::VehicleAttitude>::SharedPtr attitudeSubscription_;
         rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr stateSubscription_;
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv1StatePublisher_;
         rclcpp::Publisher<std_msgs::msg::Float64MultiArray>::SharedPtr rgv2StatePublisher_;
         rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr psSubscription_;
-        rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr ssSubscription_;
         cv::Mat psFrame_;
         cv::Mat psDisplayFrame_;
-        cv::Mat ssDisplayFrame_;
-        cv::Mat ssFrame_;
-
         BasicBlobDetector rgv1BlobDetector_;
         BasicBlobDetector rgv2BlobDetector_;
         RGV rgv1_;
@@ -57,9 +51,8 @@ class CompleteMissionScheduler : public Scheduler
         float stopVelocityThresh_;
         float stopTimeThresh_;
         float coarseLocalizationTime_;
-        float fineLocalizationTime_;
         bool psMsgReceived_ = false;
-        bool ssMsgReceived_ = false;
+        std::ofstream outputFile_;
         
         // methods:
         bool isUASStopped(RGV rgv);
@@ -69,9 +62,7 @@ class CompleteMissionScheduler : public Scheduler
         void publishRGV1State();
         void publishRGV2State();
         void imageConvertPS(const sensor_msgs::msg::Image::SharedPtr sImg);
-        void imageConvertSS(const sensor_msgs::msg::Image::SharedPtr sImg);
         void callbackPS(const sensor_msgs::msg::Image::SharedPtr msg);
-        void callbackSS(const sensor_msgs::msg::Image::SharedPtr msg);
         void savePSFrame();
         
 };

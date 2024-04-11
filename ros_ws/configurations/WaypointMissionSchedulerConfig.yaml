@@ -16,8 +16,44 @@ phase:
     desiredAlt: -11.0
   exploration:
     waypoints:
-      - ix: 0
-        iy: 0
+      - ix: -0
+        iy: -0
+        iz: -12
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
+      - ix: -5
+        iy: -5
+        iz: -12
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
+      - ix: -5
+        iy: 5
+        iz: -12
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
+      - ix: 5
+        iy: 5
+        iz: -12
+        iphi: 0
+        itheta: 0
+        ipsi: 0
+        bxV: 0
+        byV: 0
+        bzV: 0
+      - ix: 5
+        iy: -5
         iz: -12
         iphi: 0
         itheta: 0

@@ -1,8 +1,7 @@
+
 import cv2
 import datetime
 import os
-import signal
-import sys
 
 def gstreamer_pipeline(capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=30, flip_method=0):
     return (
@@ -21,15 +20,6 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
-
-def signal_handler(sig, frame):
-    print('You pressed Ctrl+C! Saving the video and exiting.')
-    cap.release()
-    video_writer.release()
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, signal_handler)
-
 cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 if not cap.isOpened():
     print("Failed to open camera.")
@@ -45,9 +35,14 @@ try:
         if not ret:
             print("Failed to capture frame.")
             break
-
+        
         video_writer.write(frame)
         
+        cv2.imshow("CSI Camera", frame)
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 finally:
     cap.release()
     video_writer.release()
+    cv2.destroyAllWindows()
