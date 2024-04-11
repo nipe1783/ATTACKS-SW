@@ -118,15 +118,9 @@ ros2 launch uas_bringup uas_hitl_mission.launch.py
 ```bash
 ssh attacks@10.42.0.1
 ```
-
-### Launching Camera Nodes:
+### Scripts:
 ```bash
-sudo chmod 666 /dev/video0
-cd ~/dev/ATTACKS-SW/scripts
-source /opt/ros/foxy/setup.bash
-source install/local_setup.bash
-chmod +x camera_publisher.py
-sudo python3 camera_publisher.py
+sudo unmount /media/attacks/6C09-B902
 ```
 ### Help:
 
