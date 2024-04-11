@@ -91,7 +91,7 @@ gazebo Tools/simulation/gazebo-classic/sitl_gazebo-classic/worlds/hitl_uas.world
 - Connect the Cube Orange from the Telem 2 port to a USB on the Jetson.
 ```bash
 cd ~/dev/ATTACKS-SW/Micro-XRCE-DDS-Agent/build
-sudo MicroXRCEAgent serial --dev /dev/ttyUSB0 -b 3000000
+sudo MicroXRCEAgent serial --dev /dev/ttyUSB0 -b 921600
 ```
 - The tty port will depend on which port it is connected to. To see all tty USB devices run the following command.
 
