@@ -27,13 +27,7 @@ class CameraPublisher(Node):
         ).format(capture_width, capture_height, framerate, flip_method, display_width, display_height)
 
     def timer_callback(self):
-        ret, frame = self.cap.read()
-        if not ret:
-            self.get_logger().error('Failed to capture frame.')
-            return
-        msg = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
-        self.publisher_.publish(msg)
-        self.get_logger().info('Publishing camera frame')
+        print("TEST")
 
 def main(args=None):
     rclpy.init(args=args)
