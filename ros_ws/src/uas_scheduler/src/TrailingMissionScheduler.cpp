@@ -211,7 +211,12 @@ void TrailingMissionScheduler::savePSFrame()
 
 void TrailingMissionScheduler::timerCallback(){
 
-    if(!psMsgReceived_ || !stateMsgReceived_) {
+    if(!psMsgReceived_) {
+        std::cout<<"No PS message received"<<std::endl;
+        return;
+    }
+    if(!stateMsgReceived_) {
+        std::cout<<"No state message received"<<std::endl;
         return;
     }
 
