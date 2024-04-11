@@ -1,8 +1,8 @@
 import shutil
 import os
 
-source_folder = '/path/to/your/source/folder'
-destination_folder = '/path/to/your/usb/stick'
+source_folder = '~/dev/ATTACKS-SW/Datasets'
+destination_folder = '/media/attacks/6C09-B902'
 
 
 os.makedirs(destination_folder, exist_ok=True)
