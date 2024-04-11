@@ -11,7 +11,6 @@ class CameraPublisher(Node):
         self.publisher_ = self.create_publisher(Image, '/camera/image_raw', 10)
         self.timer_period = 1/30  # Adjust based on your camera's framerate
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
-        self.bridge = CvBridge()
         self.cap = cv2.VideoCapture(self.gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
         
         if not self.cap.isOpened():
