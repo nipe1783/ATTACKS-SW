@@ -4,7 +4,8 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Image
 import cv2
-from cv_bridge import CvBridge, CvBridgeError
+from cv_bridge import CvBridge
+
 
 class CameraPublisher(Node):
     def __init__(self):
@@ -12,6 +13,7 @@ class CameraPublisher(Node):
         self.publisher_ = self.create_publisher(Image, '/camera/image_raw', 10)
         self.timer_period = 1/30  # Adjust based on your camera's framerate
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
+        self.bridge = CvBridge()
         self.cap = cv2.VideoCapture(self.gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
         
         if not self.cap.isOpened():
@@ -26,7 +28,13 @@ class CameraPublisher(Node):
         ).format(capture_width, capture_height, framerate, flip_method, display_width, display_height)
 
     def timer_callback(self):
-        print("TEST")
+        ret, frame = self.cap.read()
+        if not ret:
+            self.get_logger().error('Failed to capture frame.')
+            return
+        msg = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
+        self.publisher_.publish(msg)
+        self.get_logger().info('Publishing camera frame')
 
 def main(args=None):
     rclpy.init(args=args)
