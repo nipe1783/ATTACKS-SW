@@ -114,6 +114,20 @@ ros2 launch uas_bringup uas_hitl_mission.launch.py
 - On Q Ground control press takeoff.
 - Change flight mode to offboard.
 
+### SSH:
+```bash
+ssh attacks@10.42.0.1
+```
+
+### Launching Camera Nodes:
+```bash
+sudo chmod 666 /dev/video0
+cd ~/dev/ATTACKS-SW/scripts
+source /opt/ros/foxy/setup.bash
+source install/local_setup.bash
+chmod +x camera_publisher.py
+sudo python3 camera_publisher.py
+```
 ### Help:
 
 - If the vehicles state is unkown on Q Ground Control close the gazebo application and Q Ground. Unplug the Cube Orange and restart. 
