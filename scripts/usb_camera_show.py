@@ -1,14 +1,16 @@
-
 import cv2
 import datetime
 import os
 
 def gstreamer_pipeline(capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=30, flip_method=0):
     return (
-        "nvarguscamerasrc ! video/x-raw(memory:NVMM), width=(int){}, height=(int){}, format=(string)NV12, framerate=(fraction){}/1 ! "
-        "nvvidconv flip-method={} ! video/x-raw, width=(int){}, height=(int){}, format=(string)BGRx ! "
-        "videoconvert ! video/x-raw, format=(string)BGR ! appsink drop=true sync=false"
-    ).format(capture_width, capture_height, framerate, flip_method, display_width, display_height)
+        f"v4l2src device=/dev/video1 ! " 
+        f"video/x-raw, width=(int){capture_width}, height=(int){capture_height}, format=(string)YUY2, framerate=(fraction){framerate}/1 ! "
+        "videoconvert ! " 
+        f"video/x-raw, width=(int){display_width}, height=(int){display_height}, format=(string)BGR ! "
+        f"videoflip method={flip_method} ! "
+        "appsink drop=true sync=false"
+    )
 
 def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     recordings_path = os.path.join(os.getcwd(), recordings_dir)
@@ -20,14 +22,16 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
-cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=1), cv2.CAP_GSTREAMER)
+
+cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 if not cap.isOpened():
     print("Failed to open camera.")
     exit()
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-video_writer = make_video_writer(width, height)
+fps = cap.get(cv2.CAP_PROP_FPS)
+video_writer = make_video_writer(width, height, fps or 30)
 
 try:
     while True:
@@ -38,7 +42,7 @@ try:
         
         video_writer.write(frame)
         
-        cv2.imshow("CSI Camera", frame)
+        cv2.imshow("USB Camera", frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
