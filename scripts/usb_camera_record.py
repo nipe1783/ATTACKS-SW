@@ -1,19 +1,22 @@
 import cv2
 import datetime
 import os
+import signal
+import sys
 
-def gstreamer_pipeline(device='/dev/video1', capture_width=1280, capture_height=720, framerate=100):
-    """Generate a GStreamer pipeline string for video capture."""
+def gstreamer_pipeline(device='/dev/video1', capture_width=1280, capture_height=720, framerate=30, flip_method=0):
+    """Generate a GStreamer pipeline string for video capture from a USB camera."""
     return (
         f"v4l2src device={device} ! "
         f"video/x-raw, width=(int){capture_width}, height=(int){capture_height}, "
         f"format=(string)YUY2, framerate=(fraction){framerate}/1 ! "
-        "videoconvert ! "  # Converts the video from YUY2 to BGR, which OpenCV can use
+        "videoflip method={flip_method} ! "
+        "videoconvert ! "  # Converts from YUY2 to BGR for OpenCV
         "video/x-raw, format=(string)BGR ! "
         "appsink drop=true sync=false"
     )
 
-def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
+def make_video_writer(width, height, fps=30, recordings_dir="../Datasets"):
     recordings_path = os.path.join(os.getcwd(), recordings_dir)
     if not os.path.exists(recordings_path):
         os.makedirs(recordings_path)
@@ -24,33 +27,32 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
 
-def main():
-    cap = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
-    if not cap.isOpened():
-        print("Failed to open camera.")
-        return
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C! Saving the video and exiting.')
+    cap.release()
+    video_writer.release()
+    sys.exit(0)
 
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    fps = cap.get(cv2.CAP_PROP_FPS) or 100  # Fallback to 100fps if detection fails
-    video_writer = make_video_writer(width, height, fps)
+signal.signal(signal.SIGINT, signal_handler)
 
-    try:
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                print("Failed to capture frame.")
-                break
+cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+if not cap.isOpened():
+    print("Failed to open camera.")
+    exit()
 
-            video_writer.write(frame)
-            cv2.imshow("Video Feed", frame)
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+video_writer = make_video_writer(width, height)
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-    finally:
-        cap.release()
-        video_writer.release()
-        cv2.destroyAllWindows()
+try:
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("Failed to capture frame.")
+            break
 
-if __name__ == '__main__':
-    main()
+        video_writer.write(frame)
+        
+finally:
+    cap.release()
+    video_writer.release()
