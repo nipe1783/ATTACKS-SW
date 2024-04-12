@@ -1,15 +1,16 @@
 import cv2
 import datetime
 import os
+import signal
+import sys
 
-def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=30, flip_method=0):
+def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=30):
     return (
-        f"v4l2src device=/dev/video2 ! "
+        f"v4l2src device=/dev/video1 ! "
         f"video/x-raw, width=(int){capture_width}, height=(int){capture_height}, "
         f"format=(string)YUY2, framerate=(fraction){framerate}/1 ! "
         "videoconvert ! "
         "video/x-raw, format=(string)BGR ! "
-        f"videoflip method={flip_method} ! "
         "appsink drop=true sync=false"
     )
 
@@ -20,18 +21,28 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
 
     current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     filename = os.path.join(recordings_path, f"Recording_{current_time}.mp4")
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
 
-cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C! Saving the video and exiting.')
+    cap.release()
+    video_writer.release()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
+# Initialize video capture with GStreamer pipeline
+cap = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
 if not cap.isOpened():
     print("Failed to open camera.")
-    exit()
+    sys.exit(1)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-fps = cap.get(cv2.CAP_PROP_FPS) or 30  # Default to 30fps if the camera does not report fps
+fps = cap.get(cv2.CAP_PROP_FPS) or 30  # Use default fps if detection fails
+
 video_writer = make_video_writer(width, height, fps)
 
 try:
@@ -42,11 +53,6 @@ try:
             break
 
         video_writer.write(frame)
-        cv2.imshow("USB Camera", frame)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
 finally:
     cap.release()
-    video_writer.release()
-    cv2.destroyAllWindows()
