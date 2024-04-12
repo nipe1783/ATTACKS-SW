@@ -10,8 +10,8 @@ def gstreamer_pipeline(device='/dev/video1', capture_width=1280, capture_height=
         f"v4l2src device={device} ! "
         f"video/x-raw, width=(int){capture_width}, height=(int){capture_height}, "
         f"format=(string)YUY2, framerate=(fraction){framerate}/1 ! "
-        "videoflip method={flip_method} ! "
-        "videoconvert ! "  # Converts from YUY2 to BGR for OpenCV
+        f"videoflip method={flip_method} ! "  # Correct method application
+        "videoconvert ! "  # Converts the video from YUY2 to BGR, which OpenCV can use
         "video/x-raw, format=(string)BGR ! "
         "appsink drop=true sync=false"
     )
