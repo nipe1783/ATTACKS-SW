@@ -1,15 +1,14 @@
 import cv2
 import datetime
 import os
-import signal
-import sys
 
-def gstreamer_pipeline(capture_width=1280, capture_height=720, framerate=30):
+def gstreamer_pipeline(device='/dev/video1', capture_width=1280, capture_height=720, framerate=100):
+    """Generate a GStreamer pipeline string for video capture."""
     return (
-        f"v4l2src device=/dev/video1 ! "
+        f"v4l2src device={device} ! "
         f"video/x-raw, width=(int){capture_width}, height=(int){capture_height}, "
         f"format=(string)YUY2, framerate=(fraction){framerate}/1 ! "
-        "videoconvert ! "
+        "videoconvert ! "  # Converts the video from YUY2 to BGR, which OpenCV can use
         "video/x-raw, format=(string)BGR ! "
         "appsink drop=true sync=false"
     )
@@ -25,34 +24,33 @@ def make_video_writer(width, height, fps=30, recordings_dir="Recordings"):
     out = cv2.VideoWriter(filename, fourcc, fps, (width, height))
     return out
 
-def signal_handler(sig, frame):
-    print('You pressed Ctrl+C! Saving the video and exiting.')
-    cap.release()
-    video_writer.release()
-    sys.exit(0)
+def main():
+    cap = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
+    if not cap.isOpened():
+        print("Failed to open camera.")
+        return
 
-signal.signal(signal.SIGINT, signal_handler)
+    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    fps = cap.get(cv2.CAP_PROP_FPS) or 100  # Fallback to 100fps if detection fails
+    video_writer = make_video_writer(width, height, fps)
 
-# Initialize video capture with GStreamer pipeline
-cap = cv2.VideoCapture(gstreamer_pipeline(), cv2.CAP_GSTREAMER)
-if not cap.isOpened():
-    print("Failed to open camera.")
-    sys.exit(1)
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                print("Failed to capture frame.")
+                break
 
-width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-fps = cap.get(cv2.CAP_PROP_FPS) or 30  # Use default fps if detection fails
+            video_writer.write(frame)
+            cv2.imshow("Video Feed", frame)
 
-video_writer = make_video_writer(width, height, fps)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    finally:
+        cap.release()
+        video_writer.release()
+        cv2.destroyAllWindows()
 
-try:
-    while True:
-        ret, frame = cap.read()
-        if not ret:
-            print("Failed to capture frame.")
-            break
-
-        video_writer.write(frame)
-
-finally:
-    cap.release()
+if __name__ == '__main__':
+    main()
