@@ -4,11 +4,11 @@ import os
 
 def gstreamer_pipeline(capture_width=1280, capture_height=720, display_width=1280, display_height=720, framerate=30, flip_method=0):
     return (
-        f"v4l2src device=/dev/video1 ! " 
+        f"v4l2src device=/dev/video0 ! "  # Change device path as needed
         f"video/x-raw, width=(int){capture_width}, height=(int){capture_height}, format=(string)YUY2, framerate=(fraction){framerate}/1 ! "
-        "videoconvert ! " 
-        f"video/x-raw, width=(int){display_width}, height=(int){display_height}, format=(string)BGR ! "
-        f"videoflip method={flip_method} ! "
+        "videoconvert ! "  # Converts the YUY2 format to a format OpenCV can use (BGR)
+        f"video/x-raw, format=(string)BGR ! "
+        f"videoflip method={flip_method} ! "  # Optional: Adjust flip method as needed
         "appsink drop=true sync=false"
     )
 
@@ -31,7 +31,7 @@ if not cap.isOpened():
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 fps = cap.get(cv2.CAP_PROP_FPS)
-video_writer = make_video_writer(width, height, fps or 30)
+video_writer = make_video_writer(width, height, fps)
 
 try:
     while True:
