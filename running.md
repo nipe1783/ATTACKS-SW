@@ -118,10 +118,7 @@ ros2 launch uas_bringup uas_hitl_mission.launch.py
 ```bash
 ssh attacks@10.42.0.1
 ```
-### Scripts:
-```bash
-sudo unmount /media/attacks/6C09-B902
-```
+
 ### Help:
 
 - If the vehicles state is unkown on Q Ground Control close the gazebo application and Q Ground. Unplug the Cube Orange and restart. 
