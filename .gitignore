@@ -13,9 +13,9 @@ ros_ws/log/*
 ros_ws/install/*
 ros_ws/build/*
 
-# Datasets
-Datasets/*
-!Datasets/README.md
+# Recordings
+Recordings/*
+!Recordings/README.md
 
 # Specific files to keep.
 !ComputerVision/videos/test.txt

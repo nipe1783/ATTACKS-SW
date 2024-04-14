@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
     std::stringstream ss;
     ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d_%H-%M-%S");
     std::string fileName = "output_" + ss.str() + ".csv";
-    std::filesystem::path outputPath = currentPath / ".." / "Datasets" / fileName;
+    std::filesystem::path outputPath = currentPath / ".." / "Recordings" / fileName;
     std::filesystem::create_directories(outputPath.parent_path());
     std::cout << "Config Path: " << configPath << std::endl;
     std::cout << "Output Path: " << outputPath << std::endl;
