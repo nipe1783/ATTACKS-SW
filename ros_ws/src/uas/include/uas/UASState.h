@@ -25,6 +25,15 @@ class UASState {
         float byV_;
         // body z velocity
         float bzV_;
+        // body quaternion
+        float q0_ = 0;
+        float q1_ = 0;
+        float q2_ = 0;
+        float q3_ = 0;
+        // body thrust
+        float thrustX_ = 0;
+        float thrustY_ = 0;
+        float thrustZ_ = 0;
 
         //methods
         void updateState(float ix, float iy, float iz, float ipsi, float bxV, float byV, float bzV);

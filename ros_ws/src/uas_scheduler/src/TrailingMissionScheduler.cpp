@@ -223,7 +223,7 @@ void TrailingMissionScheduler::timerCallback(){
         std::cout<<"No state message received"<<std::endl;
         return;
     }
-
+    std::cout<<"current phase: "<<currentPhase_<<std::endl;
     if (offboardSetpointCounter_ == 10) {
         std::cout<<"ARMING UAS"<<std::endl;
         publishVehicleCommand(px4_msgs::msg::VehicleCommand::VEHICLE_CMD_DO_SET_MODE, 1, 6);
@@ -261,16 +261,16 @@ void TrailingMissionScheduler::timerCallback(){
         rgv1_.state_ = coarsePhase_->localize(camera1_, rgv1CVData_, uas_, rgv1_);
     }
     else if (rgv1_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv1CVData_.blobs.size() > 0){
-        if (isUASStopped(rgv1_)) {
-            std::cout<<"COARSE PHASE"<<std::endl;
-            rgv1_.currentPhase_ = "coarse";
-            currentPhase_ = "coarse";
-            rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
-            goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-        }
-        else{
-            goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-        }
+        // if (isUASStopped(rgv1_)) {
+        //     std::cout<<"COARSE PHASE"<<std::endl;
+        //     rgv1_.currentPhase_ = "coarse";
+        //     currentPhase_ = "coarse";
+        //     rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
+        //     goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+        // }
+        // else{
+        goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+        // }
     }
     else if (rgv1_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv1CVData_.blobs.size() > 0){
         if (isRGVCoarseLocalized(rgv1_)) {
@@ -288,15 +288,14 @@ void TrailingMissionScheduler::timerCallback(){
     }
     cv::imshow("Primary Sensor", psDisplayFrame_);
     cv::waitKey(1);
-
-    currentPhase_ = "trailing";
     publishControlMode();
     if(currentPhase_ == "trailing" || currentPhase_ == "jointTrailing" || currentPhase_ == "coarse"){
         publishVehicleAttitudeSetpoint(goalState_);
     }
-    // else{
-    //     publishTrajectorySetpoint(goalState_);
-    // }
+    else{
+        std::cout<<"here"<<std::endl;
+        publishTrajectorySetpoint(goalState_);
+    }
     if (offboardSetpointCounter_ < 11) {
         offboardSetpointCounter_++;
     }

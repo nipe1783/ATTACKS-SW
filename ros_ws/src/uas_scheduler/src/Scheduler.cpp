@@ -5,6 +5,7 @@
 #include "uas_helpers/Camera.h"
 #include <cv_bridge/cv_bridge.h>
 #include <limits>
+#include <cmath> 
 
 
 double Scheduler::distance(UASState s1, UASState s2)
@@ -14,6 +15,7 @@ double Scheduler::distance(UASState s1, UASState s2)
 
 void Scheduler::publishControlMode()
 {   
+    std::cout<<"TESTTT phase: "<<currentPhase_<<std::endl;
     px4_msgs::msg::OffboardControlMode msg{};
     if(currentPhase_ == "exploration"){
         msg.position = true;
@@ -44,6 +46,7 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
 {
     px4_msgs::msg::TrajectorySetpoint msg{};
     if(currentPhase_ == "exploration"){
+        std::cout<<"desired state: "<<s.ix_<<" "<<s.iy_<<" "<<s.iz_<<std::endl;
         msg.position = {s.ix_, s.iy_, s.iz_};
         msg.yaw = 0;
     }
@@ -54,17 +57,15 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
 void Scheduler::publishVehicleAttitudeSetpoint(UASState s)
 {
     px4_msgs::msg::VehicleAttitudeSetpoint msg{};
-    
-    // Example: Quaternion for no rotation
-    msg.q_d[0] = 1.0;  // w
-    msg.q_d[1] = 0.0;  // x
-    msg.q_d[2] = 0.0;  // y
-    msg.q_d[3] = 0.0;  // z
-
-    // Example: Setting neutral thrust along the z-axis of the drone
-    msg.thrust_body[0] = -0.5; // No thrust along the x-axis
-    msg.thrust_body[1] = -0; // No thrust along the y-axis
-    msg.thrust_body[2] = -0; // Moderate positive thrust along the z-axis (normalized)
+    // Quaternion calculation for rotation about the y-axis
+    msg.q_d[0] = s.q0_;  // w
+    msg.q_d[1] = s.q1_;  // x
+    msg.q_d[2] = s.q2_;  // y
+    msg.q_d[3] = s.q3_;  // z
+    // Setting thrust to maintain altitude and contribute to forward movement
+    msg.thrust_body[0] = s.thrustX_;
+    msg.thrust_body[1] = s.thrustY_;
+    msg.thrust_body[2] = s.thrustZ_;
 
     msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
     vehicleAttitudeSetpointPublisher_->publish(msg);

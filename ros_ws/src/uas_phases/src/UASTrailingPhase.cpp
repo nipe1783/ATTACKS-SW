@@ -10,23 +10,26 @@ UASTrailingPhase::UASTrailingPhase()
 UASState UASTrailingPhase::generateDesiredState(const CVImg& cvImg, const UASState& uasState)
 {   
     UASState desiredUASState;
-    desiredUASState.bxV_ = 0.0f;
-    desiredUASState.byV_ = 0.0f;
-    desiredUASState.bzV_ = 0.0f;
-    float bodyX = 0.0f;
-    float bodyY = 0.0f;
-    
-    Blob blob = cvImg.blobs[0];
-    if (std::abs(blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) > tolerance_) {
-        bodyX = (blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) * velocityFactor_;
-    }
+    double maxPitchAngle_ = -5 * M_PI / 180;  // Pitching forward by -5 degrees
+    double maxRollAngle_ = 5 * M_PI / 180;  // Rolling right by 5 degrees
 
-    if (std::abs(blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) > tolerance_) {
-        bodyY = (blob.y - cvImg.centerY) / static_cast<float>(cvImg.height) * velocityFactor_;
-    }
-    desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
-    desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
-    desiredUASState.bzV_ = (desiredAltitude_ - uasState.iz_) * kpZ_;
+    // Get the blob coordinates
+    Blob blob = cvImg.blobs[0];
+
+    // Calculate pitch and roll angles based on blob position
+    float pitch = ((blob.y - cvImg.centerY) / static_cast<float>(cvImg.height)) * maxPitchAngle_;  // maxPitchAngle_ is the maximum pitch in radians
+    float roll = -((blob.x - cvImg.centerX) / static_cast<float>(cvImg.width)) * maxRollAngle_;   // maxRollAngle_ is the maximum roll in radians
+
+    // Assuming small angles, calculate quaternion components
+    desiredUASState.q0_ = cos(pitch / 2) * cos(roll / 2);
+    desiredUASState.q1_ = sin(roll / 2) * cos(pitch / 2);
+    desiredUASState.q2_ = cos(roll / 2) * sin(pitch / 2);
+    desiredUASState.q3_ = sin(roll / 2) * sin(pitch / 2);
+
+    // Set thrust to maintain altitude while tilting
+    desiredUASState.thrustX_ = 0;
+    desiredUASState.thrustY_ = 0;
+    desiredUASState.thrustZ_ = -0.455; // Example thrust value, adjust as necessary
 
     return desiredUASState;
 }
