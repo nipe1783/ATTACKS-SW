@@ -11,7 +11,7 @@ def gstreamer_pipeline(capture_width=1280, capture_height=720, display_width=128
         "videoconvert ! video/x-raw, format=(string)BGR ! appsink drop=true sync=false"
     ).format(capture_width, capture_height, framerate, flip_method, display_width, display_height)
 
-def make_video_writer(width, height, fps=30, recordings_dir="../Datasets"):
+def make_video_writer(width, height, fps=30, recordings_dir="../Recordings"):
     recordings_path = os.path.join(os.getcwd(), recordings_dir)
     if not os.path.exists(recordings_path):
         os.makedirs(recordings_path)
