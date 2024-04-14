@@ -15,6 +15,7 @@
 #include <px4_msgs/msg/offboard_control_mode.hpp>
 #include <px4_msgs/msg/trajectory_setpoint.hpp>
 #include <px4_msgs/msg/vehicle_command.hpp>
+#include <px4_msgs/msg/vehicle_attitude_setpoint.hpp>
 
 class Scheduler : public rclcpp::Node
 {   
@@ -35,6 +36,7 @@ class Scheduler : public rclcpp::Node
         rclcpp::Subscription<px4_msgs::msg::VehicleLocalPosition>::SharedPtr stateSubscription_;
         rclcpp::Publisher<px4_msgs::msg::OffboardControlMode>::SharedPtr controlModePublisher_;
         rclcpp::Publisher<px4_msgs::msg::TrajectorySetpoint>::SharedPtr trajectorySetpointPublisher_;
+        rclcpp::Publisher<px4_msgs::msg::VehicleAttitudeSetpoint>::SharedPtr vehicleAttitudeSetpointPublisher_;
         rclcpp::Publisher<px4_msgs::msg::VehicleCommand>::SharedPtr vehicleCommandPublisher_;
         rclcpp::TimerBase::SharedPtr timer_;
         uint64_t offboardSetpointCounter_;
@@ -62,6 +64,11 @@ class Scheduler : public rclcpp::Node
          * @brief Publishes the trajectory setpoint to the UAS. Tells the UAS where to go.
          */
         void publishTrajectorySetpoint(UASState uasState);
+
+        /**
+         * @brief Publishes the attitude setpoint to the UAS. Tells the UAS how to move.
+         */
+        void publishVehicleAttitudeSetpoint(UASState uasState);
 
         /**
          * @brief Publishes a vehicle command to the UAS. Allows for the UAS to arm, disarm, etc.

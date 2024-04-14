@@ -49,6 +49,10 @@ TrailingMissionScheduler::TrailingMissionScheduler(std::string configPath, std::
         "/fmu/in/trajectory_setpoint", qos
     );
 
+    vehicleAttitudeSetpointPublisher_ = this->create_publisher<px4_msgs::msg::VehicleAttitudeSetpoint>(
+        "/fmu/in/vehicle_attitude_setpoint", qos
+    );
+
     vehicleCommandPublisher_ = this->create_publisher<px4_msgs::msg::VehicleCommand>(
         "/fmu/in/vehicle_command", qos
     );
@@ -282,11 +286,17 @@ void TrailingMissionScheduler::timerCallback(){
         currentPhase_ = "exploration";
         goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
     }
-    // cv::imshow("Primary Sensor", psDisplayFrame_);
-    // cv::waitKey(1);
+    cv::imshow("Primary Sensor", psDisplayFrame_);
+    cv::waitKey(1);
 
+    currentPhase_ = "trailing";
     publishControlMode();
-    publishTrajectorySetpoint(goalState_);
+    if(currentPhase_ == "trailing" || currentPhase_ == "jointTrailing" || currentPhase_ == "coarse"){
+        publishVehicleAttitudeSetpoint(goalState_);
+    }
+    // else{
+    //     publishTrajectorySetpoint(goalState_);
+    // }
     if (offboardSetpointCounter_ < 11) {
         offboardSetpointCounter_++;
     }

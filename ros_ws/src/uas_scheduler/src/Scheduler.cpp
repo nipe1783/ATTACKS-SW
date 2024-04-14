@@ -1,6 +1,7 @@
 #include "uas_scheduler/Scheduler.h"
 #include "uas/UASState.h"
 #include "uas/UAS.h"
+#include <px4_msgs/msg/vehicle_attitude_setpoint.hpp>
 #include "uas_helpers/Camera.h"
 #include <cv_bridge/cv_bridge.h>
 #include <limits>
@@ -23,9 +24,9 @@ void Scheduler::publishControlMode()
     }
     else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
         msg.position = false;
-        msg.velocity = true;
+        msg.velocity = false;
         msg.acceleration = false;
-        msg.attitude = false;
+        msg.attitude = true;
         msg.body_rate = false;
     }
     else if(currentPhase_ == "coarse"){
@@ -44,24 +45,29 @@ void Scheduler::publishTrajectorySetpoint(UASState s)
     px4_msgs::msg::TrajectorySetpoint msg{};
     if(currentPhase_ == "exploration"){
         msg.position = {s.ix_, s.iy_, s.iz_};
-        msg.yaw = -3.14;
-    }
-    else if(currentPhase_ == "trailing" || currentPhase_ == "jointExploration" || currentPhase_ == "jointTrailing"){
-        msg.velocity = {s.bxV_, s.byV_, s.bzV_};
-        msg.position[0] = std::numeric_limits<float>::quiet_NaN();
-        msg.position[1] = std::numeric_limits<float>::quiet_NaN();
-        msg.position[2] = std::numeric_limits<float>::quiet_NaN();
-        msg.yaw = std::numeric_limits<float>::quiet_NaN();
-    }
-    else if(currentPhase_ == "coarse"){
-        msg.velocity = {s.bxV_, s.byV_, s.bzV_};
-        msg.position[0] = std::numeric_limits<float>::quiet_NaN();
-        msg.position[1] = std::numeric_limits<float>::quiet_NaN();
-        msg.position[2] = std::numeric_limits<float>::quiet_NaN();
-        msg.yaw = std::numeric_limits<float>::quiet_NaN();
+        msg.yaw = 0;
     }
     msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
     trajectorySetpointPublisher_->publish(msg);
+}
+
+void Scheduler::publishVehicleAttitudeSetpoint(UASState s)
+{
+    px4_msgs::msg::VehicleAttitudeSetpoint msg{};
+    
+    // Example: Quaternion for no rotation
+    msg.q_d[0] = 1.0;  // w
+    msg.q_d[1] = 0.0;  // x
+    msg.q_d[2] = 0.0;  // y
+    msg.q_d[3] = 0.0;  // z
+
+    // Example: Setting neutral thrust along the z-axis of the drone
+    msg.thrust_body[0] = -0.5; // No thrust along the x-axis
+    msg.thrust_body[1] = -0; // No thrust along the y-axis
+    msg.thrust_body[2] = -0; // Moderate positive thrust along the z-axis (normalized)
+
+    msg.timestamp = this->get_clock()->now().nanoseconds() / 1000;
+    vehicleAttitudeSetpointPublisher_->publish(msg);
 }
 
 void Scheduler::publishVehicleCommand(uint16_t command, float param1, float param2)
