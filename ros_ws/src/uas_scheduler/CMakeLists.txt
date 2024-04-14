@@ -65,10 +65,10 @@ target_link_libraries(completeMissionScheduler
 )
 install(TARGETS completeMissionScheduler DESTINATION lib/${PROJECT_NAME})
 
-# /cameraCalibrateMissionScheduler
-add_executable(cameraCalibrateMissionScheduler src/CameraCalibrateMissionScheduler.cpp src/Scheduler.cpp)
+# /hoverMissionScheduler
+add_executable(hoverMissionScheduler src/HoverMissionScheduler.cpp src/Scheduler.cpp)
 ament_target_dependencies(
-    cameraCalibrateMissionScheduler
+    hoverMissionScheduler
     cv_bridge
     uas
     uas_phases
@@ -78,12 +78,52 @@ ament_target_dependencies(
     px4_msgs 
     sensor_msgs
 )
-target_link_libraries(cameraCalibrateMissionScheduler
+target_link_libraries(hoverMissionScheduler
   ${cv_bridge_LIBRARIES}
   ${OpenCV_LIBRARIES}
   yaml-cpp
 )
-install(TARGETS cameraCalibrateMissionScheduler DESTINATION lib/${PROJECT_NAME})
+install(TARGETS hoverMissionScheduler DESTINATION lib/${PROJECT_NAME})
+
+# /waypointMissionScheduler
+add_executable(waypointMissionScheduler src/WaypointMissionScheduler.cpp src/Scheduler.cpp)
+ament_target_dependencies(
+    waypointMissionScheduler
+    cv_bridge
+    uas
+    uas_phases
+    uas_computer_vision
+    uas_helpers
+    rclcpp 
+    px4_msgs 
+    sensor_msgs
+)
+target_link_libraries(waypointMissionScheduler
+  ${cv_bridge_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  yaml-cpp
+)
+install(TARGETS waypointMissionScheduler DESTINATION lib/${PROJECT_NAME})
+
+# /trailingMissionScheduler
+add_executable(trailingMissionScheduler src/TrailingMissionScheduler.cpp src/Scheduler.cpp)
+ament_target_dependencies(
+    trailingMissionScheduler
+    cv_bridge
+    uas
+    uas_phases
+    uas_computer_vision
+    uas_helpers
+    rclcpp 
+    px4_msgs 
+    sensor_msgs
+)
+target_link_libraries(trailingMissionScheduler
+  ${cv_bridge_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  yaml-cpp
+)
+install(TARGETS trailingMissionScheduler DESTINATION lib/${PROJECT_NAME})
 
 ############
 # Install ##

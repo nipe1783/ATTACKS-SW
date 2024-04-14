@@ -147,3 +147,18 @@
     ```
 
     The UAS should start moving.
+
+## HITL Setup
+
+### Flashing the Cube Orange:
+
+- Connect the Cube Orange to the high resource computer. 
+
+```bash
+cd ~/dev/ATTACKS-SW/PX4-Autopilot
+make cubepilot_cubeorange_default upload
+```
+
+### Set the correct parameters:
+Upload the parameter file located in the root directory of ATTACKS-SW and load it to the cube.
+

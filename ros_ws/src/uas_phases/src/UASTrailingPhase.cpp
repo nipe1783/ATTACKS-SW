@@ -15,7 +15,7 @@ UASState UASTrailingPhase::generateDesiredState(const CVImg& cvImg, const UASSta
     desiredUASState.bzV_ = 0.0f;
     float bodyX = 0.0f;
     float bodyY = 0.0f;
-
+    
     Blob blob = cvImg.blobs[0];
     if (std::abs(blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) > tolerance_) {
         bodyX = (blob.x - cvImg.centerX) / static_cast<float>(cvImg.width) * velocityFactor_;
