@@ -15,6 +15,7 @@ ros_ws/build/*
 
 # Datasets
 Datasets/*
+!Datasets/README.md
 
 # Specific files to keep.
 !ComputerVision/videos/test.txt
