@@ -47,8 +47,8 @@ camera1:
   id: 0
   xFOV: 2
   yFOV: 1.125
-  width: 480
-  height: 480
+  width: 1280
+  height: 720
   distortion:
     k1: 0
     k2: 0
@@ -59,8 +59,8 @@ camera2:
   id: 1
   xFOV: 2
   yFOV: 1.125
-  width: 480
-  height: 480
+  width: 1280
+  height: 720
   distortion:
     k1: 0
     k2: 0
