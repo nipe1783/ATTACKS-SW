@@ -125,6 +125,27 @@ target_link_libraries(trailingMissionScheduler
 )
 install(TARGETS trailingMissionScheduler DESTINATION lib/${PROJECT_NAME})
 
+
+# /trailingTestMissionScheduler
+add_executable(trailingTestMissionScheduler src/TrailingTestMissionScheduler.cpp src/Scheduler.cpp)
+ament_target_dependencies(
+    trailingTestMissionScheduler
+    cv_bridge
+    uas
+    uas_phases
+    uas_computer_vision
+    uas_helpers
+    rclcpp 
+    px4_msgs 
+    sensor_msgs
+)
+target_link_libraries(trailingTestMissionScheduler
+  ${cv_bridge_LIBRARIES}
+  ${OpenCV_LIBRARIES}
+  yaml-cpp
+)
+install(TARGETS trailingTestMissionScheduler DESTINATION lib/${PROJECT_NAME})
+
 ############
 # Install ##
 ############

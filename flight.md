@@ -40,6 +40,22 @@ source install/local_setup.bash
 ros2 launch uas_bringup uas_waypoint_mission.launch.py
 ```
 
+#### Trailing Test Mission:
+```bash
+sudo su
+cd ~/dev/ATTACKS-SW/scripts
+source /opt/ros/foxy/setup.bash
+python3 camera_publisher.py
+```
+
+```bash
+cd ~/dev/ATTACKS-SW/ros_ws
+colcon build
+source /opt/ros/foxy/setup.bash
+source install/local_setup.bash
+ros2 launch uas_bringup uas_trailing_test_mission.launch.py
+```
+
 #### Trailing Mission:
 ```bash
 sudo su
