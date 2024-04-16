@@ -28,11 +28,11 @@ phase:
 rgv1:
   id: 0
   hsvColor:
-    hLow: 0
-    hHigh: 30
-    sLow: 180
-    sHigh: 255
-    vLow: 180
+    hLow: 135
+    hHigh: 191
+    sLow: 125
+    sHigh: 192
+    vLow: 170
     vHigh: 255
 rgv2:
   id: 1
