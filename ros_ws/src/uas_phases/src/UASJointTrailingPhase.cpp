@@ -35,8 +35,10 @@ UASState UASJointTrailingPhase::generateDesiredState(const CVImg& rgv1CVData, co
         bodyX = (rgv2Blob.x - rgv2CVData.centerX) / static_cast<float>(rgv2CVData.width) * velocityFactor_;
         bodyY = (rgv2Blob.y - rgv2CVData.centerY) / static_cast<float>(rgv2CVData.height) * velocityFactor_;
     }
-    desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
-    desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
+    // desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_  + M_PI_2) - bodyY * sin(uasState.ipsi_ + M_PI_2);
+    // desiredUASState.byV_ = bodyX * sin(uasState.ipsi_  + M_PI_2) + bodyY * cos(uasState.ipsi_ + M_PI_2);
+    desiredUASState.bxV_ = bodyX * cos(uasState.ipsi_) - bodyY * sin(uasState.ipsi_);
+    desiredUASState.byV_ = bodyX * sin(uasState.ipsi_) + bodyY * cos(uasState.ipsi_);
     desiredUASState.bzV_ = (desiredAltitude_ - uasState.iz_) * kpZ_;
     return desiredUASState;
 }
