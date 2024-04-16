@@ -366,14 +366,8 @@ void CompleteTestMissionScheduler::timerCallback(){
     }
     else{
         currentPhase_ = "exploration";
-        if(rgv1_.isCoarseLocalizing_){
-
-        }
         goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     }
-
-    cv::imshow("Primary Sensor", psDisplayFrame_);
-    cv::waitKey(1);
 
     publishControlMode();
     publishTrajectorySetpoint(goalState_);

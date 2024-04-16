@@ -26,7 +26,7 @@ TrailingTestMissionScheduler::TrailingTestMissionScheduler(std::string configPat
     if (!outputFile_.is_open()){
         std::cout << "Unable to open CSV file" << std::endl;
     }
-    outputFile_ << "Timer Callback Calls (ns), UAS X, UAS Y, UAS Z, UAS Phi, UAS Theta, UAS Psi, RGV1 CV X, RGV1 CV Y, RGV1 CV Width, RGV1 CV Height, RGV2 CV X, RGV2 CV Y, RGV2 CV Width, RGV2 CV Height,";
+    outputFile_ << "Timer Callback Calls (ns), UAS Phase, UAS X, UAS Y, UAS Z, UAS Phi, UAS Theta, UAS Psi, RGV1 CV X, RGV1 CV Y, RGV1 CV Width, RGV1 CV Height, RGV2 CV X, RGV2 CV Y, RGV2 CV Width, RGV2 CV Height,";
     outputFile_ << "RGV1 X (Estimate), RGV1 Y (Estimate), RGV1 Z (Estimate), RGV2 X (Estimate), RGV2 Y (Estimate), RGV2 Z (Estimate) \n";
 
     psSubscription_ = this->create_subscription<sensor_msgs::msg::Image>(
@@ -227,11 +227,14 @@ void TrailingTestMissionScheduler::timerCallback(){
     }
 
     rgv1CVData_ = rgv1BlobDetector_.detect(psFrame_);
+    
+    std::cout << "Phase: " << currentPhase_ << ". ";
+    std::cout<< "RGV 1 Phase: " << rgv1_.currentPhase_ << ". ";
+    std::cout<< "RGV 1 Blobs: " << rgv1CVData_.blobs.size() << ". ";
+    std::cout << std::endl;
 
-    std::cout<<"Image Size: "<<psFrame_.size()<<std::endl;
-    std::cout<<"Current Phase: "<<currentPhase_<<std::endl;
-
-    outputFile_ << (std::chrono::system_clock::now()).time_since_epoch().count() << ","; 
+    outputFile_ << (std::chrono::system_clock::now()).time_since_epoch().count() << ",";
+    outputFile_ << currentPhase_ << ",";
     outputFile_ << uas_.state_.ix_ << "," << uas_.state_.iy_ << "," << uas_.state_.iz_ << ",";
     outputFile_ << uas_.state_.iphi_ << "," << uas_.state_.itheta_ << "," << uas_.state_.ipsi_ << ",";
     if(rgv1CVData_.blobs.size() > 0) {
@@ -248,21 +251,24 @@ void TrailingTestMissionScheduler::timerCallback(){
     outputFile_ << rgv2_.state_.ix_ << "," << rgv2_.state_.iy_ << "," << rgv2_.state_.iz_ << ",";
     outputFile_ << "\n";
 
-
-
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
-        std::cout<<"TRAILING PHASE"<<std::endl;
-        rgv1_.currentPhase_ = "trailing";
-        currentPhase_ = "trailing";
-        rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
-        goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
-        rgv1_.state_ = coarsePhase_->localize(camera1_, rgv1CVData_, uas_, rgv1_);
+       if(rgv1_.isCoarseLocalizing_){
+            rgv1_.currentPhase_ = "coarse";
+            currentPhase_ = "coarse";
+            goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+        }
+        else{
+            rgv1_.currentPhase_ = "trailing";
+            currentPhase_ = "trailing";
+            rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
+            goalState_ = trailingPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+        }
     }
     else if (rgv1_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv1CVData_.blobs.size() > 0){
         if (isUASStopped(rgv1_)) {
-            std::cout<<"COARSE PHASE"<<std::endl;
             rgv1_.currentPhase_ = "coarse";
             currentPhase_ = "coarse";
+            rgv1_.isCoarseLocalizing_ = true;
             rgv1_.phaseStartTime_ = std::chrono::system_clock::now();
             goalState_ = coarsePhase_->generateDesiredState(rgv1CVData_, uas_.state_);
         }
@@ -280,12 +286,20 @@ void TrailingTestMissionScheduler::timerCallback(){
             publishRGV1State();
         }
     }
+    else if (rgv1_.currentPhase_ == "trailing" && currentPhase_ == "trailing" && rgv1CVData_.blobs.size() == 0){
+        rgv1_.currentPhase_ = "exploration";
+        currentPhase_ = "exploration";
+        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    }
+    else if (rgv1_.currentPhase_ == "coarse" && currentPhase_ == "coarse" && rgv1CVData_.blobs.size() == 0){
+        rgv1_.currentPhase_ = "exploration";
+        currentPhase_ = "exploration";
+        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
+    }
     else{
         currentPhase_ = "exploration";
-        goalState_ = explorationPhase_->generateDesiredState(rgv1CVData_, uas_.state_);
+        goalState_ = explorationPhase_->generateDesiredState(rgv2CVData_, uas_.state_);
     }
-    // cv::imshow("Primary Sensor", psDisplayFrame_);
-    // cv::waitKey(1);
 
     publishControlMode();
     publishTrajectorySetpoint(goalState_);

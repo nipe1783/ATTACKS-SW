@@ -1,5 +1,5 @@
 ---
-minHeight: -12.0
+minHeight: -10.0
 maxHeight: -15.0
 phase:
   kpZ: 0.1
