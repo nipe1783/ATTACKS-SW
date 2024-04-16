@@ -73,12 +73,12 @@ rgv1:
 rgv2:
   id: 1
   hsvColor:
-    hLow: 0
-    hHigh: 1
-    sLow: 0
-    sHigh: 1
-    vLow: 0
-    vHigh: 1
+    hLow: 200
+    hHigh: 201
+    sLow: 200
+    sHigh: 201
+    vLow: 200
+    vHigh: 201
 camera1:
   id: 0
   xFOV: 2
