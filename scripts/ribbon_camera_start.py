@@ -14,7 +14,7 @@ class CameraPublisher(Node):
     def __init__(self):
         super().__init__('camera_publisher')
         self.publisher_ = self.create_publisher(Image, '/camera/image_raw', 5)
-        self.timer_period = 1 / 30  # Timer frequency matches the camera FPS
+        self.timer_period = 1 / 30
         self.timer = self.create_timer(self.timer_period, self.timer_callback)
         self.bridge = CvBridge()
         self.cap = cv2.VideoCapture(self.gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
@@ -38,7 +38,7 @@ class CameraPublisher(Node):
 
         width = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        fps = 30  # Adjust as needed
+        fps = 30
         current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         filename = os.path.join(recordings_path, f"Recording_{current_time}.mp4")
         fourcc = cv2.VideoWriter_fourcc(*'mp4v') 
