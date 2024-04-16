@@ -21,4 +21,6 @@ class RGV {
         int vHigh_;
         std::string currentPhase_;
         std::chrono::time_point<std::chrono::system_clock> phaseStartTime_;
+        bool isCoarseLocalizing_ = false;
+        bool isFineLocalizing_ = false;
 };      

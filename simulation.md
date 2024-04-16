@@ -46,6 +46,26 @@
   ros2 launch uas_bringup uas_hover_mission.launch.py
   ```
 
+### Trailing Mission Node:
+
+  ```bash
+  cd ~/dev/ATTACKS-SW/ros_ws
+  colcon build
+  source /opt/ros/foxy/setup.bash
+  source install/local_setup.bash
+  ros2 launch uas_bringup uas_trailing_mission.launch.py
+  ```
+
+
+### Complete Test Mission Node:
+
+  ```bash
+  cd ~/dev/ATTACKS-SW/ros_ws
+  colcon build
+  source /opt/ros/foxy/setup.bash
+  source install/local_setup.bash
+  ros2 launch uas_bringup uas_complete_test_mission.launch.py
+  ```
 
 
 
