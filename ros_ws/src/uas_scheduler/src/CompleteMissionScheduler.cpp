@@ -18,7 +18,19 @@
 #include <yaml-cpp/yaml.h>
 #include <filesystem>
 
+cv::VideoWriter videoWriter;
+
 CompleteMissionScheduler::CompleteMissionScheduler(std::string configPath) : Scheduler("uas_complete_mission") {
+
+    std::string outputPath = "output_video.mp4";
+    int codec = cv::VideoWriter::fourcc('X', '2', '6', '4');
+    double fps = 30.0;
+    cv::Size frameSize(1280, 720);
+    videoWriter.open(outputPath, codec, fps, frameSize, true);
+     if (!videoWriter.isOpened()) {
+        RCLCPP_ERROR(this->get_logger(), "Could not open the output video file for write.");
+    }
+
     rmw_qos_profile_t qos_profile = rmw_qos_profile_sensor_data;
     auto qos = rclcpp::QoS(rclcpp::QoSInitialization(qos_profile.history, 5), qos_profile);
 
@@ -246,15 +258,14 @@ void CompleteMissionScheduler::timerCallback(){
     std::cout << "Phase: " << currentPhase_ << ". ";
     std::cout<< "RGV 1 Phase: " << rgv1_.currentPhase_ << ". ";
     std::cout<< "RGV 2 Phase: " << rgv2_.currentPhase_ << ". ";
-    // std::cout<< "UAS State: " << uas_.state_.ix_ << ", " << uas_.state_.iy_ << ", " << uas_.state_.iz_ << ". ";
-    // if(rgv1CVData_.blobs.size() > 0){
-    //     cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
-    //     cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
-    // }
-    // if(rgv2CVData_.blobs.size() > 0){
-    //     cv::Rect bounding_box = cv::Rect(rgv2CVData_.blobs[0].x, rgv2CVData_.blobs[0].y, rgv2CVData_.blobs[0].width, rgv2CVData_.blobs[0].height);
-    //     cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(0, 255, 0), 2);
-    // }
+    if(rgv1CVData_.blobs.size() > 0){
+        cv::Rect bounding_box = cv::Rect(rgv1CVData_.blobs[0].x, rgv1CVData_.blobs[0].y, rgv1CVData_.blobs[0].width, rgv1CVData_.blobs[0].height);
+        cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(255, 0, 0), 2);
+    }
+    if(rgv2CVData_.blobs.size() > 0){
+        cv::Rect bounding_box = cv::Rect(rgv2CVData_.blobs[0].x, rgv2CVData_.blobs[0].y, rgv2CVData_.blobs[0].width, rgv2CVData_.blobs[0].height);
+        cv::rectangle(psDisplayFrame_, bounding_box, cv::Scalar(0, 255, 0), 2);
+    }
     std::cout << std::endl;
 
     if(rgv1_.currentPhase_ == "exploration" && currentPhase_ == "exploration" && rgv1CVData_.blobs.size() > 0 && uas_.state_.iz_ <= minHeight_){
@@ -392,6 +403,10 @@ void CompleteMissionScheduler::timerCallback(){
 
     cv::imshow("Primary Sensor", psDisplayFrame_);
     cv::waitKey(1);
+
+    if (!psDisplayFrame_.empty()) {
+        videoWriter.write(psDisplayFrame_);
+    }
 
     publishControlMode();
     publishTrajectorySetpoint(goalState_);

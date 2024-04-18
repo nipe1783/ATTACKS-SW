@@ -64,21 +64,21 @@ phase:
 rgv1:
   id: 0
   hsvColor:
-    hLow: 135
-    hHigh: 191
-    sLow: 125
-    sHigh: 192
-    vLow: 170
+    hLow: 0
+    hHigh: 19
+    sLow: 50
+    sHigh: 128
+    vLow: 181
     vHigh: 255
 rgv2:
   id: 1
   hsvColor:
-    hLow: 200
-    hHigh: 201
-    sLow: 200
-    sHigh: 201
-    vLow: 200
-    vHigh: 201
+    hLow: 120
+    hHigh: 180
+    sLow: 49
+    sHigh: 130
+    vLow: 215
+    vHigh: 255
 camera1:
   id: 0
   xFOV: 2
